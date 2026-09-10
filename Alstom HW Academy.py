@@ -1,5 +1,8 @@
 import streamlit as st
 from PIL import Image
+from supabase import create_client, Client
+import streamlit as st
+from PIL import Image
 
 # ---------------------------------------------------
 # Page Config
@@ -58,6 +61,14 @@ def resize_image_to_height(image_path, target_height=320):
     new_width = int((target_height / height) * width)
     resized_img = img.resize((new_width, target_height))
     return resized_img
+
+# ---------------------------------------------------
+# Supabase Connection
+# ---------------------------------------------------
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # ---------------------------------------------------
 # Global Style
