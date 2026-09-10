@@ -614,12 +614,38 @@ elif st.session_state.current_page == "auth":
                 elif password != confirm_password:
                     st.error("Passwords do not match.")
                 else:
-                    st.session_state.logged_in = True
-                    st.session_state.user_name = full_name
-                    st.session_state.user_email = signup_email
-                    go_to("home")
-                    st.success("Account created successfully!")
-                    st.rerun()
+                    try:
+                        # Create auth user
+                        auth_response = supabase.auth.sign_up({
+                            "email": signup_email,
+                            "password": password
+                        })
+
+                        user = auth_response.user
+
+                        if user is not None:
+                            # Insert into profiles table
+                            supabase.table("profiles").insert({
+                                "id": user.id,
+                                "full_name": full_name,
+                                "email": signup_email
+                            }).execute()
+
+                            # Insert initial progress
+                            supabase.table("user_progress").insert({
+                                "user_id": user.id,
+                                "stage1_completed": False,
+                                "stage2_completed": False,
+                                "selected_path": "",
+                                "progress_percent": 0
+                            }).execute()
+
+                            st.success("Account created successfully! You can now log in.")
+                        else:
+                            st.error("Sign up failed. Please try again.")
+
+                    except Exception as e:
+                        st.error(f"Sign up error: {e}")
 
 # ---------------------------------------------------
 # Home Page
