@@ -608,7 +608,7 @@ elif st.session_state.current_page == "auth":
             if st.button("Login to Platform", use_container_width=True, key="auth_login_platform"):
                 if login_email and login_password:
                     try:
-                        auth_response = supabase_auth.sign_in_with_password({
+                        auth_response = supabase_auth.auth.sign_in_with_password({
                             "email": login_email,
                             "password": login_password
                         })
@@ -659,7 +659,7 @@ elif st.session_state.current_page == "auth":
                 else:
                     try:
                         # Create auth user
-                        auth_response = supabase_auth.auth.sign_up({
+                        auth_response = supabase_auth.auth.sign_in_with_password({
                             "email": signup_email,
                             "password": password
                         })
