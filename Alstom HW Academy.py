@@ -153,8 +153,12 @@ def show_logo():
 # ---------------------------------------------------
 st.markdown("""
 <style>
+.stApp {
+    background-color: #F5F5F7;
+}
+
 .main {
-    background-color: #FFFFFF;
+    background-color: #F5F5F7;
 }
 
 .hero-box {
@@ -278,6 +282,21 @@ st.markdown("""
     margin-top: 4px;
 }
 
+            .header-wrapper {
+    background-color: white;
+    padding: 18px 26px;
+    border-radius: 0 0 18px 18px;
+    margin: -1rem -1rem 28px -1rem;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.footer-wrapper {
+    background-color: white;
+    padding: 24px 20px 14px 20px;
+    margin: 30px -1rem -1rem -1rem;
+    border-top: 1px solid #E5E7EB;
+}
+            
 </style>
 """, unsafe_allow_html=True)
 
@@ -286,7 +305,7 @@ st.markdown("""
 # Landing Page
 # ---------------------------------------------------
 if st.session_state.current_page == "landing":
-
+    st.markdown('<div class="header-wrapper">', unsafe_allow_html=True)
     nav1, nav2, nav3 = st.columns([2.2, 3.2, 2])
 
     with nav1:
@@ -316,6 +335,7 @@ if st.session_state.current_page == "landing":
             if st.button("Join Now", use_container_width=True, key="landing_join"):
                 go_to("auth")
                 st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.write("")
 
