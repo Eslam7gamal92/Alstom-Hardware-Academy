@@ -249,7 +249,7 @@ if st.session_state.current_page == "landing":
     """, unsafe_allow_html=True)
 
     # 2. Key Highlights
-    st.markdown("## Key Highlights")
+    st.markdown('<h2 style="color:#1F3552; font-weight:700;">Key Highlights</h2>', unsafe_allow_html=True)
     s1, s2, s3, s4 = st.columns(4)
 
     with s1:
@@ -333,7 +333,7 @@ if st.session_state.current_page == "landing":
     """, unsafe_allow_html=True)
 
     # 6. Vision / Mission / Values
-    st.markdown("## Vision, Mission & Values")
+    st.markdown('<h2 style="color:#1F3552; font-weight:700;">Vision, Mission & Values</h2>', unsafe_allow_html=True)
 
     vm1, vm2, vm3 = st.columns(3)
 
@@ -403,7 +403,7 @@ if st.session_state.current_page == "landing":
     """, unsafe_allow_html=True)
 
     # 9. Explore Learning Areas
-    st.markdown("## Explore Learning Areas")
+    st.markdown('<h2 style="color:#1F3552; font-weight:700;">Explore Learning Areas</h2>', unsafe_allow_html=True)
     st.write("Discover the main learning tracks included in Alstom Hardware Academy.")
 
     card1, card2 = st.columns(2)
