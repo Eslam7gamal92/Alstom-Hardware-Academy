@@ -18,6 +18,7 @@ st.set_page_config(
 # ---------------------------------------------------
 defaults = {
     "logged_in": False,
+    "user_id": "",
     "user_name": "",
     "user_email": "",
     "stage1_completed": False,
@@ -38,6 +39,7 @@ def go_to(page_name):
 
 def logout():
     st.session_state.logged_in = False
+    st.session_state.user_id = ""
     st.session_state.user_name = ""
     st.session_state.user_email = ""
     st.session_state.stage1_completed = False
@@ -69,15 +71,6 @@ SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-st.write("SUPABASE_URL:", SUPABASE_URL)
-st.write("SUPABASE_KEY preview:", SUPABASE_KEY[:25])
-
-try:
-    test_response = supabase.table("profiles").select("*").limit(1).execute()
-    st.success("Supabase connection successful")
-except Exception as e:
-    st.error(f"Supabase connection failed: {e}")
 
 # ---------------------------------------------------
 # Global Style
@@ -601,12 +594,40 @@ elif st.session_state.current_page == "auth":
 
             if st.button("Login to Platform", use_container_width=True, key="auth_login_platform"):
                 if login_email and login_password:
-                    st.session_state.logged_in = True
-                    st.session_state.user_email = login_email
-                    st.session_state.user_name = login_email.split("@")[0].replace(".", " ").title()
-                    go_to("home")
-                    st.success("Login successful!")
-                    st.rerun()
+                    try:
+                        auth_response = supabase.auth.sign_in_with_password({
+                            "email": login_email,
+                            "password": login_password
+                        })
+
+                        user = auth_response.user
+
+                        if user:
+                            st.session_state.logged_in = True
+                            st.session_state.user_id = user.id
+                            st.session_state.user_email = user.email
+
+                            profile_res = supabase.table("profiles").select("*").eq("id", user.id).execute()
+                            if profile_res.data:
+                                st.session_state.user_name = profile_res.data[0]["full_name"]
+                            else:
+                                st.session_state.user_name = user.email.split("@")[0].replace(".", " ").title()
+
+                            progress_res = supabase.table("user_progress").select("*").eq("user_id", user.id).execute()
+                            if progress_res.data:
+                                progress_data = progress_res.data[0]
+                                st.session_state.stage1_completed = progress_data["stage1_completed"]
+                                st.session_state.stage2_completed = progress_data["stage2_completed"]
+                                st.session_state.selected_path = progress_data["selected_path"]
+
+                            go_to("home")
+                            st.success("Login successful!")
+                            st.rerun()
+                        else:
+                            st.error("Login failed. Please check your credentials.")
+
+                    except Exception as e:
+                        st.error(f"Login error: {e}")
                 else:
                     st.error("Please enter both email and password.")
 
