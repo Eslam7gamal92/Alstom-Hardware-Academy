@@ -67,13 +67,16 @@ def resize_image_to_height(image_path, target_height=320):
 def update_progress_in_db():
     progress = calculate_progress()
 
-    supabase_admin.table("user_progress").upsert({
-        "user_id": st.session_state.user_id,
-        "stage1_completed": st.session_state.stage1_completed,
-        "stage2_completed": st.session_state.stage2_completed,
-        "selected_path": st.session_state.selected_path,
-        "progress_percent": progress
-    }).execute()
+    supabase_admin.table("user_progress").upsert(
+        {
+            "user_id": st.session_state.user_id,
+            "stage1_completed": st.session_state.stage1_completed,
+            "stage2_completed": st.session_state.stage2_completed,
+            "selected_path": st.session_state.selected_path,
+            "progress_percent": progress
+        },
+        on_conflict="user_id"
+    ).execute()
 
 # ---------------------------------------------------
 # Supabase Connection
