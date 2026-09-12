@@ -67,11 +67,11 @@ def resize_image_to_height(image_path, target_height=320):
 def update_progress_in_db():
     progress = calculate_progress()
 
-    print("DEBUG user_id:", st.session_state.user_id)
-    print("DEBUG stage1_completed:", st.session_state.stage1_completed)
-    print("DEBUG stage2_completed:", st.session_state.stage2_completed)
-    print("DEBUG selected_path:", st.session_state.selected_path)
-    print("DEBUG progress_percent:", progress)
+    st.write("DEBUG user_id:", st.session_state.user_id)
+    st.write("DEBUG stage1_completed:", st.session_state.stage1_completed)
+    st.write("DEBUG stage2_completed:", st.session_state.stage2_completed)
+    st.write("DEBUG selected_path:", st.session_state.selected_path)
+    st.write("DEBUG progress_percent:", progress)
 
     try:
         response = supabase.table("user_progress").update({
@@ -81,9 +81,9 @@ def update_progress_in_db():
             "progress_percent": progress
         }).eq("user_id", st.session_state.user_id).execute()
 
-        print("DEBUG update response:", response)
+        st.write("DEBUG update response:", response)
     except Exception as e:
-        print("DEBUG update error:", e)
+        st.error(f"Update progress error: {e}")
 
 # ---------------------------------------------------
 # Supabase Connection
