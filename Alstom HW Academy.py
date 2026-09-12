@@ -67,40 +67,23 @@ def resize_image_to_height(image_path, target_height=320):
 def update_progress_in_db():
     progress = calculate_progress()
 
-    try:
-        existing = supabase.table("user_progress").select("*").eq("user_id", st.session_state.user_id).execute()
-
-        if existing.data:
-            response = supabase.table("user_progress").update({
-                "stage1_completed": st.session_state.stage1_completed,
-                "stage2_completed": st.session_state.stage2_completed,
-                "selected_path": st.session_state.selected_path,
-                "progress_percent": progress
-            }).eq("user_id", st.session_state.user_id).execute()
-
-            print("DEBUG update response:", response)
-
-        else:
-            response = supabase.table("user_progress").insert({
-                "user_id": st.session_state.user_id,
-                "stage1_completed": st.session_state.stage1_completed,
-                "stage2_completed": st.session_state.stage2_completed,
-                "selected_path": st.session_state.selected_path,
-                "progress_percent": progress
-            }).execute()
-
-            print("DEBUG insert response:", response)
-
-    except Exception as e:
-        print("DEBUG progress save error:", e)
+    supabase_admin.table("user_progress").upsert({
+        "user_id": st.session_state.user_id,
+        "stage1_completed": st.session_state.stage1_completed,
+        "stage2_completed": st.session_state.stage2_completed,
+        "selected_path": st.session_state.selected_path,
+        "progress_percent": progress
+    }).execute()
 
 # ---------------------------------------------------
 # Supabase Connection
 # ---------------------------------------------------
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
-SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+SUPABASE_ANON_KEY = st.secrets["SUPABASE_ANON_KEY"]
+SUPABASE_SERVICE_ROLE_KEY = st.secrets["SUPABASE_SERVICE_ROLE_KEY"]
 
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabase_auth: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
+supabase_admin: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 # ---------------------------------------------------
 # Global Style
@@ -625,7 +608,7 @@ elif st.session_state.current_page == "auth":
             if st.button("Login to Platform", use_container_width=True, key="auth_login_platform"):
                 if login_email and login_password:
                     try:
-                        auth_response = supabase.auth.sign_in_with_password({
+                        auth_response = supabase_auth.sign_in_with_password({
                             "email": login_email,
                             "password": login_password
                         })
@@ -637,13 +620,13 @@ elif st.session_state.current_page == "auth":
                             st.session_state.user_id = user.id
                             st.session_state.user_email = user.email
 
-                            profile_res = supabase.table("profiles").select("*").eq("id", user.id).execute()
+                            profile_res = supabase_admin.table("profiles").select("*").eq("id", user.id).execute()
                             if profile_res.data:
                                 st.session_state.user_name = profile_res.data[0]["full_name"]
                             else:
                                 st.session_state.user_name = user.email.split("@")[0].replace(".", " ").title()
 
-                            progress_res = supabase.table("user_progress").select("*").eq("user_id", user.id).execute()
+                            progress_res = supabase_admin.table("user_progress").select("*").eq("user_id", user.id).execute()
                             if progress_res.data:
                                 progress_data = progress_res.data[0]
                                 st.session_state.stage1_completed = progress_data["stage1_completed"]
@@ -676,7 +659,7 @@ elif st.session_state.current_page == "auth":
                 else:
                     try:
                         # Create auth user
-                        auth_response = supabase.auth.sign_up({
+                        auth_response = supabase_auth.auth.sign_up({
                             "email": signup_email,
                             "password": password
                         })
@@ -685,14 +668,14 @@ elif st.session_state.current_page == "auth":
 
                         if user is not None:
                             # Insert into profiles table
-                            supabase.table("profiles").insert({
+                            supabase_admin.table("profiles").insert({
                                 "id": user.id,
                                 "full_name": full_name,
                                 "email": signup_email
                             }).execute()
 
                             # Insert initial progress
-                            supabase.table("user_progress").insert({
+                            supabase_admin.table("user_progress").insert({
                                 "user_id": user.id,
                                 "stage1_completed": False,
                                 "stage2_completed": False,
