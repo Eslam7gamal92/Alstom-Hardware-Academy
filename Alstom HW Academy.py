@@ -305,7 +305,8 @@ st.markdown("""
 # Landing Page
 # ---------------------------------------------------
 if st.session_state.current_page == "landing":
-    st.markdown('<div class="header-wrapper">', unsafe_allow_html=True)
+    st.markdown('<div class="top-header-area">', unsafe_allow_html=True)
+
     nav1, nav2, nav3 = st.columns([2.2, 3.2, 2])
 
     with nav1:
@@ -335,6 +336,7 @@ if st.session_state.current_page == "landing":
             if st.button("Join Now", use_container_width=True, key="landing_join"):
                 go_to("auth")
                 st.rerun()
+
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.write("")
@@ -504,64 +506,76 @@ if st.session_state.current_page == "landing":
     card1, card2 = st.columns(2)
 
     with card1:
+        st.markdown('<div class="learning-card">', unsafe_allow_html=True)
         try:
             img1 = resize_image_to_height("railway_system.jpg", 320)
             st.image(img1, use_container_width=True)
-        except Exception:
+        except:
             st.info("Add image: railway_system.jpg")
+
         st.markdown("""
-        <div style="padding:8px 10px 12px 6px;">
-            <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Railway System</h3>
-            <p style="font-size:16px; color:#374151; line-height:1.55;">
+        <div class="learning-card-body">
+            <div class="learning-card-title">Railway System</div>
+            <div class="learning-card-text">
                 Build a high-level understanding of railway systems, infrastructure, rolling stock, power, telecom, and railway operations.
-            </p>
+            </div>
         </div>
         """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
     with card2:
+        st.markdown('<div class="learning-card">', unsafe_allow_html=True)
         try:
             img2 = resize_image_to_height("specialized_paths.jpg", 320)
             st.image(img2, use_container_width=True)
-        except Exception:
+        except:
             st.info("Add image: specialized_paths.jpg")
+
         st.markdown("""
-        <div style="padding:8px 10px 12px 6px;">
-            <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Specialized Paths</h3>
-            <p style="font-size:16px; color:#374151; line-height:1.55;">
+        <div class="learning-card-body">
+            <div class="learning-card-title">Specialized Paths</div>
+            <div class="learning-card-text">
                 Move into focused technical areas such as Pedals, OBC, Cable Chassis, and HVITC based on your role and learning goals.
-            </p>
+            </div>
         </div>
         """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
     card3, card4 = st.columns(2)
 
     with card3:
+        st.markdown('<div class="learning-card">', unsafe_allow_html=True)
         try:
-            img3 = Image.open("signalling_hardware.jpg")
-            st.image(img3, width=760)
-        except Exception:
+            img3 = resize_image_to_height("signalling_hardware.jpg", 320)
+            st.image(img3, use_container_width=True)
+        except:
             st.info("Add image: signalling_hardware.jpg")
+
         st.markdown("""
-        <div style="padding:8px 10px 12px 6px;">
-            <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Signalling & Hardware Fundamentals</h3>
-            <p style="font-size:16px; color:#374151; line-height:1.55;">
+        <div class="learning-card-body">
+            <div class="learning-card-title">Signalling & Hardware Fundamentals</div>
+            <div class="learning-card-text">
                 Learn key hardware concepts, system interfaces, signalling basics, component understanding, and engineering principles.
-            </p>
+            </div>
         </div>
         """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
     with card4:
+        st.markdown('<div class="learning-card">', unsafe_allow_html=True)
         try:
             img4 = resize_image_to_height("progress_tracking.jpg", 320)
             st.image(img4, use_container_width=True)
-        except Exception:
+        except:
             st.info("Add image: progress_tracking.jpg")
+
         st.markdown("""
-        <div style="padding:8px 10px 12px 6px;">
-            <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Progress Tracking</h3>
-            <p style="font-size:16px; color:#374151; line-height:1.55;">
-                Track learning completion, unlock stages, validate understanding through quizzes, and monitor your progress step by step.
-            </p>
+        <div class="footer-wrapper">
+            <hr style="margin-top:0px; margin-bottom:12px;">
+            <div class="footer-text">
+                <strong>Alstom Hardware Academy Platform</strong><br>
+                Built to support onboarding, technical learning, and knowledge development for hardware engineers at Alstom.
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
