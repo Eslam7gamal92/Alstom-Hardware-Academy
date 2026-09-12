@@ -70,6 +70,15 @@ SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+st.write("SUPABASE_URL:", SUPABASE_URL)
+st.write("SUPABASE_KEY preview:", SUPABASE_KEY[:25])
+
+try:
+    test_response = supabase.table("profiles").select("*").limit(1).execute()
+    st.success("Supabase connection successful")
+except Exception as e:
+    st.error(f"Supabase connection failed: {e}")
+
 # ---------------------------------------------------
 # Global Style
 # ---------------------------------------------------
