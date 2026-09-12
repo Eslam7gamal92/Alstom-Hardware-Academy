@@ -297,6 +297,13 @@ st.markdown("""
     border-top: 1px solid #E5E7EB;
 }
             
+.top-header-area {
+    background-color: white;
+    margin: -1rem -1rem 26px -1rem;
+    padding: 18px 28px 20px 28px;
+    border-bottom: 1px solid #E5E7EB;
+}
+            
 </style>
 """, unsafe_allow_html=True)
 
@@ -614,13 +621,15 @@ if st.session_state.current_page == "landing":
             go_to("auth")
             st.rerun()
 
-    st.markdown("""
-    <hr style="margin-top:28px; margin-bottom:12px;">
-    <div class="footer-text">
-        <strong>Alstom Hardware Academy Platform</strong><br>
-        Built to support onboarding, technical learning, and knowledge development for hardware engineers at Alstom.
-    </div>
-    """, unsafe_allow_html=True)
+        st.markdown("""
+        <div class="footer-wrapper">
+            <hr style="margin-top:0px; margin-bottom:12px;">
+            <div class="footer-text">
+                <strong>Alstom Hardware Academy Platform</strong><br>
+                Built to support onboarding, technical learning, and knowledge development for hardware engineers at Alstom.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 
 # ---------------------------------------------------
