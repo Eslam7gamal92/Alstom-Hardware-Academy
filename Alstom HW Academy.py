@@ -67,23 +67,32 @@ def resize_image_to_height(image_path, target_height=320):
 def update_progress_in_db():
     progress = calculate_progress()
 
-    st.write("DEBUG user_id:", st.session_state.user_id)
-    st.write("DEBUG stage1_completed:", st.session_state.stage1_completed)
-    st.write("DEBUG stage2_completed:", st.session_state.stage2_completed)
-    st.write("DEBUG selected_path:", st.session_state.selected_path)
-    st.write("DEBUG progress_percent:", progress)
-
     try:
-        response = supabase.table("user_progress").update({
-            "stage1_completed": st.session_state.stage1_completed,
-            "stage2_completed": st.session_state.stage2_completed,
-            "selected_path": st.session_state.selected_path,
-            "progress_percent": progress
-        }).eq("user_id", st.session_state.user_id).execute()
+        existing = supabase.table("user_progress").select("*").eq("user_id", st.session_state.user_id).execute()
 
-        st.write("DEBUG update response:", response)
+        if existing.data:
+            response = supabase.table("user_progress").update({
+                "stage1_completed": st.session_state.stage1_completed,
+                "stage2_completed": st.session_state.stage2_completed,
+                "selected_path": st.session_state.selected_path,
+                "progress_percent": progress
+            }).eq("user_id", st.session_state.user_id).execute()
+
+            print("DEBUG update response:", response)
+
+        else:
+            response = supabase.table("user_progress").insert({
+                "user_id": st.session_state.user_id,
+                "stage1_completed": st.session_state.stage1_completed,
+                "stage2_completed": st.session_state.stage2_completed,
+                "selected_path": st.session_state.selected_path,
+                "progress_percent": progress
+            }).execute()
+
+            print("DEBUG insert response:", response)
+
     except Exception as e:
-        st.error(f"Update progress error: {e}")
+        print("DEBUG progress save error:", e)
 
 # ---------------------------------------------------
 # Supabase Connection
