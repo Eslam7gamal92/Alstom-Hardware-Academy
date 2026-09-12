@@ -1,7 +1,8 @@
 import streamlit as st
 from PIL import Image
 from supabase import create_client, Client
-
+import streamlit as st
+from PIL import Image
 
 # ---------------------------------------------------
 # Page Config
@@ -15,7 +16,7 @@ st.set_page_config(
 # ---------------------------------------------------
 # Session State Initialization
 # ---------------------------------------------------
-DEFAULTS = {
+defaults = {
     "logged_in": False,
     "user_id": "",
     "user_name": "",
@@ -26,37 +27,25 @@ DEFAULTS = {
     "current_page": "landing"
 }
 
-for key, value in DEFAULTS.items():
+for key, value in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = value
-
-
-# ---------------------------------------------------
-# Supabase Connection
-# ---------------------------------------------------
-SUPABASE_URL = st.secrets["SUPABASE_URL"]
-SUPABASE_ANON_KEY = st.secrets["SUPABASE_ANON_KEY"]
-SUPABASE_SERVICE_ROLE_KEY = st.secrets["SUPABASE_SERVICE_ROLE_KEY"]
-
-supabase_auth: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
-supabase_admin: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
-
 
 # ---------------------------------------------------
 # Helper Functions
 # ---------------------------------------------------
-def go_to(page_name: str):
+def go_to(page_name):
     st.session_state.current_page = page_name
 
-
-def reset_session():
-    for key, value in DEFAULTS.items():
-        st.session_state[key] = value
-
-
 def logout():
-    reset_session()
-
+    st.session_state.logged_in = False
+    st.session_state.user_id = ""
+    st.session_state.user_name = ""
+    st.session_state.user_email = ""
+    st.session_state.stage1_completed = False
+    st.session_state.stage2_completed = False
+    st.session_state.selected_path = ""
+    st.session_state.current_page = "landing"
 
 def calculate_progress():
     progress = 0
@@ -68,66 +57,16 @@ def calculate_progress():
         progress += 20
     return progress
 
-
 def resize_image_to_height(image_path, target_height=320):
     img = Image.open(image_path)
     width, height = img.size
     new_width = int((target_height / height) * width)
-    return img.resize((new_width, target_height))
+    resized_img = img.resize((new_width, target_height))
+    return resized_img
 
-
-def ensure_profile_exists(user_id, full_name, email):
-    existing = supabase_admin.table("profiles").select("id").eq("id", user_id).execute()
-    if not existing.data:
-        supabase_admin.table("profiles").insert({
-            "id": user_id,
-            "full_name": full_name,
-            "email": email
-        }).execute()
-
-
-def ensure_user_progress_exists(user_id):
-    existing = supabase_admin.table("user_progress").select("user_id").eq("user_id", user_id).execute()
-    if not existing.data:
-        supabase_admin.table("user_progress").insert({
-            "user_id": user_id,
-            "stage1_completed": False,
-            "stage2_completed": False,
-            "selected_path": "",
-            "progress_percent": 0
-        }).execute()
-
-
-def load_user_data(user):
-    st.session_state.logged_in = True
-    st.session_state.user_id = user.id
-    st.session_state.user_email = user.email
-
-    guessed_name = user.email.split("@")[0].replace(".", " ").title()
-    ensure_profile_exists(user.id, guessed_name, user.email)
-    ensure_user_progress_exists(user.id)
-
-    profile_res = supabase_admin.table("profiles").select("*").eq("id", user.id).execute()
-    if profile_res.data:
-        profile = profile_res.data[0]
-        st.session_state.user_name = profile.get("full_name", guessed_name)
-    else:
-        st.session_state.user_name = guessed_name
-
-    progress_res = supabase_admin.table("user_progress").select("*").eq("user_id", user.id).execute()
-    if progress_res.data:
-        progress_data = progress_res.data[0]
-        st.session_state.stage1_completed = progress_data.get("stage1_completed", False)
-        st.session_state.stage2_completed = progress_data.get("stage2_completed", False)
-        st.session_state.selected_path = progress_data.get("selected_path", "")
-    else:
-        st.session_state.stage1_completed = False
-        st.session_state.stage2_completed = False
-        st.session_state.selected_path = ""
-
-
-def save_progress():
+def update_progress_in_db():
     progress = calculate_progress()
+
     supabase_admin.table("user_progress").upsert(
         {
             "user_id": st.session_state.user_id,
@@ -139,26 +78,23 @@ def save_progress():
         on_conflict="user_id"
     ).execute()
 
+# ---------------------------------------------------
+# Supabase Connection
+# ---------------------------------------------------
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_ANON_KEY = st.secrets["SUPABASE_ANON_KEY"]
+SUPABASE_SERVICE_ROLE_KEY = st.secrets["SUPABASE_SERVICE_ROLE_KEY"]
 
-def show_logo():
-    try:
-        st.image("alstom_logo.png", width=180)
-    except Exception:
-        st.markdown("## **ALSTOM**")
-    st.caption("Alstom Hardware Academy")
-
+supabase_auth: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
+supabase_admin: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 # ---------------------------------------------------
 # Global Style
 # ---------------------------------------------------
 st.markdown("""
 <style>
-.stApp {
-    background-color: #F5F5F7;
-}
-
 .main {
-    background-color: #F5F5F7;
+    background-color: #FFFFFF;
 }
 
 .hero-box {
@@ -196,6 +132,15 @@ st.markdown("""
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.card-box {
+    background-color: white;
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid #D1D5DB;
+    margin-bottom: 12px;
+    min-height: 130px;
 }
 
 .small-title {
@@ -247,107 +192,48 @@ st.markdown("""
     font-size:15px;
     padding-bottom:10px;
 }
-
-.top-navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 6px 18px 6px;
-}
-
-.top-navbar-left {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.top-navbar-center {
-    display: flex;
-    align-items: center;
-    gap: 34px;
-    font-size: 17px;
-    font-weight: 700;
-    color: #1F2937;
-}
-
-.top-navbar-right {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-}
-
-.logo-subtitle {
-    color: #6B7280;
-    font-size: 15px;
-    margin-top: 4px;
-}
-
-            .header-wrapper {
-    background-color: white;
-    padding: 18px 26px;
-    border-radius: 0 0 18px 18px;
-    margin: -1rem -1rem 28px -1rem;
-    border-bottom: 1px solid #E5E7EB;
-}
-
-.footer-wrapper {
-    background-color: white;
-    padding: 24px 20px 14px 20px;
-    margin: 30px -1rem -1rem -1rem;
-    border-top: 1px solid #E5E7EB;
-}
-            
-.top-header-area {
-    background-color: white;
-    margin: -1rem -1rem 26px -1rem;
-    padding: 18px 28px 20px 28px;
-    border-bottom: 1px solid #E5E7EB;
-}
-            
 </style>
 """, unsafe_allow_html=True)
-
 
 # ---------------------------------------------------
 # Landing Page
 # ---------------------------------------------------
 if st.session_state.current_page == "landing":
-    st.markdown('<div class="top-header-area">', unsafe_allow_html=True)
 
-    nav1, nav2, nav3 = st.columns([2.2, 3.2, 2])
+    nav1, nav2, nav3 = st.columns([2, 4, 2])
 
     with nav1:
         try:
             st.image("alstom_logo.png", width=180)
+            st.caption("Alstom Hardware Academy")
         except:
             st.markdown("## **ALSTOM**")
-        st.markdown('<div class="logo-subtitle">Alstom Hardware Academy</div>', unsafe_allow_html=True)
+            st.caption("Alstom Hardware Academy")
 
     with nav2:
-        st.markdown("""
-        <div class="top-navbar-center">
-            <span>Explore</span>
-            <span>Learning Journey</span>
-            <span>Specializations</span>
-            <span>About</span>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+            """
+            <div class="nav-center">
+            Explore &nbsp;&nbsp;&nbsp; Learning Journey &nbsp;&nbsp;&nbsp; Specializations &nbsp;&nbsp;&nbsp; About
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
     with nav3:
-        btn1, btn2 = st.columns(2)
-        with btn1:
+        b1, b2 = st.columns(2)
+        with b1:
             if st.button("Log in", use_container_width=True, key="landing_login"):
                 go_to("auth")
                 st.rerun()
-        with btn2:
+        with b2:
             if st.button("Join Now", use_container_width=True, key="landing_join"):
                 go_to("auth")
                 st.rerun()
 
-    st.markdown('</div>', unsafe_allow_html=True)
-
     st.write("")
 
+    # 1. Hero
     st.markdown("""
     <div class="hero-box">
         <div class="small-title">Structured Learning for New Joiners</div>
@@ -360,6 +246,7 @@ if st.session_state.current_page == "landing":
     </div>
     """, unsafe_allow_html=True)
 
+    # 2. Key Highlights
     st.markdown("## Key Highlights")
     s1, s2, s3, s4 = st.columns(4)
 
@@ -397,6 +284,7 @@ if st.session_state.current_page == "landing":
 
     st.write("")
 
+    # 3 + 4. Platform Objectives / Why This Platform Matters
     c1, c2 = st.columns(2)
 
     with c1:
@@ -424,6 +312,7 @@ if st.session_state.current_page == "landing":
         </div>
         """, unsafe_allow_html=True)
 
+    # 5. About Alstom
     st.markdown("""
     <div class="section-box">
         <div class="section-title">About Alstom</div>
@@ -441,7 +330,9 @@ if st.session_state.current_page == "landing":
     </div>
     """, unsafe_allow_html=True)
 
+    # 6. Vision / Mission / Values
     st.markdown("## Vision, Mission & Values")
+
     vm1, vm2, vm3 = st.columns(3)
 
     with vm1:
@@ -477,6 +368,7 @@ if st.session_state.current_page == "landing":
         </div>
         """, unsafe_allow_html=True)
 
+    # 7. Alstom and Global Mobility Impact
     st.markdown("""
     <div class="section-box">
         <div class="section-title">Alstom and Global Mobility Impact</div>
@@ -492,6 +384,7 @@ if st.session_state.current_page == "landing":
     </div>
     """, unsafe_allow_html=True)
 
+    # 8. Alstom in Egypt
     st.markdown("""
     <div class="section-box">
         <div class="section-title">Alstom in Egypt</div>
@@ -507,85 +400,75 @@ if st.session_state.current_page == "landing":
     </div>
     """, unsafe_allow_html=True)
 
+    # 9. Explore Learning Areas
     st.markdown("## Explore Learning Areas")
     st.write("Discover the main learning tracks included in Alstom Hardware Academy.")
 
     card1, card2 = st.columns(2)
 
     with card1:
-        st.markdown('<div class="learning-card">', unsafe_allow_html=True)
         try:
             img1 = resize_image_to_height("railway_system.jpg", 320)
             st.image(img1, use_container_width=True)
         except:
             st.info("Add image: railway_system.jpg")
-
         st.markdown("""
-        <div class="learning-card-body">
-            <div class="learning-card-title">Railway System</div>
-            <div class="learning-card-text">
+        <div style="padding:8px 10px 12px 6px;">
+            <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Railway System</h3>
+            <p style="font-size:16px; color:#374151; line-height:1.55;">
                 Build a high-level understanding of railway systems, infrastructure, rolling stock, power, telecom, and railway operations.
-            </div>
+            </p>
         </div>
         """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with card2:
-        st.markdown('<div class="learning-card">', unsafe_allow_html=True)
         try:
             img2 = resize_image_to_height("specialized_paths.jpg", 320)
             st.image(img2, use_container_width=True)
         except:
             st.info("Add image: specialized_paths.jpg")
-
         st.markdown("""
-        <div class="learning-card-body">
-            <div class="learning-card-title">Specialized Paths</div>
-            <div class="learning-card-text">
+        <div style="padding:8px 10px 12px 6px;">
+            <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Specialized Paths</h3>
+            <p style="font-size:16px; color:#374151; line-height:1.55;">
                 Move into focused technical areas such as Pedals, OBC, Cable Chassis, and HVITC based on your role and learning goals.
-            </div>
+            </p>
         </div>
         """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     card3, card4 = st.columns(2)
 
     with card3:
-        st.markdown('<div class="learning-card">', unsafe_allow_html=True)
         try:
-            img3 = resize_image_to_height("signalling_hardware.jpg", 320)
-            st.image(img3, use_container_width=True)
+            img3 = Image.open("signalling_hardware.jpg")
+            st.image(img3, width=760)
         except:
             st.info("Add image: signalling_hardware.jpg")
-
         st.markdown("""
-        <div class="learning-card-body">
-            <div class="learning-card-title">Signalling & Hardware Fundamentals</div>
-            <div class="learning-card-text">
+        <div style="padding:8px 10px 12px 6px;">
+            <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Signalling & Hardware Fundamentals</h3>
+            <p style="font-size:16px; color:#374151; line-height:1.55;">
                 Learn key hardware concepts, system interfaces, signalling basics, component understanding, and engineering principles.
-            </div>
+            </p>
         </div>
         """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with card4:
-        st.markdown('<div class="learning-card">', unsafe_allow_html=True)
         try:
             img4 = resize_image_to_height("progress_tracking.jpg", 320)
             st.image(img4, use_container_width=True)
         except:
             st.info("Add image: progress_tracking.jpg")
-
         st.markdown("""
-        <div class="footer-wrapper">
-            <hr style="margin-top:0px; margin-bottom:12px;">
-            <div class="footer-text">
-                <strong>Alstom Hardware Academy Platform</strong><br>
-                Built to support onboarding, technical learning, and knowledge development for hardware engineers at Alstom.
-            </div>
+        <div style="padding:8px 10px 12px 6px;">
+            <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Progress Tracking</h3>
+            <p style="font-size:16px; color:#374151; line-height:1.55;">
+                Track learning completion, unlock stages, validate understanding through quizzes, and monitor your progress step by step.
+            </p>
         </div>
         """, unsafe_allow_html=True)
 
+    # 10. Why Alstom Hardware Academy?
     st.markdown("""
     <div class="section-box">
         <div class="section-title">Why Alstom Hardware Academy?</div>
@@ -600,6 +483,7 @@ if st.session_state.current_page == "landing":
     </div>
     """, unsafe_allow_html=True)
 
+    # 11. Final CTA
     st.markdown("""
     <div class="hero-box" style="padding:30px 34px;">
         <div class="section-title" style="color:white;">Start your learning journey today</div>
@@ -621,16 +505,14 @@ if st.session_state.current_page == "landing":
             go_to("auth")
             st.rerun()
 
-        st.markdown("""
-        <div class="footer-wrapper">
-            <hr style="margin-top:0px; margin-bottom:12px;">
-            <div class="footer-text">
-                <strong>Alstom Hardware Academy Platform</strong><br>
-                Built to support onboarding, technical learning, and knowledge development for hardware engineers at Alstom.
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
+    # 12. Footer
+    st.markdown("""
+    <hr style="margin-top:28px; margin-bottom:12px;">
+    <div class="footer-text">
+        <strong>Alstom Hardware Academy Platform</strong><br>
+        Built to support onboarding, technical learning, and knowledge development for hardware engineers at Alstom.
+    </div>
+    """, unsafe_allow_html=True)
 
 # ---------------------------------------------------
 # Authentication Page
@@ -681,9 +563,17 @@ elif st.session_state.current_page == "auth":
             st.rerun()
 
     st.write("")
-    show_logo()
+
+    # Logo aligned left
+    try:
+        st.image("alstom_logo.png", width=180)
+    except:
+        st.markdown("## **ALSTOM**")
+    st.caption("Alstom Hardware Academy")
+
     st.write("")
 
+    # Full width blue intro box
     st.markdown("""
     <div class="auth-left-box">
         <div class="auth-left-title">Start your onboarding journey with confidence</div>
@@ -704,6 +594,7 @@ elif st.session_state.current_page == "auth":
     </div>
     """, unsafe_allow_html=True)
 
+    # Narrow centered form section
     form_left, form_center, form_right = st.columns([1.2, 2.6, 1.2])
 
     with form_center:
@@ -728,7 +619,23 @@ elif st.session_state.current_page == "auth":
                         user = auth_response.user
 
                         if user:
-                            load_user_data(user)
+                            st.session_state.logged_in = True
+                            st.session_state.user_id = user.id
+                            st.session_state.user_email = user.email
+
+                            profile_res = supabase_admin.table("profiles").select("*").eq("id", user.id).execute()
+                            if profile_res.data:
+                                st.session_state.user_name = profile_res.data[0]["full_name"]
+                            else:
+                                st.session_state.user_name = user.email.split("@")[0].replace(".", " ").title()
+
+                            progress_res = supabase_admin.table("user_progress").select("*").eq("user_id", user.id).execute()
+                            if progress_res.data:
+                                progress_data = progress_res.data[0]
+                                st.session_state.stage1_completed = progress_data["stage1_completed"]
+                                st.session_state.stage2_completed = progress_data["stage2_completed"]
+                                st.session_state.selected_path = progress_data["selected_path"]
+
                             go_to("home")
                             st.success("Login successful!")
                             st.rerun()
@@ -754,7 +661,8 @@ elif st.session_state.current_page == "auth":
                     st.error("Passwords do not match.")
                 else:
                     try:
-                        auth_response = supabase_auth.auth.sign_up({
+                        # Create auth user
+                        auth_response = supabase_auth.auth.sign_in_with_password({
                             "email": signup_email,
                             "password": password
                         })
@@ -762,15 +670,28 @@ elif st.session_state.current_page == "auth":
                         user = auth_response.user
 
                         if user is not None:
-                            ensure_profile_exists(user.id, full_name, signup_email)
-                            ensure_user_progress_exists(user.id)
+                            # Insert into profiles table
+                            supabase_admin.table("profiles").insert({
+                                "id": user.id,
+                                "full_name": full_name,
+                                "email": signup_email
+                            }).execute()
+
+                            # Insert initial progress
+                            supabase_admin.table("user_progress").insert({
+                                "user_id": user.id,
+                                "stage1_completed": False,
+                                "stage2_completed": False,
+                                "selected_path": "",
+                                "progress_percent": 0
+                            }).execute()
+
                             st.success("Account created successfully! You can now log in.")
                         else:
                             st.error("Sign up failed. Please try again.")
 
                     except Exception as e:
                         st.error(f"Sign up error: {e}")
-
 
 # ---------------------------------------------------
 # Home Page
@@ -785,7 +706,11 @@ elif st.session_state.current_page == "home":
         top1, top2, top3 = st.columns([2, 4, 2])
 
         with top1:
-            show_logo()
+            try:
+                st.image("alstom_logo.png", width=180)
+            except:
+                st.markdown("## **ALSTOM**")
+            st.caption("Alstom Hardware Academy")
 
         with top3:
             if st.button("Logout", use_container_width=True, key="home_logout"):
@@ -826,7 +751,6 @@ Alstom Hardware Academy supports your onboarding journey through:
             if st.button("Go to Learning Journey", use_container_width=True, key="home_learning_journey"):
                 go_to("learning")
                 st.rerun()
-
 
 # ---------------------------------------------------
 # Learning Journey Page
@@ -890,7 +814,7 @@ This stage introduces the learner to:
             if st.button("Submit Stage 1 Quiz", use_container_width=True, key="submit_stage1"):
                 if q1 == "Train safety and control":
                     st.session_state.stage1_completed = True
-                    save_progress()
+                    update_progress_in_db()
                     st.success("Stage 1 completed successfully!")
                     st.rerun()
                 else:
@@ -935,7 +859,7 @@ This stage introduces:
                 if st.button("Submit Stage 2 Quiz", use_container_width=True, key="submit_stage2"):
                     if q2 == "Understand technical system components":
                         st.session_state.stage2_completed = True
-                        save_progress()
+                        update_progress_in_db()
                         st.success("Stage 2 completed successfully!")
                         st.rerun()
                     else:
@@ -962,7 +886,7 @@ This stage introduces:
             if st.button("Confirm Specialization", use_container_width=True, key="confirm_specialization"):
                 if selected:
                     st.session_state.selected_path = selected
-                    save_progress()
+                    update_progress_in_db()
                     st.success(f"Specialization selected: {selected}")
                     st.rerun()
                 else:
@@ -970,7 +894,6 @@ This stage introduces:
 
             if st.session_state.selected_path:
                 st.success(f"Selected Path: {st.session_state.selected_path} ✅")
-
 
 # ---------------------------------------------------
 # Profile Page
