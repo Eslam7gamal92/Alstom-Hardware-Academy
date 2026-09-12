@@ -181,9 +181,11 @@ st.markdown("""
 
 .nav-center {
     text-align: center;
-    padding-top: 18px;
+    padding-top: 8px;
     font-size: 16px;
-    color: #374151;
+    font-weight: 700;
+    color: #1F2937;
+    white-space: nowrap;
 }
 
 .footer-text {
@@ -200,7 +202,7 @@ st.markdown("""
 # ---------------------------------------------------
 if st.session_state.current_page == "landing":
 
-    nav1, nav2, nav3 = st.columns([2, 4, 2])
+    nav1, nav2, nav3 = st.columns([2.2, 3.6, 2.2])
 
     with nav1:
         try:
