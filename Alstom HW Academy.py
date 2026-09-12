@@ -64,6 +64,16 @@ def resize_image_to_height(image_path, target_height=320):
     resized_img = img.resize((new_width, target_height))
     return resized_img
 
+def update_progress_in_db():
+    progress = calculate_progress()
+
+    supabase.table("user_progress").update({
+        "stage1_completed": st.session_state.stage1_completed,
+        "stage2_completed": st.session_state.stage2_completed,
+        "selected_path": st.session_state.selected_path,
+        "progress_percent": progress
+    }).eq("user_id", st.session_state.user_id).execute()
+
 # ---------------------------------------------------
 # Supabase Connection
 # ---------------------------------------------------
@@ -798,6 +808,7 @@ This stage introduces the learner to:
             if st.button("Submit Stage 1 Quiz", use_container_width=True, key="submit_stage1"):
                 if q1 == "Train safety and control":
                     st.session_state.stage1_completed = True
+                    update_progress_in_db()
                     st.success("Stage 1 completed successfully!")
                     st.rerun()
                 else:
@@ -842,6 +853,7 @@ This stage introduces:
                 if st.button("Submit Stage 2 Quiz", use_container_width=True, key="submit_stage2"):
                     if q2 == "Understand technical system components":
                         st.session_state.stage2_completed = True
+                        update_progress_in_db()
                         st.success("Stage 2 completed successfully!")
                         st.rerun()
                     else:
@@ -868,6 +880,7 @@ This stage introduces:
             if st.button("Confirm Specialization", use_container_width=True, key="confirm_specialization"):
                 if selected:
                     st.session_state.selected_path = selected
+                    update_progress_in_db()
                     st.success(f"Specialization selected: {selected}")
                     st.rerun()
                 else:
