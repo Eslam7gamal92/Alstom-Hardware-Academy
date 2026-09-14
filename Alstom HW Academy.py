@@ -189,31 +189,31 @@ st.markdown("""
 }
 
 .footer-text {
-    text-align:center;
-    color:#6B7280;
-    font-size:15px;
-    padding-bottom:10px;
+    text-align: center;
+    color: #6B7280;
+    font-size: 15px;
+    padding-bottom: 10px;
 }
 
 .home-hero {
     background: linear-gradient(90deg, #0B3D91 0%, #123E8C 100%);
-    padding: 34px 32px;
+    padding: 44px 40px;
     border-radius: 20px;
     color: white;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
 }
 
 .home-hero-title {
-    font-size: 38px;
+    font-size: 44px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     color: white;
 }
 
 .home-hero-text {
-    font-size: 17px;
+    font-size: 18px;
     color: #E5E7EB;
-    line-height: 1.7;
+    line-height: 1.8;
 }
 
 .home-progress-box {
@@ -228,24 +228,24 @@ st.markdown("""
     background-color: white;
     border: 1px solid #E5E7EB;
     border-radius: 18px;
-    padding: 22px;
-    min-height: 250px;
+    padding: 26px;
+    min-height: 270px;
     box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
     margin-bottom: 18px;
 }
 
 .stage-card-title {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 700;
     color: #1F3552;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .stage-card-text {
     font-size: 15px;
     color: #4B5563;
-    line-height: 1.7;
-    margin-bottom: 18px;
+    line-height: 1.9;
+    margin-bottom: 20px;
 }
 
 .stage-badge-completed {
@@ -285,11 +285,10 @@ st.markdown("""
     background-color: white;
     border: 1px solid #E5E7EB;
     border-radius: 18px;
-    padding: 24px;
-    min-height: 240px;
+    padding: 28px;
+    min-height: 150px;
     box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
 }
-            
 </style>
 """, unsafe_allow_html=True)
 
