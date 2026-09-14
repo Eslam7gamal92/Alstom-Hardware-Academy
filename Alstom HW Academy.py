@@ -29,6 +29,9 @@ defaults = {
     "mandatory_5_completed": False,
     "mandatory_6_completed": False,
     "mandatory_7_completed": False,
+    "stage1_doc_completed": False,
+    "stage1_quiz_completed": False,
+    "stage1_current_item": 0,
     "stage1_completed": False,
     "stage2_completed": False,
     "selected_path": "",
@@ -58,6 +61,9 @@ def logout():
     st.session_state.mandatory_5_completed = False
     st.session_state.mandatory_6_completed = False
     st.session_state.mandatory_7_completed = False
+    st.session_state.stage1_doc_completed = False
+    st.session_state.stage1_quiz_completed = False
+    st.session_state.stage1_current_item = 0
     st.session_state.stage1_completed = False
     st.session_state.stage2_completed = False
     st.session_state.selected_path = ""
@@ -107,6 +113,8 @@ def save_progress():
             "mandatory_5_completed": st.session_state.mandatory_5_completed,
             "mandatory_6_completed": st.session_state.mandatory_6_completed,
             "mandatory_7_completed": st.session_state.mandatory_7_completed,
+            "stage1_doc_completed": st.session_state.stage1_doc_completed,
+            "stage1_quiz_completed": st.session_state.stage1_quiz_completed,
             "stage1_completed": st.session_state.stage1_completed,
             "stage2_completed": st.session_state.stage2_completed,
             "selected_path": st.session_state.selected_path,
@@ -174,6 +182,24 @@ MANDATORY_COURSES = [
     }
 ]
 
+STAGE1_ITEMS = [
+    {
+        "key": "stage1_doc_completed",
+        "title": "Railway System Document",
+        "type": "PDF",
+        "duration": "Self-paced",
+        "description": "Download and study the railway system document before proceeding to the quiz.",
+        "file": "stage1_railway_system.pdf"
+    },
+    {
+        "key": "stage1_quiz_completed",
+        "title": "Stage 1 Quiz",
+        "type": "Quiz",
+        "duration": "Short assessment",
+        "description": "Complete the quiz based on the Stage 1 railway system document.",
+        "file": ""
+    }
+]
 # ---------------------------------------------------
 # Supabase Connection
 # ---------------------------------------------------
@@ -903,6 +929,8 @@ elif st.session_state.current_page == "auth":
                                 st.session_state.mandatory_5_completed = progress_data.get("mandatory_5_completed", False)
                                 st.session_state.mandatory_6_completed = progress_data.get("mandatory_6_completed", False)
                                 st.session_state.mandatory_7_completed = progress_data.get("mandatory_7_completed", False)
+                                st.session_state.stage1_doc_completed = progress_data.get("stage1_doc_completed", False)
+                                st.session_state.stage1_quiz_completed = progress_data.get("stage1_quiz_completed", False)
                                 st.session_state.stage1_completed = progress_data.get("stage1_completed", False)
                                 st.session_state.stage2_completed = progress_data.get("stage2_completed", False)
                                 st.session_state.selected_path = progress_data.get("selected_path", "")
@@ -1095,7 +1123,7 @@ elif st.session_state.current_page == "home":
                 key="open_stage1",
                 disabled=not st.session_state.mandatory_completed
             ):
-                go_to("learning")
+                go_to("stage1")
                 st.rerun()
 
         # Row 2
@@ -1235,6 +1263,145 @@ elif st.session_state.current_page == "mandatory_trainings":
                         st.button("Completed", use_container_width=True, key=f'done_{course["key"]}', disabled=True)
 
             st.write("")
+
+# ---------------------------------------------------
+# Stage 1 Page
+# ---------------------------------------------------
+elif st.session_state.current_page == "stage1":
+    if not st.session_state.logged_in:
+        st.warning("Please login first.")
+        if st.button("Go to Login", key="stage1_go_to_login"):
+            go_to("auth")
+            st.rerun()
+    else:
+        top1, top2, top3 = st.columns([2, 4, 2])
+
+        with top1:
+            if st.button("← Home", use_container_width=True, key="stage1_home"):
+                go_to("home")
+                st.rerun()
+
+        with top3:
+            if st.button("Profile", use_container_width=True, key="stage1_profile"):
+                go_to("profile")
+                st.rerun()
+
+        st.title("Stage 1: Railway System")
+
+        progress = calculate_progress()
+        st.progress(progress / 100)
+        st.write(f"Overall Progress: **{progress}%**")
+
+        st.write("---")
+
+        if not st.session_state.mandatory_completed:
+            st.info("This stage is locked. Complete Mandatory Trainings first.")
+        else:
+            # Set current item automatically
+            if not st.session_state.stage1_doc_completed:
+                st.session_state.stage1_current_item = 0
+            elif not st.session_state.stage1_quiz_completed:
+                st.session_state.stage1_current_item = 1
+            else:
+                st.session_state.stage1_current_item = 1
+
+            left_col, right_col = st.columns([1.1, 2.2])
+
+            # -----------------------------
+            # Left Sidebar
+            # -----------------------------
+            with left_col:
+                st.markdown("### Stage 1 Content")
+
+                for idx, item in enumerate(STAGE1_ITEMS):
+                    completed = st.session_state[item["key"]]
+                    icon = "✅" if completed else "⬜"
+
+                    label = f"{icon} {item['title']}"
+
+                    if st.button(label, use_container_width=True, key=f"stage1_item_nav_{idx}"):
+                        st.session_state.stage1_current_item = idx
+                        st.rerun()
+
+            # -----------------------------
+            # Main Content Area
+            # -----------------------------
+            with right_col:
+                current_index = st.session_state.stage1_current_item
+                current_item = STAGE1_ITEMS[current_index]
+
+                st.markdown(f"## {current_item['title']}")
+                st.write(f"**Type:** {current_item['type']}")
+                st.write(f"**Duration:** {current_item['duration']}")
+                st.write(current_item["description"])
+                st.write("")
+
+                # -------------------------
+                # Item 1: PDF Document
+                # -------------------------
+                if current_index == 0:
+                    try:
+                        with open(current_item["file"], "rb") as pdf_file:
+                            st.download_button(
+                                label="Download Document",
+                                data=pdf_file,
+                                file_name=current_item["file"],
+                                mime="application/pdf",
+                                use_container_width=True,
+                                key="stage1_download_pdf"
+                            )
+                    except Exception:
+                        st.error(f"PDF file not found: {current_item['file']}")
+
+                    st.write("")
+
+                    if not st.session_state.stage1_doc_completed:
+                        if st.button("Mark Document as Completed", use_container_width=True, key="stage1_doc_complete"):
+                            st.session_state.stage1_doc_completed = True
+                            st.session_state.stage1_current_item = 1
+                            save_progress()
+                            st.rerun()
+                    else:
+                        st.success("Document completed ✅")
+
+                    st.write("")
+
+                    if st.button("Go to Next Item", use_container_width=True, key="stage1_next_from_doc"):
+                        st.session_state.stage1_current_item = 1
+                        st.rerun()
+
+                # -------------------------
+                # Item 2: Quiz
+                # -------------------------
+                elif current_index == 1:
+                    if not st.session_state.stage1_doc_completed:
+                        st.info("Please complete the document first before attempting the quiz.")
+                    else:
+                        if not st.session_state.stage1_quiz_completed:
+                            st.subheader("Stage 1 Quiz")
+
+                            q1 = st.radio(
+                                "What is the main purpose of railway signalling?",
+                                [
+                                    "Entertainment",
+                                    "Train safety and control",
+                                    "Food service"
+                                ],
+                                key="stage1_q1_page"
+                            )
+
+                            if st.button("Submit Quiz", use_container_width=True, key="stage1_submit_quiz_page"):
+                                if q1 == "Train safety and control":
+                                    st.session_state.stage1_quiz_completed = True
+                                    st.session_state.stage1_completed = True
+                                    save_progress()
+                                    st.success("Stage 1 completed successfully!")
+                                    st.rerun()
+                                else:
+                                    st.error("Incorrect answer. Please try again.")
+                        else:
+                            st.success("Quiz completed ✅")
+                            st.success("Stage 1 completed successfully ✅")
 
 # ---------------------------------------------------
 # Learning Journey Page
