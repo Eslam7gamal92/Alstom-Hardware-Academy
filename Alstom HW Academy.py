@@ -1176,16 +1176,16 @@ elif st.session_state.current_page == "mandatory_trainings":
 
         st.write("")
 
-        for i in range(0, len(MANDATORY_COURSES), 2):
-            row_courses = MANDATORY_COURSES[i:i+2]
-            cols = st.columns(2)
+        for i in range(0, len(MANDATORY_COURSES), 3):
+            row_courses = MANDATORY_COURSES[i:i+3]
+            cols = st.columns(3)
 
             for col, course in zip(cols, row_courses):
                 with col:
                     completed = st.session_state[course["key"]]
 
                     try:
-                        course_img = resize_image_to_height(course["image"], 240)
+                        course_img = resize_image_to_height(course["image"], 220)
                         st.image(course_img, use_container_width=True)
                     except:
                         st.info(f"Add image: {course['image']}")
