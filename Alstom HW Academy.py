@@ -1176,85 +1176,41 @@ elif st.session_state.current_page == "mandatory_trainings":
 
         st.write("")
 
-        # First row: 4 cards
-        row1 = MANDATORY_COURSES[:4]
-        cols1 = st.columns(4)
+        for i in range(0, len(MANDATORY_COURSES), 2):
+            row_courses = MANDATORY_COURSES[i:i+2]
+            cols = st.columns(2)
 
-        for col, course in zip(cols1, row1):
-            with col:
-                completed = st.session_state[course["key"]]
+            for col, course in zip(cols, row_courses):
+                with col:
+                    completed = st.session_state[course["key"]]
 
-                try:
-                    course_img = resize_image_to_height(course["image"], 220)
-                    st.image(course_img, use_container_width=True)
-                except:
-                    st.info(f"Add image: {course['image']}")
+                    try:
+                        course_img = resize_image_to_height(course["image"], 240)
+                        st.image(course_img, use_container_width=True)
+                    except:
+                        st.info(f"Add image: {course['image']}")
 
-                if completed:
-                    st.markdown('<div class="mandatory-status-done">Completed</div>', unsafe_allow_html=True)
-                else:
-                    st.markdown('<div class="mandatory-status-pending">Pending</div>', unsafe_allow_html=True)
+                    if completed:
+                        st.markdown('<div class="mandatory-status-done">Completed</div>', unsafe_allow_html=True)
+                    else:
+                        st.markdown('<div class="mandatory-status-pending">Pending</div>', unsafe_allow_html=True)
 
-                st.markdown(f'<div class="mandatory-card-title">{course["title"]}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="mandatory-card-duration">{course["duration"]}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="mandatory-card-text">{course["description"]}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="mandatory-card-title">{course["title"]}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="mandatory-card-duration">{course["duration"]}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="mandatory-card-text">{course["description"]}</div>', unsafe_allow_html=True)
 
-                st.markdown(
-                    f'<a href="{course["link"]}" target="_blank" style="text-decoration:none;">'
-                    f'<div style="background-color:#0B3D91; color:white; text-align:center; padding:10px 14px; '
-                    f'border-radius:10px; font-weight:600; margin-bottom:10px;">Open Course</div></a>',
-                    unsafe_allow_html=True
-                )
+                    st.link_button("Open Course", course["link"], use_container_width=True)
 
-                if not completed:
-                    if st.button("Mark as Completed", use_container_width=True, key=f'complete_{course["key"]}'):
-                        st.session_state[course["key"]] = True
-                        update_mandatory_completion()
-                        save_progress()
-                        st.rerun()
-                else:
-                    st.button("Completed", use_container_width=True, key=f'done_{course["key"]}', disabled=True)
+                    if not completed:
+                        if st.button("Mark as Completed", use_container_width=True, key=f'complete_{course["key"]}'):
+                            st.session_state[course["key"]] = True
+                            update_mandatory_completion()
+                            save_progress()
+                            st.rerun()
+                    else:
+                        st.button("Completed", use_container_width=True, key=f'done_{course["key"]}', disabled=True)
 
-        st.write("")
-
-        # Second row: 3 cards
-        row2 = MANDATORY_COURSES[4:]
-        cols2 = st.columns(3)
-
-        for col, course in zip(cols2, row2):
-            with col:
-                completed = st.session_state[course["key"]]
-
-                try:
-                    course_img = resize_image_to_height(course["image"], 220)
-                    st.image(course_img, use_container_width=True)
-                except:
-                    st.info(f"Add image: {course['image']}")
-
-                if completed:
-                    st.markdown('<div class="mandatory-status-done">Completed</div>', unsafe_allow_html=True)
-                else:
-                    st.markdown('<div class="mandatory-status-pending">Pending</div>', unsafe_allow_html=True)
-
-                st.markdown(f'<div class="mandatory-card-title">{course["title"]}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="mandatory-card-duration">{course["duration"]}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="mandatory-card-text">{course["description"]}</div>', unsafe_allow_html=True)
-
-                st.markdown(
-                    f'<a href="{course["link"]}" target="_blank" style="text-decoration:none;">'
-                    f'<div style="background-color:#0B3D91; color:#FFFFFF; text-align:center; padding:12px 14px; '
-                    f'border-radius:12px; font-weight:700; font-size:16px; margin-bottom:10px;">Open Course</div></a>',
-                    unsafe_allow_html=True
-                )
-
-                if not completed:
-                    if st.button("Mark as Completed", use_container_width=True, key=f'complete_row2_{course["key"]}'):
-                        st.session_state[course["key"]] = True
-                        update_mandatory_completion()
-                        save_progress()
-                        st.rerun()
-                else:
-                    st.button("Completed", use_container_width=True, key=f'done_row2_{course["key"]}', disabled=True)
+            st.write("")
 
 # ---------------------------------------------------
 # Learning Journey Page
