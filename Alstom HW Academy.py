@@ -1301,21 +1301,37 @@ elif st.session_state.current_page == "mandatory_trainings":
                         st.button("Completed", use_container_width=True, key=f'done_{course["key"]}', disabled=True)
 
             st.write("")
-            st.write("")
 
-if st.session_state.mandatory_completed:
-    st.success("You can now proceed to Stage 1 ✅")
-else:
-    st.info("Complete all mandatory trainings to unlock Stage 1.")
+        st.write("")
 
-if st.button(
-    "Go to Stage 1",
-    use_container_width=True,
-    key="mandatory_go_stage1",
-    disabled=not st.session_state.mandatory_completed
-):
-    go_to("stage1")
-    st.rerun()
+        if st.session_state.mandatory_completed:
+            st.success("You can now proceed to Stage 1 ✅")
+
+            st.markdown(
+                """
+                <div style="
+                    background-color:#DC2626;
+                    color:white;
+                    text-align:center;
+                    padding:14px 18px;
+                    border-radius:14px;
+                    font-weight:700;
+                    font-size:18px;
+                    margin-top:10px;
+                    margin-bottom:10px;
+                ">
+                    Stage 1 is now unlocked
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+            if st.button("Go to Stage 1", use_container_width=True, key="mandatory_go_stage1"):
+                go_to("stage1")
+                st.rerun()
+        else:
+            st.info("Complete all mandatory trainings to unlock Stage 1.")
+            st.button("Go to Stage 1", use_container_width=True, key="mandatory_go_stage1_disabled", disabled=True)
 
 # ---------------------------------------------------
 # Stage 1 Page
@@ -1367,7 +1383,6 @@ elif st.session_state.current_page == "stage1":
             # Left Sidebar
             # -----------------------------
             with left_col:
-                st.markdown('<div class="stage-sidebar-box">', unsafe_allow_html=True)
                 st.markdown("### Stage 1 Content")
 
                 stage1_labels = []
@@ -1386,13 +1401,11 @@ elif st.session_state.current_page == "stage1":
 
                 st.session_state.stage1_current_item = stage1_labels.index(selected_label)
 
-                st.markdown('</div>', unsafe_allow_html=True)
 
             # -----------------------------
             # Main Content Area
             # -----------------------------
             with right_col:
-                st.markdown('<div class="stage-main-box">', unsafe_allow_html=True)
 
                 current_index = st.session_state.stage1_current_item
                 current_item = STAGE1_ITEMS[current_index]
@@ -1410,7 +1423,7 @@ elif st.session_state.current_page == "stage1":
                     try:
                         with open(current_item["file"], "rb") as pdf_file:
                             st.download_button(
-                                label="Open / Download Document",
+                                label="Download Stage 1 Document",
                                 data=pdf_file,
                                 file_name=current_item["file"],
                                 mime="application/pdf",
@@ -1469,8 +1482,6 @@ elif st.session_state.current_page == "stage1":
                         else:
                             st.success("Quiz completed ✅")
                             st.success("Stage 1 completed successfully ✅")
-
-                st.markdown('</div>', unsafe_allow_html=True)
 
 # ---------------------------------------------------
 # Learning Journey Page
