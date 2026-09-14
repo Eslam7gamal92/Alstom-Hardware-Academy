@@ -1346,9 +1346,6 @@ elif st.session_state.current_page == "stage1":
             if st.session_state.stage1_current_item not in [0, 1]:
                 st.session_state.stage1_current_item = 0
 
-            if st.session_state.stage1_current_item == 0 and st.session_state.stage1_doc_completed and not st.session_state.stage1_quiz_completed:
-                st.session_state.stage1_current_item = 1
-
             left_col, right_col = st.columns([0.9, 2.3])
 
             # -----------------------------
@@ -1358,14 +1355,21 @@ elif st.session_state.current_page == "stage1":
                 st.markdown('<div class="stage-sidebar-box">', unsafe_allow_html=True)
                 st.markdown("### Stage 1 Content")
 
-                for idx, item in enumerate(STAGE1_ITEMS):
+                stage1_labels = []
+                for item in STAGE1_ITEMS:
                     completed = st.session_state[item["key"]]
                     icon = "✅" if completed else "⬜"
-                    label = f"{icon} {item['title']}"
+                    stage1_labels.append(f"{icon} {item['title']}")
 
-                    if st.button(label, use_container_width=True, key=f"stage1_item_nav_{idx}"):
-                        st.session_state.stage1_current_item = idx
-                        st.rerun()
+                selected_label = st.radio(
+                    "Select content item",
+                    stage1_labels,
+                    index=st.session_state.stage1_current_item,
+                    key="stage1_sidebar_radio",
+                    label_visibility="collapsed"
+                )
+
+                st.session_state.stage1_current_item = stage1_labels.index(selected_label)
 
                 st.markdown('</div>', unsafe_allow_html=True)
 
