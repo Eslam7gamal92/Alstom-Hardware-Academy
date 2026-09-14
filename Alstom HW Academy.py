@@ -1073,7 +1073,7 @@ elif st.session_state.current_page == "home":
             </div>
             """, unsafe_allow_html=True)
 
-            if st.button("Open Mandatory", use_container_width=True, key="open_mandatory"):
+            if st.button("Enter Mandatory Trainings", use_container_width=True, key="open_mandatory"):
                 go_to("mandatory_trainings")
                 st.rerun()
 
@@ -1184,8 +1184,6 @@ elif st.session_state.current_page == "mandatory_trainings":
             with col:
                 completed = st.session_state[course["key"]]
 
-                st.markdown('<div class="mandatory-card">', unsafe_allow_html=True)
-
                 try:
                     st.image(course["image"], use_container_width=True)
                 except:
@@ -1216,8 +1214,6 @@ elif st.session_state.current_page == "mandatory_trainings":
                 else:
                     st.button("Completed", use_container_width=True, key=f'done_{course["key"]}', disabled=True)
 
-                st.markdown('</div>', unsafe_allow_html=True)
-
         st.write("")
 
         # Second row: 3 cards
@@ -1227,8 +1223,6 @@ elif st.session_state.current_page == "mandatory_trainings":
         for col, course in zip(cols2, row2):
             with col:
                 completed = st.session_state[course["key"]]
-
-                st.markdown('<div class="mandatory-card">', unsafe_allow_html=True)
 
                 try:
                     st.image(course["image"], use_container_width=True)
@@ -1259,8 +1253,6 @@ elif st.session_state.current_page == "mandatory_trainings":
                         st.rerun()
                 else:
                     st.button("Completed", use_container_width=True, key=f'done_row2_{course["key"]}', disabled=True)
-
-                st.markdown('</div>', unsafe_allow_html=True)
 
 # ---------------------------------------------------
 # Learning Journey Page
