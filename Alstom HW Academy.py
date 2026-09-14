@@ -836,9 +836,21 @@ elif st.session_state.current_page == "home":
         st.write(f"Progress: **{progress}%**")
         st.markdown('</div>', unsafe_allow_html=True)
 
+        # About journey first
+        st.markdown("""
+        <div class="info-panel" style="margin-bottom:22px;">
+            <h3 style="color:#1F3552; margin-bottom:12px;">About Your Journey</h3>
+            <p style="font-size:16px; color:#374151; line-height:1.75; margin-bottom:0;">
+                Alstom Hardware Academy is designed to make onboarding clearer, faster, and more structured.
+                Instead of navigating scattered documents, you will move through a defined learning path,
+                starting with the railway system, then hardware fundamentals, and finally your technical specialization.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
         # Stage cards title
         st.markdown('<h2 style="color:#1F3552; font-weight:700;">Your Learning Journey</h2>', unsafe_allow_html=True)
-        st.write("Explore the three stages of your learning path and continue from your current step.")
+        st.write("Explore the three stages of your journey and continue from your current step.")
 
         c1, c2, c3 = st.columns(3)
 
@@ -876,7 +888,7 @@ elif st.session_state.current_page == "home":
             </div>
             """, unsafe_allow_html=True)
 
-            if st.button("Open Stage 1", use_container_width=True, key="open_stage1"):
+            if st.button("Enter Stage 1", use_container_width=True, key="open_stage1"):
                 go_to("learning")
                 st.rerun()
 
@@ -892,7 +904,7 @@ elif st.session_state.current_page == "home":
             </div>
             """, unsafe_allow_html=True)
 
-            if st.button("Open Stage 2", use_container_width=True, key="open_stage2"):
+            if st.button("Enter Stage 2", use_container_width=True, key="open_stage2"):
                 go_to("learning")
                 st.rerun()
 
@@ -908,45 +920,9 @@ elif st.session_state.current_page == "home":
             </div>
             """, unsafe_allow_html=True)
 
-            if st.button("Open Stage 3", use_container_width=True, key="open_stage3"):
+            if st.button("Enter Stage 3", use_container_width=True, key="open_stage3"):
                 go_to("learning")
                 st.rerun()
-
-        st.write("")
-
-        # Bottom info panels
-        b1, b2 = st.columns([1.3, 1])
-
-        with b1:
-            st.markdown("""
-            <div class="info-panel">
-                <h3 style="color:#1F3552; margin-bottom:12px;">About Your Journey</h3>
-                <p style="font-size:16px; color:#374151; line-height:1.75;">
-                    Alstom Hardware Academy is designed to make onboarding clearer, faster, and more structured.
-                    Instead of navigating scattered documents, you will move through a defined learning path,
-                    starting with the railway system, then hardware fundamentals, and finally your technical specialization.
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-
-        with b2:
-            st.markdown("""
-            <div class="info-panel">
-                <h3 style="color:#1F3552; margin-bottom:12px;">Next Step</h3>
-            """, unsafe_allow_html=True)
-
-            if progress == 0:
-                st.info("Start with Stage 1: Railway System.")
-            elif progress < 100:
-                st.info("Continue your learning journey from your current stage.")
-            else:
-                st.success("You completed all available stages!")
-
-            if st.button("Go to Learning Journey", use_container_width=True, key="home_learning_journey"):
-                go_to("learning")
-                st.rerun()
-
-            st.markdown("</div>", unsafe_allow_html=True)
 
 # ---------------------------------------------------
 # Learning Journey Page
