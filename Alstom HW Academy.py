@@ -1199,137 +1199,36 @@ elif st.session_state.current_page == "home":
                 go_to("learning")
                 st.rerun()
 
-# ---------------------------------------------------
-# Mandatory Trainings Page
-# ---------------------------------------------------
-elif st.session_state.current_page == "mandatory_trainings":
-    if not st.session_state.logged_in:
-        st.warning("Please login first.")
-        if st.button("Go to Login", key="mandatory_go_to_login"):
-            go_to("auth")
-            st.rerun()
-    else:
-        top1, top2, top3 = st.columns([2, 4, 2])
-
-        with top1:
-            if st.button("← Home", use_container_width=True, key="mandatory_home"):
-                go_to("home")
-                st.rerun()
-
-        with top3:
-            if st.button("Profile", use_container_width=True, key="mandatory_profile"):
-                go_to("profile")
-                st.rerun()
-
-        st.markdown("""
-        <div class="mandatory-hero">
-            <div class="mandatory-hero-title">Mandatory Trainings</div>
-            <div class="mandatory-hero-text">
-                Before starting your technical learning journey, please complete the required onboarding trainings.
-                These courses are mandatory for all new joiners and must be completed before progressing to Stage 1.
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        progress = calculate_progress()
-        st.markdown(f"### Progress: {progress}%")
-        st.progress(progress / 100)
+st.write("")
 
         if st.session_state.mandatory_completed:
-            st.success("All mandatory trainings have been completed successfully ✅")
-        else:
-            st.info("Please complete all mandatory trainings before starting Stage 1.")
+            st.success("You can now proceed to Stage 1 ✅")
 
-        st.write("")
-
-        for i in range(0, len(MANDATORY_COURSES), 3):
-            row_courses = MANDATORY_COURSES[i:i+3]
-
-            if len(row_courses) == 1:
-                left, center, right = st.columns([1, 1.2, 1])
-                cols = [center]
-            else:
-                cols = st.columns(3)
-
-            for col, course in zip(cols, row_courses):
-                with col:
-                    completed = st.session_state[course["key"]]
-
-                    try:
-                        course_img = resize_image_to_height(course["image"], 220)
-                        st.image(course_img, use_container_width=True)
-                    except:
-                        st.info(f"Add image: {course['image']}")
-
-                    if completed:
-                        st.markdown('<div class="mandatory-status-done">Completed</div>', unsafe_allow_html=True)
-                    else:
-                        st.markdown('<div class="mandatory-status-pending">Pending</div>', unsafe_allow_html=True)
-
-                    st.markdown(f'<div class="mandatory-card-title">{course["title"]}</div>', unsafe_allow_html=True)
-                    st.markdown(f'<div class="mandatory-card-duration">{course["duration"]}</div>', unsafe_allow_html=True)
-                    st.markdown(f'<div class="mandatory-card-text">{course["description"]}</div>', unsafe_allow_html=True)
-
-                    st.markdown(
-                        f"""
-                        <a href="{course['link']}" target="_blank" style="text-decoration:none;">
-                            <div style="
-                                background-color:#0B3D91;
-                                color:white;
-                                text-align:center;
-                                padding:12px 14px;
-                                border-radius:12px;
-                                font-weight:700;
-                                font-size:16px;
-                                margin-top:6px;
-                                margin-bottom:10px;
-                            ">
-                                Open Course
-                            </div>
-                        </a>
-                        """,
-                        unsafe_allow_html=True
-                    )
-
-                    if not completed:
-                        if st.button("Mark as Completed", use_container_width=True, key=f'complete_{course["key"]}'):
-                            st.session_state[course["key"]] = True
-                            update_mandatory_completion()
-                            save_progress()
-                            st.rerun()
-                    else:
-                        st.button("Completed", use_container_width=True, key=f'done_{course["key"]}', disabled=True)
-
-            st.write("")
-
-        st.write("")
-
-        if st.session_state.mandatory_completed:
             st.markdown(
                 """
                 <div style="
-                    background: linear-gradient(90deg, #DC2626 0%, #B91C1C 100%);
+                    background-color:#DC2626;
                     color:white;
                     text-align:center;
-                    padding:16px 20px;
-                    border-radius:16px;
+                    padding:14px 18px;
+                    border-radius:14px;
                     font-weight:700;
-                    font-size:20px;
-                    margin-top:14px;
-                    margin-bottom:12px;
+                    font-size:18px;
+                    margin-top:10px;
+                    margin-bottom:10px;
                 ">
-                    Stage 1 is now unlocked — you can continue your technical journey
+                    Stage 1 is now unlocked
                 </div>
                 """,
                 unsafe_allow_html=True
             )
 
-            if st.button("Enter Stage 1", use_container_width=True, key="mandatory_go_stage1"):
+            if st.button("Go to Stage 1", use_container_width=True, key="mandatory_go_stage1"):
                 go_to("stage1")
                 st.rerun()
         else:
             st.info("Complete all mandatory trainings to unlock Stage 1.")
-            st.button("Enter Stage 1", use_container_width=True, key="mandatory_go_stage1_disabled", disabled=True)
+            st.button("Go to Stage 1", use_container_width=True, key="mandatory_go_stage1_disabled", disabled=True)
 
 # ---------------------------------------------------
 # Stage 1 Page
@@ -1371,7 +1270,6 @@ elif st.session_state.current_page == "stage1":
         if not st.session_state.mandatory_completed:
             st.info("This stage is locked. Complete Mandatory Trainings first.")
         else:
-            # Set default current item only once / when needed
             if st.session_state.stage1_current_item not in [0, 1]:
                 st.session_state.stage1_current_item = 0
 
@@ -1389,26 +1287,20 @@ elif st.session_state.current_page == "stage1":
                     icon = "✅" if completed else "⬜"
                     stage1_labels.append(f"{icon} {item['title']}")
 
-                if "stage1_sidebar_radio_index" not in st.session_state:
-                    st.session_state.stage1_sidebar_radio_index = st.session_state.stage1_current_item
-
-                selected_index = st.radio(
+                selected_label = st.radio(
                     "Select content item",
-                    options=list(range(len(stage1_labels))),
-                    format_func=lambda i: stage1_labels[i],
+                    stage1_labels,
                     index=st.session_state.stage1_current_item,
                     key="stage1_sidebar_radio",
                     label_visibility="collapsed"
                 )
 
-                st.session_state.stage1_current_item = selected_index
-
+                st.session_state.stage1_current_item = stage1_labels.index(selected_label)
 
             # -----------------------------
             # Main Content Area
             # -----------------------------
             with right_col:
-
                 current_index = st.session_state.stage1_current_item
                 current_item = STAGE1_ITEMS[current_index]
 
@@ -1447,27 +1339,9 @@ elif st.session_state.current_page == "stage1":
                         st.success("Document completed ✅")
 
                     st.write("")
-                    st.markdown(
-                        """
-                        <div style="
-                            background-color:#0B3D91;
-                            color:white;
-                            text-align:center;
-                            padding:12px 14px;
-                            border-radius:12px;
-                            font-weight:700;
-                            font-size:16px;
-                            margin-top:6px;
-                            margin-bottom:10px;
-                        ">
-                            Ready to continue to the next item
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
+
                     if st.button("Go to Next Item →", use_container_width=True, key="stage1_next_from_doc"):
                         st.session_state.stage1_current_item = 1
-                        st.session_state.stage1_sidebar_radio = 1
                         st.rerun()
 
                 # -------------------------
