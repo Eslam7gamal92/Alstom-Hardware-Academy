@@ -1185,7 +1185,8 @@ elif st.session_state.current_page == "mandatory_trainings":
                 completed = st.session_state[course["key"]]
 
                 try:
-                    st.image(course["image"], use_container_width=True)
+                    course_img = resize_image_to_height(course["image"], 220)
+                    st.image(course_img, use_container_width=True)
                 except:
                     st.info(f"Add image: {course['image']}")
 
@@ -1225,7 +1226,8 @@ elif st.session_state.current_page == "mandatory_trainings":
                 completed = st.session_state[course["key"]]
 
                 try:
-                    st.image(course["image"], use_container_width=True)
+                    course_img = resize_image_to_height(course["image"], 220)
+                    st.image(course_img, use_container_width=True)
                 except:
                     st.info(f"Add image: {course['image']}")
 
@@ -1240,8 +1242,8 @@ elif st.session_state.current_page == "mandatory_trainings":
 
                 st.markdown(
                     f'<a href="{course["link"]}" target="_blank" style="text-decoration:none;">'
-                    f'<div style="background-color:#0B3D91; color:white; text-align:center; padding:10px 14px; '
-                    f'border-radius:10px; font-weight:600; margin-bottom:10px;">Open Course</div></a>',
+                    f'<div style="background-color:#0B3D91; color:#FFFFFF; text-align:center; padding:12px 14px; '
+                    f'border-radius:12px; font-weight:700; font-size:16px; margin-bottom:10px;">Open Course</div></a>',
                     unsafe_allow_html=True
                 )
 
