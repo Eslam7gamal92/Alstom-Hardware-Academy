@@ -1301,6 +1301,21 @@ elif st.session_state.current_page == "mandatory_trainings":
                         st.button("Completed", use_container_width=True, key=f'done_{course["key"]}', disabled=True)
 
             st.write("")
+            st.write("")
+
+if st.session_state.mandatory_completed:
+    st.success("You can now proceed to Stage 1 ✅")
+else:
+    st.info("Complete all mandatory trainings to unlock Stage 1.")
+
+if st.button(
+    "Go to Stage 1",
+    use_container_width=True,
+    key="mandatory_go_stage1",
+    disabled=not st.session_state.mandatory_completed
+):
+    go_to("stage1")
+    st.rerun()
 
 # ---------------------------------------------------
 # Stage 1 Page
