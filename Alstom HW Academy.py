@@ -1305,7 +1305,7 @@ elif st.session_state.current_page == "stage1":
             else:
                 st.session_state.stage1_current_item = 1
 
-            left_col, right_col = st.columns([1.1, 2.2])
+            left_col, right_col = st.columns([0.9, 2.3])
 
             # -----------------------------
             # Left Sidebar
