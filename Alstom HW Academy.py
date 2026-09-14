@@ -1178,7 +1178,12 @@ elif st.session_state.current_page == "mandatory_trainings":
 
         for i in range(0, len(MANDATORY_COURSES), 3):
             row_courses = MANDATORY_COURSES[i:i+3]
-            cols = st.columns(3)
+
+            if len(row_courses) == 1:
+                left, center, right = st.columns([1, 1.2, 1])
+                cols = [center]
+            else:
+                cols = st.columns(3)
 
             for col, course in zip(cols, row_courses):
                 with col:
@@ -1199,7 +1204,26 @@ elif st.session_state.current_page == "mandatory_trainings":
                     st.markdown(f'<div class="mandatory-card-duration">{course["duration"]}</div>', unsafe_allow_html=True)
                     st.markdown(f'<div class="mandatory-card-text">{course["description"]}</div>', unsafe_allow_html=True)
 
-                    st.link_button("Open Course", course["link"], use_container_width=True)
+                    st.markdown(
+                        f"""
+                        <a href="{course['link']}" target="_blank" style="text-decoration:none;">
+                            <div style="
+                                background-color:#0B3D91;
+                                color:white;
+                                text-align:center;
+                                padding:12px 14px;
+                                border-radius:12px;
+                                font-weight:700;
+                                font-size:16px;
+                                margin-top:6px;
+                                margin-bottom:10px;
+                            ">
+                                Open Course
+                            </div>
+                        </a>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
                     if not completed:
                         if st.button("Mark as Completed", use_container_width=True, key=f'complete_{course["key"]}'):
