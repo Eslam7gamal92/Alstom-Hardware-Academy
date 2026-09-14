@@ -1305,33 +1305,31 @@ elif st.session_state.current_page == "mandatory_trainings":
         st.write("")
 
         if st.session_state.mandatory_completed:
-            st.success("You can now proceed to Stage 1 ✅")
-
             st.markdown(
                 """
                 <div style="
-                    background-color:#DC2626;
+                    background: linear-gradient(90deg, #DC2626 0%, #B91C1C 100%);
                     color:white;
                     text-align:center;
-                    padding:14px 18px;
-                    border-radius:14px;
+                    padding:16px 20px;
+                    border-radius:16px;
                     font-weight:700;
-                    font-size:18px;
-                    margin-top:10px;
-                    margin-bottom:10px;
+                    font-size:20px;
+                    margin-top:14px;
+                    margin-bottom:12px;
                 ">
-                    Stage 1 is now unlocked
+                    Stage 1 is now unlocked — you can continue your technical journey
                 </div>
                 """,
                 unsafe_allow_html=True
             )
 
-            if st.button("Go to Stage 1", use_container_width=True, key="mandatory_go_stage1"):
+            if st.button("Enter Stage 1", use_container_width=True, key="mandatory_go_stage1"):
                 go_to("stage1")
                 st.rerun()
         else:
             st.info("Complete all mandatory trainings to unlock Stage 1.")
-            st.button("Go to Stage 1", use_container_width=True, key="mandatory_go_stage1_disabled", disabled=True)
+            st.button("Enter Stage 1", use_container_width=True, key="mandatory_go_stage1_disabled", disabled=True)
 
 # ---------------------------------------------------
 # Stage 1 Page
@@ -1391,15 +1389,19 @@ elif st.session_state.current_page == "stage1":
                     icon = "✅" if completed else "⬜"
                     stage1_labels.append(f"{icon} {item['title']}")
 
-                selected_label = st.radio(
+                if "stage1_sidebar_radio_index" not in st.session_state:
+                    st.session_state.stage1_sidebar_radio_index = st.session_state.stage1_current_item
+
+                selected_index = st.radio(
                     "Select content item",
-                    stage1_labels,
+                    options=list(range(len(stage1_labels))),
+                    format_func=lambda i: stage1_labels[i],
                     index=st.session_state.stage1_current_item,
                     key="stage1_sidebar_radio",
                     label_visibility="collapsed"
                 )
 
-                st.session_state.stage1_current_item = stage1_labels.index(selected_label)
+                st.session_state.stage1_current_item = selected_index
 
 
             # -----------------------------
@@ -1445,9 +1447,27 @@ elif st.session_state.current_page == "stage1":
                         st.success("Document completed ✅")
 
                     st.write("")
-
+                    st.markdown(
+                        """
+                        <div style="
+                            background-color:#0B3D91;
+                            color:white;
+                            text-align:center;
+                            padding:12px 14px;
+                            border-radius:12px;
+                            font-weight:700;
+                            font-size:16px;
+                            margin-top:6px;
+                            margin-bottom:10px;
+                        ">
+                            Ready to continue to the next item
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
                     if st.button("Go to Next Item →", use_container_width=True, key="stage1_next_from_doc"):
                         st.session_state.stage1_current_item = 1
+                        st.session_state.stage1_sidebar_radio = 1
                         st.rerun()
 
                 # -------------------------
