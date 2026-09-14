@@ -194,6 +194,102 @@ st.markdown("""
     font-size:15px;
     padding-bottom:10px;
 }
+
+.home-hero {
+    background: linear-gradient(90deg, #0B3D91 0%, #123E8C 100%);
+    padding: 34px 32px;
+    border-radius: 20px;
+    color: white;
+    margin-bottom: 24px;
+}
+
+.home-hero-title {
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: white;
+}
+
+.home-hero-text {
+    font-size: 17px;
+    color: #E5E7EB;
+    line-height: 1.7;
+}
+
+.home-progress-box {
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 22px;
+}
+
+.stage-card {
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 18px;
+    padding: 22px;
+    min-height: 250px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+    margin-bottom: 18px;
+}
+
+.stage-card-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1F3552;
+    margin-bottom: 10px;
+}
+
+.stage-card-text {
+    font-size: 15px;
+    color: #4B5563;
+    line-height: 1.7;
+    margin-bottom: 18px;
+}
+
+.stage-badge-completed {
+    display: inline-block;
+    background-color: #D1FAE5;
+    color: #065F46;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.stage-badge-current {
+    display: inline-block;
+    background-color: #DBEAFE;
+    color: #1D4ED8;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.stage-badge-locked {
+    display: inline-block;
+    background-color: #F3F4F6;
+    color: #6B7280;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.info-panel {
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 18px;
+    padding: 24px;
+    min-height: 240px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+            
 </style>
 """, unsafe_allow_html=True)
 
@@ -719,40 +815,138 @@ elif st.session_state.current_page == "home":
                 logout()
                 st.rerun()
 
-        st.title(f"Welcome, {st.session_state.user_name} 👋")
-
         progress = calculate_progress()
-        st.write("## Your Progress")
+
+        # Hero Welcome
+        st.markdown(f"""
+        <div class="home-hero">
+            <div class="home-hero-title">Welcome, {st.session_state.user_name} 👋</div>
+            <div class="home-hero-text">
+                Your onboarding journey is organized into three guided stages: Railway System,
+                Signalling & Hardware Fundamentals, and your final Specialization path.
+                Follow them step by step to build your technical foundation and track your readiness.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Progress
+        st.markdown('<div class="home-progress-box">', unsafe_allow_html=True)
+        st.markdown(f'<h3 style="color:#1F3552; margin-bottom:12px;">Your Progress</h3>', unsafe_allow_html=True)
         st.progress(progress / 100)
         st.write(f"Progress: **{progress}%**")
+        st.markdown('</div>', unsafe_allow_html=True)
 
-        st.write("---")
+        # Stage cards title
+        st.markdown('<h2 style="color:#1F3552; font-weight:700;">Your Learning Journey</h2>', unsafe_allow_html=True)
+        st.write("Explore the three stages of your learning path and continue from your current step.")
 
-        col1, col2 = st.columns([1.4, 1])
+        c1, c2, c3 = st.columns(3)
 
-        with col1:
-            st.markdown("## About Alstom")
-            st.write("""
-Alstom is a global leader in smart and sustainable mobility.
+        # Stage 1 status
+        if st.session_state.stage1_completed:
+            stage1_badge = '<div class="stage-badge-completed">Completed</div>'
+        else:
+            stage1_badge = '<div class="stage-badge-current">Start Here</div>'
 
-Alstom Hardware Academy supports your onboarding journey through:
-1. **Railway System**
-2. **Signalling & Hardware Fundamentals**
-3. **Specialized Technical Path**
-""")
+        # Stage 2 status
+        if st.session_state.stage2_completed:
+            stage2_badge = '<div class="stage-badge-completed">Completed</div>'
+        elif st.session_state.stage1_completed:
+            stage2_badge = '<div class="stage-badge-current">Current Stage</div>'
+        else:
+            stage2_badge = '<div class="stage-badge-locked">Locked</div>'
 
-        with col2:
-            st.markdown("## Next Step")
+        # Stage 3 status
+        if st.session_state.selected_path:
+            stage3_badge = '<div class="stage-badge-completed">Path Selected</div>'
+        elif st.session_state.stage2_completed:
+            stage3_badge = '<div class="stage-badge-current">Ready to Choose</div>'
+        else:
+            stage3_badge = '<div class="stage-badge-locked">Locked</div>'
+
+        with c1:
+            st.markdown(f"""
+            <div class="stage-card">
+                {stage1_badge}
+                <div class="stage-card-title">Stage 1: Railway System</div>
+                <div class="stage-card-text">
+                    Start by building a high-level understanding of railway systems, infrastructure,
+                    rolling stock, power systems, and the overall railway ecosystem.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            if st.button("Open Stage 1", use_container_width=True, key="open_stage1"):
+                go_to("learning")
+                st.rerun()
+
+        with c2:
+            st.markdown(f"""
+            <div class="stage-card">
+                {stage2_badge}
+                <div class="stage-card-title">Stage 2: Signalling & Hardware</div>
+                <div class="stage-card-text">
+                    Continue with signalling concepts, hardware fundamentals, interfaces,
+                    system components, and core engineering principles used in the function.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            if st.button("Open Stage 2", use_container_width=True, key="open_stage2"):
+                go_to("learning")
+                st.rerun()
+
+        with c3:
+            st.markdown(f"""
+            <div class="stage-card">
+                {stage3_badge}
+                <div class="stage-card-title">Stage 3: Specialization</div>
+                <div class="stage-card-text">
+                    Move into your role-based specialization path such as Pedals, OBC,
+                    Cable Chassis, or HVITC based on your learning direction.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            if st.button("Open Stage 3", use_container_width=True, key="open_stage3"):
+                go_to("learning")
+                st.rerun()
+
+        st.write("")
+
+        # Bottom info panels
+        b1, b2 = st.columns([1.3, 1])
+
+        with b1:
+            st.markdown("""
+            <div class="info-panel">
+                <h3 style="color:#1F3552; margin-bottom:12px;">About Your Journey</h3>
+                <p style="font-size:16px; color:#374151; line-height:1.75;">
+                    Alstom Hardware Academy is designed to make onboarding clearer, faster, and more structured.
+                    Instead of navigating scattered documents, you will move through a defined learning path,
+                    starting with the railway system, then hardware fundamentals, and finally your technical specialization.
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with b2:
+            st.markdown("""
+            <div class="info-panel">
+                <h3 style="color:#1F3552; margin-bottom:12px;">Next Step</h3>
+            """, unsafe_allow_html=True)
+
             if progress == 0:
-                st.info("You have not started your learning journey yet.")
+                st.info("Start with Stage 1: Railway System.")
             elif progress < 100:
-                st.info("Continue your learning journey.")
+                st.info("Continue your learning journey from your current stage.")
             else:
-                st.success("You completed all stages!")
+                st.success("You completed all available stages!")
 
             if st.button("Go to Learning Journey", use_container_width=True, key="home_learning_journey"):
                 go_to("learning")
                 st.rerun()
+
+            st.markdown("</div>", unsafe_allow_html=True)
 
 # ---------------------------------------------------
 # Learning Journey Page
