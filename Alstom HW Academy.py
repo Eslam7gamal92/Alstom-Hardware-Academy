@@ -1031,15 +1031,12 @@ elif st.session_state.current_page == "home":
         st.markdown('<h2 style="color:#1F3552; font-weight:700;">Your Learning Journey</h2>', unsafe_allow_html=True)
         st.write("Explore the three stages of your journey and continue from your current step.")
 
-        c1, c2, c3, c4 = st.columns(4)
-
-        # Mandatory status
+        # Status logic
         if st.session_state.mandatory_completed:
             mandatory_badge = '<div class="stage-badge-completed">Completed</div>'
         else:
             mandatory_badge = '<div class="stage-badge-current">Required First</div>'
 
-        # Stage 1 status
         if st.session_state.stage1_completed:
             stage1_badge = '<div class="stage-badge-completed">Completed</div>'
         elif st.session_state.mandatory_completed:
@@ -1047,7 +1044,6 @@ elif st.session_state.current_page == "home":
         else:
             stage1_badge = '<div class="stage-badge-locked">Locked</div>'
 
-        # Stage 2 status
         if st.session_state.stage2_completed:
             stage2_badge = '<div class="stage-badge-completed">Completed</div>'
         elif st.session_state.stage1_completed:
@@ -1055,13 +1051,15 @@ elif st.session_state.current_page == "home":
         else:
             stage2_badge = '<div class="stage-badge-locked">Locked</div>'
 
-        # Stage 3 status
         if st.session_state.selected_path:
             stage3_badge = '<div class="stage-badge-completed">Path Selected</div>'
         elif st.session_state.stage2_completed:
             stage3_badge = '<div class="stage-badge-current">Ready to Choose</div>'
         else:
             stage3_badge = '<div class="stage-badge-locked">Locked</div>'
+
+        # Row 1
+        c1, c2 = st.columns(2)
 
         with c1:
             st.markdown(f"""
@@ -1099,6 +1097,41 @@ elif st.session_state.current_page == "home":
             ):
                 go_to("learning")
                 st.rerun()
+
+# Row 2
+c3, c4 = st.columns(2)
+
+with c3:
+    st.markdown(f"""
+    <div class="stage-card">
+        {stage2_badge}
+        <div class="stage-card-title">Stage 2: Signalling & Hardware</div>
+        <div class="stage-card-text">
+            Continue with signalling concepts, hardware fundamentals, interfaces,
+            system components, and core engineering principles used in the function.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    if st.button("Enter Stage 2", use_container_width=True, key="open_stage2"):
+        go_to("learning")
+        st.rerun()
+
+with c4:
+    st.markdown(f"""
+    <div class="stage-card">
+        {stage3_badge}
+        <div class="stage-card-title">Stage 3: Specialization</div>
+        <div class="stage-card-text">
+            Move into your role-based specialization path such as Pedals, OBC,
+            Cable Chassis, or HVITC based on your learning direction.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    if st.button("Enter Stage 3", use_container_width=True, key="open_stage3"):
+        go_to("learning")
+        st.rerun()
 
         with c3:
             st.markdown(f"""
