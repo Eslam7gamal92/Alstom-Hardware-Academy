@@ -216,14 +216,6 @@ st.markdown("""
     line-height: 1.8;
 }
 
-.home-progress-box {
-    background-color: white;
-    border: 1px solid #E5E7EB;
-    border-radius: 18px;
-    padding: 24px;
-    margin-bottom: 22px;
-}
-
 .stage-card {
     background-color: white;
     border: 1px solid #E5E7EB;
@@ -830,11 +822,9 @@ elif st.session_state.current_page == "home":
         """, unsafe_allow_html=True)
 
         # Progress
-        st.markdown('<div class="home-progress-box">', unsafe_allow_html=True)
         st.markdown(f'<h3 style="color:#1F3552; margin-bottom:12px;">Your Progress</h3>', unsafe_allow_html=True)
         st.progress(progress / 100)
         st.write(f"Progress: **{progress}%**")
-        st.markdown('</div>', unsafe_allow_html=True)
 
         # About journey first
         st.markdown("""
