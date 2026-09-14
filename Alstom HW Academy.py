@@ -21,6 +21,14 @@ defaults = {
     "user_id": "",
     "user_name": "",
     "user_email": "",
+    "mandatory_completed": False,
+    "mandatory_1_completed": False,
+    "mandatory_2_completed": False,
+    "mandatory_3_completed": False,
+    "mandatory_4_completed": False,
+    "mandatory_5_completed": False,
+    "mandatory_6_completed": False,
+    "mandatory_7_completed": False,
     "stage1_completed": False,
     "stage2_completed": False,
     "selected_path": "",
@@ -42,6 +50,14 @@ def logout():
     st.session_state.user_id = ""
     st.session_state.user_name = ""
     st.session_state.user_email = ""
+    st.session_state.mandatory_completed = False
+    st.session_state.mandatory_1_completed = False
+    st.session_state.mandatory_2_completed = False
+    st.session_state.mandatory_3_completed = False
+    st.session_state.mandatory_4_completed = False
+    st.session_state.mandatory_5_completed = False
+    st.session_state.mandatory_6_completed = False
+    st.session_state.mandatory_7_completed = False
     st.session_state.stage1_completed = False
     st.session_state.stage2_completed = False
     st.session_state.selected_path = ""
@@ -49,13 +65,26 @@ def logout():
 
 def calculate_progress():
     progress = 0
+    if st.session_state.mandatory_completed:
+        progress += 20
     if st.session_state.stage1_completed:
-        progress += 40
+        progress += 30
     if st.session_state.stage2_completed:
-        progress += 40
+        progress += 30
     if st.session_state.selected_path:
         progress += 20
     return progress
+
+def update_mandatory_completion():
+    st.session_state.mandatory_completed = all([
+        st.session_state.mandatory_1_completed,
+        st.session_state.mandatory_2_completed,
+        st.session_state.mandatory_3_completed,
+        st.session_state.mandatory_4_completed,
+        st.session_state.mandatory_5_completed,
+        st.session_state.mandatory_6_completed,
+        st.session_state.mandatory_7_completed,
+    ])
 
 def resize_image_to_height(image_path, target_height=320):
     img = Image.open(image_path)
@@ -64,12 +93,20 @@ def resize_image_to_height(image_path, target_height=320):
     resized_img = img.resize((new_width, target_height))
     return resized_img
 
-def update_progress_in_db():
+def save_progress():
     progress = calculate_progress()
 
     supabase_admin.table("user_progress").upsert(
         {
             "user_id": st.session_state.user_id,
+            "mandatory_completed": st.session_state.mandatory_completed,
+            "mandatory_1_completed": st.session_state.mandatory_1_completed,
+            "mandatory_2_completed": st.session_state.mandatory_2_completed,
+            "mandatory_3_completed": st.session_state.mandatory_3_completed,
+            "mandatory_4_completed": st.session_state.mandatory_4_completed,
+            "mandatory_5_completed": st.session_state.mandatory_5_completed,
+            "mandatory_6_completed": st.session_state.mandatory_6_completed,
+            "mandatory_7_completed": st.session_state.mandatory_7_completed,
             "stage1_completed": st.session_state.stage1_completed,
             "stage2_completed": st.session_state.stage2_completed,
             "selected_path": st.session_state.selected_path,
@@ -722,9 +759,17 @@ elif st.session_state.current_page == "auth":
                             progress_res = supabase_admin.table("user_progress").select("*").eq("user_id", user.id).execute()
                             if progress_res.data:
                                 progress_data = progress_res.data[0]
-                                st.session_state.stage1_completed = progress_data["stage1_completed"]
-                                st.session_state.stage2_completed = progress_data["stage2_completed"]
-                                st.session_state.selected_path = progress_data["selected_path"]
+                                st.session_state.mandatory_completed = progress_data.get("mandatory_completed", False)
+                                st.session_state.mandatory_1_completed = progress_data.get("mandatory_1_completed", False)
+                                st.session_state.mandatory_2_completed = progress_data.get("mandatory_2_completed", False)
+                                st.session_state.mandatory_3_completed = progress_data.get("mandatory_3_completed", False)
+                                st.session_state.mandatory_4_completed = progress_data.get("mandatory_4_completed", False)
+                                st.session_state.mandatory_5_completed = progress_data.get("mandatory_5_completed", False)
+                                st.session_state.mandatory_6_completed = progress_data.get("mandatory_6_completed", False)
+                                st.session_state.mandatory_7_completed = progress_data.get("mandatory_7_completed", False)
+                                st.session_state.stage1_completed = progress_data.get("stage1_completed", False)
+                                st.session_state.stage2_completed = progress_data.get("stage2_completed", False)
+                                st.session_state.selected_path = progress_data.get("selected_path", "")
 
                             go_to("home")
                             st.success("Login successful!")
@@ -752,7 +797,7 @@ elif st.session_state.current_page == "auth":
                 else:
                     try:
                         # Create auth user
-                        auth_response = supabase_auth.auth.sign_in_with_password({
+                        auth_response = supabase_auth.auth.sign_up({
                             "email": signup_email,
                             "password": password
                         })
@@ -770,6 +815,14 @@ elif st.session_state.current_page == "auth":
                             # Insert initial progress
                             supabase_admin.table("user_progress").insert({
                                 "user_id": user.id,
+                                "mandatory_completed": False,
+                                "mandatory_1_completed": False,
+                                "mandatory_2_completed": False,
+                                "mandatory_3_completed": False,
+                                "mandatory_4_completed": False,
+                                "mandatory_5_completed": False,
+                                "mandatory_6_completed": False,
+                                "mandatory_7_completed": False,
                                 "stage1_completed": False,
                                 "stage2_completed": False,
                                 "selected_path": "",
@@ -976,7 +1029,7 @@ This stage introduces the learner to:
             if st.button("Submit Stage 1 Quiz", use_container_width=True, key="submit_stage1"):
                 if q1 == "Train safety and control":
                     st.session_state.stage1_completed = True
-                    update_progress_in_db()
+                    save_progress()
                     st.success("Stage 1 completed successfully!")
                     st.rerun()
                 else:
@@ -1021,7 +1074,7 @@ This stage introduces:
                 if st.button("Submit Stage 2 Quiz", use_container_width=True, key="submit_stage2"):
                     if q2 == "Understand technical system components":
                         st.session_state.stage2_completed = True
-                        update_progress_in_db()
+                        save_progress()
                         st.success("Stage 2 completed successfully!")
                         st.rerun()
                     else:
@@ -1048,7 +1101,7 @@ This stage introduces:
             if st.button("Confirm Specialization", use_container_width=True, key="confirm_specialization"):
                 if selected:
                     st.session_state.selected_path = selected
-                    update_progress_in_db()
+                    save_progress()
                     st.success(f"Specialization selected: {selected}")
                     st.rerun()
                 else:
@@ -1081,5 +1134,14 @@ elif st.session_state.current_page == "profile":
         st.write(f"**Stage 2 Completed:** {'Yes' if st.session_state.stage2_completed else 'No'}")
         st.write(f"**Selected Path:** {st.session_state.selected_path if st.session_state.selected_path else 'Not selected'}")
         st.write(f"**Overall Progress:** {progress}%")
+
+        st.write(f"**Mandatory Trainings Completed:** {'Yes' if st.session_state.mandatory_completed else 'No'}")
+        st.write(f"**Mandatory 1:** {'Yes' if st.session_state.mandatory_1_completed else 'No'}")
+        st.write(f"**Mandatory 2:** {'Yes' if st.session_state.mandatory_2_completed else 'No'}")
+        st.write(f"**Mandatory 3:** {'Yes' if st.session_state.mandatory_3_completed else 'No'}")
+        st.write(f"**Mandatory 4:** {'Yes' if st.session_state.mandatory_4_completed else 'No'}")
+        st.write(f"**Mandatory 5:** {'Yes' if st.session_state.mandatory_5_completed else 'No'}")
+        st.write(f"**Mandatory 6:** {'Yes' if st.session_state.mandatory_6_completed else 'No'}")
+        st.write(f"**Mandatory 7:** {'Yes' if st.session_state.mandatory_7_completed else 'No'}")
 
         st.progress(progress / 100)
