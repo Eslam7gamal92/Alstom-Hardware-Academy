@@ -1129,38 +1129,6 @@ elif st.session_state.current_page == "home":
             </div>
             """, unsafe_allow_html=True)
 
-    if st.button("Enter Stage 3", use_container_width=True, key="open_stage3"):
-        go_to("learning")
-        st.rerun()
-
-        with c3:
-            st.markdown(f"""
-            <div class="stage-card">
-                {stage2_badge}
-                <div class="stage-card-title">Stage 2: Signalling & Hardware</div>
-                <div class="stage-card-text">
-                    Continue with signalling concepts, hardware fundamentals, interfaces,
-                    system components, and core engineering principles used in the function.
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            if st.button("Enter Stage 2", use_container_width=True, key="open_stage2"):
-                go_to("learning")
-                st.rerun()
-
-        with c4:
-            st.markdown(f"""
-            <div class="stage-card">
-                {stage3_badge}
-                <div class="stage-card-title">Stage 3: Specialization</div>
-                <div class="stage-card-text">
-                    Move into your role-based specialization path such as Pedals, OBC,
-                    Cable Chassis, or HVITC based on your learning direction.
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
             if st.button("Enter Stage 3", use_container_width=True, key="open_stage3"):
                 go_to("learning")
                 st.rerun()
