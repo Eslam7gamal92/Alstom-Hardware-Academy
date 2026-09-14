@@ -228,24 +228,25 @@ st.markdown("""
     background-color: white;
     border: 1px solid #E5E7EB;
     border-radius: 18px;
-    padding: 26px;
-    min-height: 270px;
+    padding: 22px;
+    min-height: 250px;
     box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
     margin-bottom: 18px;
 }
 
 .stage-card-title {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     color: #1F3552;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    line-height: 1.4;
 }
 
 .stage-card-text {
     font-size: 15px;
     color: #4B5563;
-    line-height: 1.9;
-    margin-bottom: 20px;
+    line-height: 1.75;
+    margin-bottom: 18px;
 }
 
 .stage-badge-completed {
