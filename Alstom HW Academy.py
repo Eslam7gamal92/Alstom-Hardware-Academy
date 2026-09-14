@@ -481,6 +481,44 @@ st.markdown("""
     margin-bottom: 12px;
 }
 
+.stage-page-hero {
+    background: linear-gradient(90deg, #0B3D91 0%, #123E8C 100%);
+    padding: 34px 32px;
+    border-radius: 20px;
+    color: white;
+    margin-bottom: 22px;
+}
+
+.stage-page-hero-title {
+    font-size: 34px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.stage-page-hero-text {
+    font-size: 17px;
+    color: #E5E7EB;
+    line-height: 1.75;
+}
+
+.stage-sidebar-box {
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+    margin-bottom: 16px;
+}
+
+.stage-main-box {
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+    margin-bottom: 18px;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -1286,23 +1324,29 @@ elif st.session_state.current_page == "stage1":
                 go_to("profile")
                 st.rerun()
 
-        st.title("Stage 1: Railway System")
+        st.markdown("""
+        <div class="stage-page-hero">
+            <div class="stage-page-hero-title">Stage 1: Railway System</div>
+            <div class="stage-page-hero-text">
+                Build a foundational understanding of railway systems, infrastructure, rolling stock,
+                power systems, and the wider railway ecosystem before moving forward in your technical journey.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
         progress = calculate_progress()
+        st.markdown(f"### Progress: {progress}%")
         st.progress(progress / 100)
-        st.write(f"Overall Progress: **{progress}%**")
-
-        st.write("---")
+        st.write("")
 
         if not st.session_state.mandatory_completed:
             st.info("This stage is locked. Complete Mandatory Trainings first.")
         else:
-            # Set current item automatically
-            if not st.session_state.stage1_doc_completed:
+            # Set default current item only once / when needed
+            if st.session_state.stage1_current_item not in [0, 1]:
                 st.session_state.stage1_current_item = 0
-            elif not st.session_state.stage1_quiz_completed:
-                st.session_state.stage1_current_item = 1
-            else:
+
+            if st.session_state.stage1_current_item == 0 and st.session_state.stage1_doc_completed and not st.session_state.stage1_quiz_completed:
                 st.session_state.stage1_current_item = 1
 
             left_col, right_col = st.columns([0.9, 2.3])
@@ -1311,22 +1355,26 @@ elif st.session_state.current_page == "stage1":
             # Left Sidebar
             # -----------------------------
             with left_col:
+                st.markdown('<div class="stage-sidebar-box">', unsafe_allow_html=True)
                 st.markdown("### Stage 1 Content")
 
                 for idx, item in enumerate(STAGE1_ITEMS):
                     completed = st.session_state[item["key"]]
                     icon = "✅" if completed else "⬜"
-
                     label = f"{icon} {item['title']}"
 
                     if st.button(label, use_container_width=True, key=f"stage1_item_nav_{idx}"):
                         st.session_state.stage1_current_item = idx
                         st.rerun()
 
+                st.markdown('</div>', unsafe_allow_html=True)
+
             # -----------------------------
             # Main Content Area
             # -----------------------------
             with right_col:
+                st.markdown('<div class="stage-main-box">', unsafe_allow_html=True)
+
                 current_index = st.session_state.stage1_current_item
                 current_item = STAGE1_ITEMS[current_index]
 
@@ -1343,7 +1391,7 @@ elif st.session_state.current_page == "stage1":
                     try:
                         with open(current_item["file"], "rb") as pdf_file:
                             st.download_button(
-                                label="Download Document",
+                                label="Open / Download Document",
                                 data=pdf_file,
                                 file_name=current_item["file"],
                                 mime="application/pdf",
@@ -1356,17 +1404,17 @@ elif st.session_state.current_page == "stage1":
                     st.write("")
 
                     if not st.session_state.stage1_doc_completed:
-                        if st.button("Mark Document as Completed", use_container_width=True, key="stage1_doc_complete"):
+                        if st.button("Mark Document as Completed ✅", use_container_width=True, key="stage1_doc_complete"):
                             st.session_state.stage1_doc_completed = True
-                            st.session_state.stage1_current_item = 1
                             save_progress()
+                            st.success("Document marked as completed.")
                             st.rerun()
                     else:
                         st.success("Document completed ✅")
 
                     st.write("")
 
-                    if st.button("Go to Next Item", use_container_width=True, key="stage1_next_from_doc"):
+                    if st.button("Go to Next Item →", use_container_width=True, key="stage1_next_from_doc"):
                         st.session_state.stage1_current_item = 1
                         st.rerun()
 
@@ -1390,7 +1438,7 @@ elif st.session_state.current_page == "stage1":
                                 key="stage1_q1_page"
                             )
 
-                            if st.button("Submit Quiz", use_container_width=True, key="stage1_submit_quiz_page"):
+                            if st.button("Submit Quiz ✅", use_container_width=True, key="stage1_submit_quiz_page"):
                                 if q1 == "Train safety and control":
                                     st.session_state.stage1_quiz_completed = True
                                     st.session_state.stage1_completed = True
@@ -1402,6 +1450,8 @@ elif st.session_state.current_page == "stage1":
                         else:
                             st.success("Quiz completed ✅")
                             st.success("Stage 1 completed successfully ✅")
+
+                st.markdown('</div>', unsafe_allow_html=True)
 
 # ---------------------------------------------------
 # Learning Journey Page
