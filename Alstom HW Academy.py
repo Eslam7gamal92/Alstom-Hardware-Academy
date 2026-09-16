@@ -1482,7 +1482,12 @@ elif st.session_state.current_page == "stage1":
 
                     st.write("")
 
-                    if st.button("Go to Next Item →", use_container_width=True, key="stage1_next_from_doc"):
+                    next_col1, next_col2 = st.columns([1, 2.4])
+
+                    with next_col1:
+                        if st.button("Go to Next Item →", use_container_width=True, key="stage1_next_from_doc"):
+                            st.session_state.stage1_current_item = 1
+                            st.rerun()
                         st.session_state.stage1_current_item = 1
                         st.rerun()
 
@@ -1490,15 +1495,6 @@ elif st.session_state.current_page == "stage1":
                 # Item 2: Quiz
                 # -------------------------
                 elif current_index == 1:
-                    back_col, empty_col = st.columns([1, 3])
-
-                    with back_col:
-                        if st.button("← Back", use_container_width=True, key="stage1_back_to_doc"):
-                            st.session_state.stage1_current_item = 0
-                            st.rerun()
-
-                    st.write("")
-
                     if not st.session_state.stage1_doc_completed:
                         st.info("Please complete the document first before attempting the quiz.")
                     else:
@@ -1527,6 +1523,14 @@ elif st.session_state.current_page == "stage1":
                         else:
                             st.success("Quiz completed ✅")
                             st.success("Stage 1 completed successfully ✅")
+
+                    st.write("")
+                    back_col1, back_col2 = st.columns([1, 2.4])
+
+                    with back_col1:
+                        if st.button("← Back", use_container_width=True, key="stage1_back_to_doc"):
+                            st.session_state.stage1_current_item = 0
+                            st.rerun()
 
 # ---------------------------------------------------
 # Learning Journey Page
