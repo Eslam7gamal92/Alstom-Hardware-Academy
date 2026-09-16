@@ -1941,42 +1941,58 @@ elif st.session_state.current_page == "stage2":
                 # Item 2: Document 2
                 # -------------------------
                 elif current_index == 1:
-                    try:
-                        with open(current_item["file"], "rb") as doc_file:
-                            st.download_button(
-                                label="Download Stage 2 Document 2",
-                                data=doc_file,
-                                file_name=current_item["file"],
-                                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
-                                use_container_width=True,
-                                key="stage2_download_doc2"
-                            )
-                    except Exception:
-                        st.error(f"File not found: {current_item['file']}")
-
-                    st.write("")
-
-                    if not st.session_state.stage2_doc2_completed:
-                        if st.button("Mark Document 2 as Completed ✅", use_container_width=True, key="stage2_doc2_complete"):
-                            st.session_state.stage2_doc2_completed = True
-                            save_progress()
-                            st.success("Document 2 marked as completed.")
-                            st.rerun()
+                    if not st.session_state.stage1_doc_completed:
+                        st.info("Please complete the document first before attempting the quiz.")
                     else:
-                        st.success("Document 2 completed ✅")
+                        if not st.session_state.stage1_quiz_completed:
+                            st.subheader("Stage 1 Quiz")
+
+                            user_answers = []
+
+                            for i, q in enumerate(STAGE1_QUIZ_QUESTIONS, start=1):
+                                answer = st.radio(
+                                    f"Q{i}. {q['question']}",
+                                    q["options"],
+                                    key=f"stage1_quiz_q{i}"
+                                )
+                                user_answers.append(answer)
+
+                            if st.button("Submit Quiz ✅", use_container_width=True, key="stage1_submit_quiz_page"):
+                                correct_count = 0
+
+                                for user_answer, q in zip(user_answers, STAGE1_QUIZ_QUESTIONS):
+                                    if user_answer == q["answer"]:
+                                        correct_count += 1
+
+                                total_questions = len(STAGE1_QUIZ_QUESTIONS)
+                                required_score = int(total_questions * 0.8)
+
+                                st.write(f"Your score: **{correct_count}/{total_questions}**")
+
+                                if correct_count >= required_score:
+                                    st.session_state.stage1_quiz_completed = True
+                                    st.session_state.stage1_completed = True
+                                    save_progress()
+                                    st.success("Stage 1 completed successfully!")
+                                    st.rerun()
+                                else:
+                                    st.error(f"You need at least {required_score}/{total_questions} correct answers to pass. Please try again.")
+                        else:
+                            st.success("Quiz completed ✅")
+                            st.success("Stage 1 completed successfully ✅")
 
                     st.write("")
+                    back_col1, back_col2 = st.columns([1, 2.4])
 
-                    nav_col1, nav_col2, nav_col3 = st.columns([1, 1, 2])
-
-                    with nav_col1:
-                        if st.button("← Back", use_container_width=True, key="stage2_back_to_doc1"):
-                            st.session_state.stage2_current_item = 0
+                    with back_col1:
+                        if st.button("← Back", use_container_width=True, key="stage1_back_to_doc"):
+                            st.session_state.stage1_current_item = 0
                             st.rerun()
 
-                    with nav_col2:
-                        if st.button("Next →", use_container_width=True, key="stage2_next_to_quiz"):
-                            st.session_state.stage2_current_item = 2
+                    if st.session_state.stage1_quiz_completed:
+                        st.write("")
+                        if st.button("Go to Stage 2", use_container_width=True, key="stage1_go_stage2"):
+                            go_to("stage2")
                             st.rerun()
 
                 # -------------------------
