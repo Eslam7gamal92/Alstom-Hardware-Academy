@@ -182,6 +182,21 @@ MANDATORY_COURSES = [
     }
 ]
 
+MANAGERS = [
+    {
+        "name": "Mohammed Ibrahim AbdelShafy",
+        "email": "mohammed.abdelshafy@alstomgroup.com"
+    },
+    {
+        "name": "Kubra Eker",
+        "email": "kubra.eker@alstomgroup.com"
+    },
+    {
+        "name": "Burak Bingol",
+        "email": "burak.bingol@alstomgroup.com"
+    }
+]
+
 STAGE1_ITEMS = [
     {
         "key": "stage1_doc_completed",
@@ -991,14 +1006,21 @@ elif st.session_state.current_page == "auth":
             password = st.text_input("Password", type="password", key="signup_password")
             confirm_password = st.text_input("Confirm Password", type="password", key="signup_confirm_password")
 
+            manager_names = [manager["name"] for manager in MANAGERS]
+            selected_manager_name = st.selectbox(
+                "Select Your Manager",
+                [""] + manager_names,
+                index=0,
+                key="signup_manager"
+            )
+
             if st.button("Create Account", use_container_width=True, key="auth_create_account"):
-                if not full_name or not signup_email or not password or not confirm_password:
+                if not full_name or not signup_email or not password or not confirm_password or not selected_manager_name:
                     st.error("Please complete all fields.")
                 elif password != confirm_password:
                     st.error("Passwords do not match.")
                 else:
                     try:
-                        # Create auth user
                         auth_response = supabase_auth.auth.sign_up({
                             "email": signup_email,
                             "password": password
@@ -1007,14 +1029,21 @@ elif st.session_state.current_page == "auth":
                         user = auth_response.user
 
                         if user is not None:
-                            # Insert into profiles table
+                            selected_manager = next(
+                                (manager for manager in MANAGERS if manager["name"] == selected_manager_name),
+                                None
+                            )
+
+                            manager_email = selected_manager["email"] if selected_manager else ""
+
                             supabase_admin.table("profiles").insert({
                                 "id": user.id,
                                 "full_name": full_name,
-                                "email": signup_email
+                                "email": signup_email,
+                                "manager_name": selected_manager_name,
+                                "manager_email": manager_email
                             }).execute()
 
-                            # Insert initial progress
                             supabase_admin.table("user_progress").insert({
                                 "user_id": user.id,
                                 "mandatory_completed": False,
@@ -1025,6 +1054,8 @@ elif st.session_state.current_page == "auth":
                                 "mandatory_5_completed": False,
                                 "mandatory_6_completed": False,
                                 "mandatory_7_completed": False,
+                                "stage1_doc_completed": False,
+                                "stage1_quiz_completed": False,
                                 "stage1_completed": False,
                                 "stage2_completed": False,
                                 "selected_path": "",
