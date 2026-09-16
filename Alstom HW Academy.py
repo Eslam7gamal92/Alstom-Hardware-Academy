@@ -1488,8 +1488,6 @@ elif st.session_state.current_page == "stage1":
                         if st.button("Go to Next Item →", use_container_width=True, key="stage1_next_from_doc"):
                             st.session_state.stage1_current_item = 1
                             st.rerun()
-                        st.session_state.stage1_current_item = 1
-                        st.rerun()
 
                 # -------------------------
                 # Item 2: Quiz
