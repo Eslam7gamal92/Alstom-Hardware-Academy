@@ -1975,7 +1975,7 @@ elif st.session_state.current_page == "stage2":
                             st.rerun()
 
                     with nav_col2:
-                        if st.button("Next →", use_container_width=True, key="stage2_next_to_quiz"):
+                        if st.button("Go to Next Item →", use_container_width=True, key="stage2_next_to_quiz"):
                             st.session_state.stage2_current_item = 2
                             st.rerun()
 
@@ -2023,19 +2023,19 @@ elif st.session_state.current_page == "stage2":
                             st.success("Quiz completed ✅")
                             st.success("Stage 2 completed successfully ✅")
 
-                            st.write("")
+                        st.write("")
+                        back_col1, back_col2 = st.columns([1, 2.4])
 
+                        with back_col1:
+                            if st.button("← Back", use_container_width=True, key="stage2_back_to_doc2"):
+                                st.session_state.stage2_current_item = 1
+                                st.rerun()
+
+                        if st.session_state.stage2_quiz_completed:
+                            st.write("")
                             if st.button("Go to Stage 3", use_container_width=True, key="stage2_go_stage3"):
                                 go_to("learning")
                                 st.rerun()
-
-                    st.write("")
-                    back_col1, back_col2 = st.columns([1, 2.4])
-
-                    with back_col1:
-                        if st.button("← Back", use_container_width=True, key="stage2_back_to_doc2"):
-                            st.session_state.stage2_current_item = 1
-                            st.rerun()
 
 # ---------------------------------------------------
 # Learning Journey Page
