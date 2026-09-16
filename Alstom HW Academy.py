@@ -1398,21 +1398,22 @@ elif st.session_state.current_page == "stage1":
             with left_col:
                 st.markdown("### Stage 1 Content")
 
-                stage1_labels = []
+                item_labels = []
                 for item in STAGE1_ITEMS:
                     completed = st.session_state[item["key"]]
                     icon = "✅" if completed else "⬜"
-                    stage1_labels.append(f"{icon} {item['title']}")
+                    item_labels.append(f"{icon} {item['title']}")
 
-                selected_label = st.radio(
+                selected_index = st.radio(
                     "Select content item",
-                    stage1_labels,
+                    options=list(range(len(STAGE1_ITEMS))),
+                    format_func=lambda x: item_labels[x],
                     index=st.session_state.stage1_current_item,
-                    key="stage1_sidebar_radio",
+                    key="stage1_sidebar_selector",
                     label_visibility="collapsed"
                 )
 
-                st.session_state.stage1_current_item = stage1_labels.index(selected_label)
+                st.session_state.stage1_current_item = selected_index
 
             # -----------------------------
             # Main Content Area
@@ -1458,7 +1459,8 @@ elif st.session_state.current_page == "stage1":
                     st.write("")
 
                     if st.button("Go to Next Item →", use_container_width=True, key="stage1_next_from_doc"):
-                        st.session_state.stage1_current_item = 1
+                        if st.session_state.stage1_current_item < len(STAGE1_ITEMS) - 1:
+                            st.session_state.stage1_current_item += 1
                         st.rerun()
 
                 # -------------------------
