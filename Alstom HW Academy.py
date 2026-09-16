@@ -1393,27 +1393,51 @@ elif st.session_state.current_page == "stage1":
             left_col, right_col = st.columns([0.9, 2.3])
 
             # -----------------------------
-            # Left Sidebar
+            # Left Sidebar (Display Only)
             # -----------------------------
             with left_col:
                 st.markdown("### Stage 1 Content")
 
-                item_labels = []
-                for item in STAGE1_ITEMS:
+                for idx, item in enumerate(STAGE1_ITEMS):
                     completed = st.session_state[item["key"]]
+                    is_current = st.session_state.stage1_current_item == idx
+
                     icon = "✅" if completed else "⬜"
-                    item_labels.append(f"{icon} {item['title']}")
 
-                selected_index = st.radio(
-                    "Select content item",
-                    options=list(range(len(STAGE1_ITEMS))),
-                    format_func=lambda x: item_labels[x],
-                    index=st.session_state.stage1_current_item,
-                    key="stage1_sidebar_selector",
-                    label_visibility="collapsed"
-                )
-
-                st.session_state.stage1_current_item = selected_index
+                    if is_current:
+                        st.markdown(
+                            f"""
+                            <div style="
+                                background-color:#E8F0FE;
+                                border:1px solid #BFDBFE;
+                                border-radius:12px;
+                                padding:10px 12px;
+                                margin-bottom:10px;
+                                font-weight:700;
+                                color:#1F3552;
+                            ">
+                                {icon} {item['title']}
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
+                    else:
+                        st.markdown(
+                            f"""
+                            <div style="
+                                background-color:white;
+                                border:1px solid #E5E7EB;
+                                border-radius:12px;
+                                padding:10px 12px;
+                                margin-bottom:10px;
+                                font-weight:500;
+                                color:#374151;
+                            ">
+                                {icon} {item['title']}
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
 
             # -----------------------------
             # Main Content Area
@@ -1459,14 +1483,22 @@ elif st.session_state.current_page == "stage1":
                     st.write("")
 
                     if st.button("Go to Next Item →", use_container_width=True, key="stage1_next_from_doc"):
-                        if st.session_state.stage1_current_item < len(STAGE1_ITEMS) - 1:
-                            st.session_state.stage1_current_item += 1
+                        st.session_state.stage1_current_item = 1
                         st.rerun()
 
                 # -------------------------
                 # Item 2: Quiz
                 # -------------------------
                 elif current_index == 1:
+                    back_col, empty_col = st.columns([1, 3])
+
+                    with back_col:
+                        if st.button("← Back", use_container_width=True, key="stage1_back_to_doc"):
+                            st.session_state.stage1_current_item = 0
+                            st.rerun()
+
+                    st.write("")
+
                     if not st.session_state.stage1_doc_completed:
                         st.info("Please complete the document first before attempting the quiz.")
                     else:
