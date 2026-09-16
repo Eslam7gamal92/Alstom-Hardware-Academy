@@ -137,7 +137,7 @@ MANDATORY_COURSES = [
         "title": "Alstom Information Security Awareness",
         "duration": "15 minutes",
         "link": "https://alstomuniversity.eu.crossknowledge.com/site/path/7382?origin=lc_widget#tab/path/activity/49165",
-        "image": "mandatory_2.png",
+        "image": "mandatory_2.jpg",
         "description": "Raise awareness on basic IT security good practices and information protection."
     },
     {
