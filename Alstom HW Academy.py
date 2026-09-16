@@ -215,6 +215,110 @@ STAGE1_ITEMS = [
         "file": ""
     }
 ]
+
+STAGE1_QUIZ_QUESTIONS = [
+    {
+        "question": "What is the most important rule regarding railway safety?",
+        "options": [
+            "Trains must follow the timetable exactly",
+            "Trains must not exceed speed limits",
+            "Two trains must not occupy the same position on the track at the same time",
+            "Drivers must always operate manually"
+        ],
+        "answer": "Two trains must not occupy the same position on the track at the same time"
+    },
+    {
+        "question": "Which of the following is NOT one of the five reasons for railway signalling mentioned in the training?",
+        "options": [
+            "Traffic management",
+            "Rear-end collision prevention",
+            "Head-on collision prevention",
+            "Fuel consumption reduction"
+        ],
+        "answer": "Fuel consumption reduction"
+    },
+    {
+        "question": "Before a route can be released for train movement, which condition must be ensured?",
+        "options": [
+            "The train schedule is approved",
+            "The route is free and points are set, locked, and detected",
+            "The station manager authorizes it manually",
+            "The train speed is below 40 km/h"
+        ],
+        "answer": "The route is free and points are set, locked, and detected"
+    },
+    {
+        "question": "What is the main limitation of axle counters highlighted in the presentation?",
+        "options": [
+            "They require insulated rail joints",
+            "They consume high power",
+            "They do not detect broken rails",
+            "They cannot be used on bridges"
+        ],
+        "answer": "They do not detect broken rails"
+    },
+    {
+        "question": "Which type of level crossing is described as the most widespread?",
+        "options": [
+            "SAL0",
+            "SAL2",
+            "SAL2B",
+            "SAL4"
+        ],
+        "answer": "SAL2"
+    },
+    {
+        "question": "The point equipment includes which three functions?",
+        "options": [
+            "Detection, communication, supervision",
+            "Actuation, locking, detection",
+            "Power supply, actuation, signalling",
+            "Switching, routing, braking"
+        ],
+        "answer": "Actuation, locking, detection"
+    },
+    {
+        "question": "What is the definition of headway?",
+        "options": [
+            "The distance between two stations",
+            "The braking distance of a train",
+            "The time interval between two following trains",
+            "The distance between two signals"
+        ],
+        "answer": "The time interval between two following trains"
+    },
+    {
+        "question": "Within Automatic Train Control (ATC), what is the primary role of ATP?",
+        "options": [
+            "Drives the train automatically",
+            "Supervises train speed and applies protection",
+            "Plans timetables",
+            "Controls interlocking routes"
+        ],
+        "answer": "Supervises train speed and applies protection"
+    },
+    {
+        "question": "What does ATS stand for?",
+        "options": [
+            "Automatic Train Safety",
+            "Automatic Track Supervision",
+            "Automatic Train Supervision",
+            "Automatic Transit Signalling"
+        ],
+        "answer": "Automatic Train Supervision"
+    },
+    {
+        "question": "According to the fail-safe principle, when a predictable signalling equipment failure occurs, the system should move to:",
+        "options": [
+            "A less restrictive condition",
+            "A manual operating mode only",
+            "A more restrictive safe condition",
+            "A higher-performance mode"
+        ],
+        "answer": "A more restrictive safe condition"
+    }
+]
+
 # ---------------------------------------------------
 # Supabase Connection
 # ---------------------------------------------------
@@ -1492,35 +1596,42 @@ elif st.session_state.current_page == "stage1":
                 # -------------------------
                 # Item 2: Quiz
                 # -------------------------
-                elif current_index == 1:
-                    if not st.session_state.stage1_doc_completed:
-                        st.info("Please complete the document first before attempting the quiz.")
-                    else:
-                        if not st.session_state.stage1_quiz_completed:
-                            st.subheader("Stage 1 Quiz")
+                if not st.session_state.stage1_quiz_completed:
+                    st.subheader("Stage 1 Quiz")
 
-                            q1 = st.radio(
-                                "What is the main purpose of railway signalling?",
-                                [
-                                    "Entertainment",
-                                    "Train safety and control",
-                                    "Food service"
-                                ],
-                                key="stage1_q1_page"
-                            )
+                    user_answers = []
 
-                            if st.button("Submit Quiz ✅", use_container_width=True, key="stage1_submit_quiz_page"):
-                                if q1 == "Train safety and control":
-                                    st.session_state.stage1_quiz_completed = True
-                                    st.session_state.stage1_completed = True
-                                    save_progress()
-                                    st.success("Stage 1 completed successfully!")
-                                    st.rerun()
-                                else:
-                                    st.error("Incorrect answer. Please try again.")
+                    for i, q in enumerate(STAGE1_QUIZ_QUESTIONS, start=1):
+                        answer = st.radio(
+                            f"Q{i}. {q['question']}",
+                            q["options"],
+                            key=f"stage1_quiz_q{i}"
+                        )
+                        user_answers.append(answer)
+
+                    if st.button("Submit Quiz ✅", use_container_width=True, key="stage1_submit_quiz_page"):
+                        correct_count = 0
+
+                        for user_answer, q in zip(user_answers, STAGE1_QUIZ_QUESTIONS):
+                            if user_answer == q["answer"]:
+                                correct_count += 1
+
+                        total_questions = len(STAGE1_QUIZ_QUESTIONS)
+                        required_score = int(total_questions * 0.8)
+
+                        st.write(f"Your score: **{correct_count}/{total_questions}**")
+
+                        if correct_count >= required_score:
+                            st.session_state.stage1_quiz_completed = True
+                            st.session_state.stage1_completed = True
+                            save_progress()
+                            st.success("Stage 1 completed successfully!")
+                            st.rerun()
                         else:
-                            st.success("Quiz completed ✅")
-                            st.success("Stage 1 completed successfully ✅")
+                            st.error(f"You need at least {required_score}/{total_questions} correct answers to pass. Please try again.")
+                else:
+                    st.success("Quiz completed ✅")
+                    st.success("Stage 1 completed successfully ✅")
 
                     st.write("")
                     back_col1, back_col2 = st.columns([1, 2.4])
