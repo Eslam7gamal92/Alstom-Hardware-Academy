@@ -1252,24 +1252,15 @@ elif st.session_state.current_page == "mandatory_trainings":
                 go_to("profile")
                 st.rerun()
 
-        hero_left, hero_right = st.columns([2.4, 1])
-
-        with hero_left:
-            st.markdown("""
-            <div class="mandatory-hero">
-                <div class="mandatory-hero-title">Mandatory Trainings</div>
-                <div class="mandatory-hero-text">
-                    Before starting your technical learning journey, please complete the required onboarding trainings.
-                    These courses are mandatory for all new joiners and must be completed before progressing to Stage 1.
-                </div>
+        st.markdown("""
+        <div class="mandatory-hero">
+            <div class="mandatory-hero-title">Mandatory Trainings</div>
+            <div class="mandatory-hero-text">
+                Before starting your technical learning journey, please complete the required onboarding trainings.
+                These courses are mandatory for all new joiners and must be completed before progressing to Stage 1.
             </div>
-            """, unsafe_allow_html=True)
-
-        with hero_right:
-            try:
-                st.image("mandatory_hero.png", use_container_width=True)
-            except:
-                st.info("Add image: mandatory_hero.png")
+        </div>
+        """, unsafe_allow_html=True)
 
         progress = calculate_progress()
         st.markdown(f"### Progress: {progress}%")
