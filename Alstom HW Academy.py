@@ -33,6 +33,10 @@ defaults = {
     "stage1_quiz_completed": False,
     "stage1_current_item": 0,
     "stage1_completed": False,
+    "stage2_doc1_completed": False,
+    "stage2_doc2_completed": False,
+    "stage2_quiz_completed": False,
+    "stage2_current_item": 0,
     "stage2_completed": False,
     "selected_path": "",
     "current_page": "landing"
@@ -65,6 +69,10 @@ def logout():
     st.session_state.stage1_quiz_completed = False
     st.session_state.stage1_current_item = 0
     st.session_state.stage1_completed = False
+    st.session_state.stage2_doc1_completed = False
+    st.session_state.stage2_doc2_completed = False
+    st.session_state.stage2_quiz_completed = False
+    st.session_state.stage2_current_item = 0
     st.session_state.stage2_completed = False
     st.session_state.selected_path = ""
     st.session_state.current_page = "landing"
@@ -116,6 +124,9 @@ def save_progress():
             "stage1_doc_completed": st.session_state.stage1_doc_completed,
             "stage1_quiz_completed": st.session_state.stage1_quiz_completed,
             "stage1_completed": st.session_state.stage1_completed,
+            "stage2_doc1_completed": st.session_state.stage2_doc1_completed,
+            "stage2_doc2_completed": st.session_state.stage2_doc2_completed,
+            "stage2_quiz_completed": st.session_state.stage2_quiz_completed,
             "stage2_completed": st.session_state.stage2_completed,
             "selected_path": st.session_state.selected_path,
             "progress_percent": progress
@@ -316,6 +327,136 @@ STAGE1_QUIZ_QUESTIONS = [
             "A higher-performance mode"
         ],
         "answer": "A more restrictive safe condition"
+    }
+]
+
+STAGE2_ITEMS = [
+    {
+        "key": "stage2_doc1_completed",
+        "title": "Stage 2 Document 1",
+        "type": "PowerPoint",
+        "duration": "Self-paced",
+        "description": "Study the first Stage 2 presentation before proceeding to the next item.",
+        "file": "stage2_document_1.pptx"
+    },
+    {
+        "key": "stage2_doc2_completed",
+        "title": "Stage 2 Document 2",
+        "type": "PowerPoint",
+        "duration": "Self-paced",
+        "description": "Study the second Stage 2 presentation before proceeding to the quiz.",
+        "file": "stage2_document_2.pptx"
+    },
+    {
+        "key": "stage2_quiz_completed",
+        "title": "Stage 2 Quiz",
+        "type": "Quiz",
+        "duration": "Short assessment",
+        "description": "Complete the quiz based on the Stage 2 materials.",
+        "file": ""
+    }
+]
+
+STAGE2_QUIZ_QUESTIONS = [
+    {
+        "question": "What is the main function of the BSI004 board?",
+        "options": [
+            "Power conversion",
+            "Fuse protection",
+            "Surge protection for detector cables",
+            "Train speed monitoring"
+        ],
+        "answer": "Surge protection for detector cables"
+    },
+    {
+        "question": "What does HVITC stand for?",
+        "options": [
+            "High Voltage Integrated Track Controller",
+            "High Voltage Impulse Track Circuit",
+            "High Velocity Impulse Track Circuit",
+            "High Voltage Interlocking Track Circuit"
+        ],
+        "answer": "High Voltage Impulse Track Circuit"
+    },
+    {
+        "question": "Which IMC063 configuration uses the Negative Detection Philosophy?",
+        "options": [
+            "DA/EP",
+            "AxF/PA",
+            "CCM-E",
+            "SIC999"
+        ],
+        "answer": "AxF/PA"
+    },
+    {
+        "question": "Which HVITC component generates high-voltage impulses and injects them into the rails?",
+        "options": [
+            "RUTA",
+            "Impedance Bond",
+            "EMZ",
+            "CCM-E"
+        ],
+        "answer": "EMZ"
+    },
+    {
+        "question": "Which cable type provides the 24VDC supply from SIC999 to IMC063?",
+        "options": [
+            "MAN0125300",
+            "MAN0125600",
+            "MAN0125700",
+            "MAN0125800"
+        ],
+        "answer": "MAN0125700"
+    },
+    {
+        "question": "The HVITC receiver (RUTA) checks:",
+        "options": [
+            "Pulse polarity, energy, and frequency",
+            "Axle count only",
+            "Train speed only",
+            "Signal lamp status"
+        ],
+        "answer": "Pulse polarity, energy, and frequency"
+    },
+    {
+        "question": "In the Pedal Cabinet layout, the BSI004 cards are installed at:",
+        "options": [
+            "+F2",
+            "+F7",
+            "+F9",
+            "+F13"
+        ],
+        "answer": "+F13"
+    },
+    {
+        "question": "What happens if an HVITC signal disappears or becomes distorted?",
+        "options": [
+            "The transmitter resets automatically",
+            "The track relay drops",
+            "The receiver increases sensitivity",
+            "Nothing changes"
+        ],
+        "answer": "The track relay drops"
+    },
+    {
+        "question": "How many IMC063 cards can one SIC Board protect?",
+        "options": [
+            "4",
+            "6",
+            "8",
+            "10"
+        ],
+        "answer": "6"
+    },
+    {
+        "question": "What is the maximum distance between the transmitter and the Impedance Bond when transmission and reception use different cables?",
+        "options": [
+            "1000 m",
+            "1500 m",
+            "2000 m",
+            "2500 m"
+        ],
+        "answer": "2000 m"
     }
 ]
 
@@ -1089,6 +1230,10 @@ elif st.session_state.current_page == "auth":
                                 st.session_state.stage1_doc_completed = progress_data.get("stage1_doc_completed", False)
                                 st.session_state.stage1_quiz_completed = progress_data.get("stage1_quiz_completed", False)
                                 st.session_state.stage1_completed = progress_data.get("stage1_completed", False)
+                                st.session_state.stage2_doc1_completed = progress_data.get("stage2_doc1_completed", False)
+                                st.session_state.stage2_doc2_completed = progress_data.get("stage2_doc2_completed", False)
+                                st.session_state.stage2_quiz_completed = progress_data.get("stage2_quiz_completed", False)
+                                st.session_state.stage2_current_item = 0
                                 st.session_state.stage2_completed = progress_data.get("stage2_completed", False)
                                 st.session_state.selected_path = progress_data.get("selected_path", "")
 
@@ -1637,6 +1782,12 @@ elif st.session_state.current_page == "stage1":
                             st.success("Quiz completed ✅")
                             st.success("Stage 1 completed successfully ✅")
 
+                            st.write("")
+
+                            if st.button("Go to Stage 2", use_container_width=True, key="stage1_go_stage2"):
+                                go_to("stage2")
+                                st.rerun()
+
                     st.write("")
                     back_col1, back_col2 = st.columns([1, 2.4])
 
@@ -1645,6 +1796,246 @@ elif st.session_state.current_page == "stage1":
                             st.session_state.stage1_current_item = 0
                             st.rerun()
 
+# ---------------------------------------------------
+# Stage 2 Page
+# ---------------------------------------------------
+elif st.session_state.current_page == "stage2":
+    if not st.session_state.logged_in:
+        st.warning("Please login first.")
+        if st.button("Go to Login", key="stage2_go_to_login"):
+            go_to("auth")
+            st.rerun()
+    else:
+        top1, top2, top3 = st.columns([2, 4, 2])
+
+        with top1:
+            if st.button("← Home", use_container_width=True, key="stage2_home"):
+                go_to("home")
+                st.rerun()
+
+        with top3:
+            if st.button("Profile", use_container_width=True, key="stage2_profile"):
+                go_to("profile")
+                st.rerun()
+
+        st.markdown("""
+        <div class="stage-page-hero">
+            <div class="stage-page-hero-title">Stage 2: Signalling & Hardware</div>
+            <div class="stage-page-hero-text">
+                Continue your journey by studying signalling and hardware fundamentals,
+                then complete the assessment to unlock the final specialization stage.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        progress = calculate_progress()
+        st.markdown(f"### Progress: {progress}%")
+        st.progress(progress / 100)
+        st.write("")
+
+        if not st.session_state.stage1_completed:
+            st.info("This stage is locked. Complete Stage 1 first.")
+        else:
+            if st.session_state.stage2_current_item not in [0, 1, 2]:
+                st.session_state.stage2_current_item = 0
+
+            left_col, right_col = st.columns([0.9, 2.3])
+
+            # -----------------------------
+            # Left Sidebar (Display Only)
+            # -----------------------------
+            with left_col:
+                st.markdown("### Stage 2 Content")
+
+                for idx, item in enumerate(STAGE2_ITEMS):
+                    completed = st.session_state[item["key"]]
+                    is_current = st.session_state.stage2_current_item == idx
+
+                    icon = "✅" if completed else "⬜"
+
+                    if is_current:
+                        st.markdown(
+                            f"""
+                            <div style="
+                                background-color:#E8F0FE;
+                                border:1px solid #BFDBFE;
+                                border-radius:12px;
+                                padding:10px 12px;
+                                margin-bottom:10px;
+                                font-weight:700;
+                                color:#1F3552;
+                            ">
+                                {icon} {item['title']}
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
+                    else:
+                        st.markdown(
+                            f"""
+                            <div style="
+                                background-color:white;
+                                border:1px solid #E5E7EB;
+                                border-radius:12px;
+                                padding:10px 12px;
+                                margin-bottom:10px;
+                                font-weight:500;
+                                color:#374151;
+                            ">
+                                {icon} {item['title']}
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
+
+            # -----------------------------
+            # Main Content Area
+            # -----------------------------
+            with right_col:
+                current_index = st.session_state.stage2_current_item
+                current_item = STAGE2_ITEMS[current_index]
+
+                st.markdown(f"## {current_item['title']}")
+                st.write(f"**Type:** {current_item['type']}")
+                st.write(f"**Duration:** {current_item['duration']}")
+                st.write(current_item["description"])
+                st.write("")
+
+                # -------------------------
+                # Item 1: Document 1
+                # -------------------------
+                if current_index == 0:
+                    try:
+                        with open(current_item["file"], "rb") as doc_file:
+                            st.download_button(
+                                label="Download Stage 2 Document 1",
+                                data=doc_file,
+                                file_name=current_item["file"],
+                                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                                use_container_width=True,
+                                key="stage2_download_doc1"
+                            )
+                    except Exception:
+                        st.error(f"File not found: {current_item['file']}")
+
+                    st.write("")
+
+                    if not st.session_state.stage2_doc1_completed:
+                        if st.button("Mark Document 1 as Completed ✅", use_container_width=True, key="stage2_doc1_complete"):
+                            st.session_state.stage2_doc1_completed = True
+                            save_progress()
+                            st.success("Document 1 marked as completed.")
+                            st.rerun()
+                    else:
+                        st.success("Document 1 completed ✅")
+
+                    st.write("")
+
+                    next_col1, next_col2 = st.columns([1, 2.4])
+                    with next_col1:
+                        if st.button("Go to Next Item →", use_container_width=True, key="stage2_next_from_doc1"):
+                            st.session_state.stage2_current_item = 1
+                            st.rerun()
+
+                # -------------------------
+                # Item 2: Document 2
+                # -------------------------
+                elif current_index == 1:
+                    try:
+                        with open(current_item["file"], "rb") as doc_file:
+                            st.download_button(
+                                label="Download Stage 2 Document 2",
+                                data=doc_file,
+                                file_name=current_item["file"],
+                                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                                use_container_width=True,
+                                key="stage2_download_doc2"
+                            )
+                    except Exception:
+                        st.error(f"File not found: {current_item['file']}")
+
+                    st.write("")
+
+                    if not st.session_state.stage2_doc2_completed:
+                        if st.button("Mark Document 2 as Completed ✅", use_container_width=True, key="stage2_doc2_complete"):
+                            st.session_state.stage2_doc2_completed = True
+                            save_progress()
+                            st.success("Document 2 marked as completed.")
+                            st.rerun()
+                    else:
+                        st.success("Document 2 completed ✅")
+
+                    st.write("")
+
+                    nav_col1, nav_col2, nav_col3 = st.columns([1, 1, 2])
+
+                    with nav_col1:
+                        if st.button("← Back", use_container_width=True, key="stage2_back_to_doc1"):
+                            st.session_state.stage2_current_item = 0
+                            st.rerun()
+
+                    with nav_col2:
+                        if st.button("Next →", use_container_width=True, key="stage2_next_to_quiz"):
+                            st.session_state.stage2_current_item = 2
+                            st.rerun()
+
+                # -------------------------
+                # Item 3: Quiz
+                # -------------------------
+                elif current_index == 2:
+                    if not st.session_state.stage2_doc1_completed or not st.session_state.stage2_doc2_completed:
+                        st.info("Please complete both documents first before attempting the quiz.")
+                    else:
+                        if not st.session_state.stage2_quiz_completed:
+                            st.subheader("Stage 2 Quiz")
+
+                            user_answers = []
+
+                            for i, q in enumerate(STAGE2_QUIZ_QUESTIONS, start=1):
+                                answer = st.radio(
+                                    f"Q{i}. {q['question']}",
+                                    q["options"],
+                                    key=f"stage2_quiz_q{i}"
+                                )
+                                user_answers.append(answer)
+
+                            if st.button("Submit Quiz ✅", use_container_width=True, key="stage2_submit_quiz_page"):
+                                correct_count = 0
+
+                                for user_answer, q in zip(user_answers, STAGE2_QUIZ_QUESTIONS):
+                                    if user_answer == q["answer"]:
+                                        correct_count += 1
+
+                                total_questions = len(STAGE2_QUIZ_QUESTIONS)
+                                required_score = int(total_questions * 0.8)
+
+                                st.write(f"Your score: **{correct_count}/{total_questions}**")
+
+                                if correct_count >= required_score:
+                                    st.session_state.stage2_quiz_completed = True
+                                    st.session_state.stage2_completed = True
+                                    save_progress()
+                                    st.success("Stage 2 completed successfully!")
+                                    st.rerun()
+                                else:
+                                    st.error(f"You need at least {required_score}/{total_questions} correct answers to pass. Please try again.")
+                        else:
+                            st.success("Quiz completed ✅")
+                            st.success("Stage 2 completed successfully ✅")
+
+                            st.write("")
+
+                            if st.button("Go to Stage 3", use_container_width=True, key="stage2_go_stage3"):
+                                go_to("learning")
+                                st.rerun()
+
+                    st.write("")
+                    back_col1, back_col2 = st.columns([1, 2.4])
+
+                    with back_col1:
+                        if st.button("← Back", use_container_width=True, key="stage2_back_to_doc2"):
+                            st.session_state.stage2_current_item = 1
+                            st.rerun()
 # ---------------------------------------------------
 # Learning Journey Page
 # ---------------------------------------------------
