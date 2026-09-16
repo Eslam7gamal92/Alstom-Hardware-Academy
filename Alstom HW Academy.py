@@ -1596,42 +1596,46 @@ elif st.session_state.current_page == "stage1":
                 # -------------------------
                 # Item 2: Quiz
                 # -------------------------
-                if not st.session_state.stage1_quiz_completed:
-                    st.subheader("Stage 1 Quiz")
+                elif current_index == 1:
+                    if not st.session_state.stage1_doc_completed:
+                        st.info("Please complete the document first before attempting the quiz.")
+                    else:
+                        if not st.session_state.stage1_quiz_completed:
+                            st.subheader("Stage 1 Quiz")
 
-                    user_answers = []
+                            user_answers = []
 
-                    for i, q in enumerate(STAGE1_QUIZ_QUESTIONS, start=1):
-                        answer = st.radio(
-                            f"Q{i}. {q['question']}",
-                            q["options"],
-                            key=f"stage1_quiz_q{i}"
-                        )
-                        user_answers.append(answer)
+                            for i, q in enumerate(STAGE1_QUIZ_QUESTIONS, start=1):
+                                answer = st.radio(
+                                    f"Q{i}. {q['question']}",
+                                    q["options"],
+                                    key=f"stage1_quiz_q{i}"
+                                )
+                                user_answers.append(answer)
 
-                    if st.button("Submit Quiz ✅", use_container_width=True, key="stage1_submit_quiz_page"):
-                        correct_count = 0
+                            if st.button("Submit Quiz ✅", use_container_width=True, key="stage1_submit_quiz_page"):
+                                correct_count = 0
 
-                        for user_answer, q in zip(user_answers, STAGE1_QUIZ_QUESTIONS):
-                            if user_answer == q["answer"]:
-                                correct_count += 1
+                                for user_answer, q in zip(user_answers, STAGE1_QUIZ_QUESTIONS):
+                                    if user_answer == q["answer"]:
+                                        correct_count += 1
 
-                        total_questions = len(STAGE1_QUIZ_QUESTIONS)
-                        required_score = int(total_questions * 0.8)
+                                total_questions = len(STAGE1_QUIZ_QUESTIONS)
+                                required_score = int(total_questions * 0.8)
 
-                        st.write(f"Your score: **{correct_count}/{total_questions}**")
+                                st.write(f"Your score: **{correct_count}/{total_questions}**")
 
-                        if correct_count >= required_score:
-                            st.session_state.stage1_quiz_completed = True
-                            st.session_state.stage1_completed = True
-                            save_progress()
-                            st.success("Stage 1 completed successfully!")
-                            st.rerun()
+                                if correct_count >= required_score:
+                                    st.session_state.stage1_quiz_completed = True
+                                    st.session_state.stage1_completed = True
+                                    save_progress()
+                                    st.success("Stage 1 completed successfully!")
+                                    st.rerun()
+                                else:
+                                    st.error(f"You need at least {required_score}/{total_questions} correct answers to pass. Please try again.")
                         else:
-                            st.error(f"You need at least {required_score}/{total_questions} correct answers to pass. Please try again.")
-                else:
-                    st.success("Quiz completed ✅")
-                    st.success("Stage 1 completed successfully ✅")
+                            st.success("Quiz completed ✅")
+                            st.success("Stage 1 completed successfully ✅")
 
                     st.write("")
                     back_col1, back_col2 = st.columns([1, 2.4])
