@@ -1,3 +1,6 @@
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import streamlit as st
 from PIL import Image
 from supabase import create_client, Client
@@ -134,6 +137,90 @@ def save_progress():
         on_conflict="user_id"
     ).execute()
 
+def send_completion_email_to_manager(user_name, user_email, manager_name, manager_email, selected_path):
+    sender_email = st.secrets["SENDER_EMAIL"]
+    sender_password = st.secrets["SENDER_APP_PASSWORD"]
+
+    subject = "Training Completion Notification"
+
+    body = f"""
+Hello {manager_name},
+
+This is to inform you that {user_name} has successfully completed the Alstom Hardware & Installation Academy training journey.
+
+Best regards,
+Alstom Hardware & Installation Academy
+"""
+
+    msg = MIMEMultipart()
+    msg["From"] = sender_email
+    msg["To"] = manager_email
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "plain"))
+
+    try:
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.send_message(msg)
+        return True
+    except Exception as e:
+        print("Email sending error:", e)
+        return False
+    
+def is_training_fully_completed():
+    return (
+        st.session_state.mandatory_completed
+        and st.session_state.stage1_completed
+        and st.session_state.stage2_completed
+        and bool(st.session_state.selected_path)
+    )
+
+def has_completion_email_been_sent(user_id):
+    result = supabase_admin.table("user_progress").select("completion_email_sent").eq("user_id", user_id).execute()
+
+    if result.data:
+        return result.data[0].get("completion_email_sent", False)
+
+    return False
+
+def mark_completion_email_as_sent(user_id):
+    supabase_admin.table("user_progress").update({
+        "completion_email_sent": True
+    }).eq("user_id", user_id).execute()
+
+def check_and_send_completion_email():
+    if not is_training_fully_completed():
+        return
+
+    if has_completion_email_been_sent(st.session_state.user_id):
+        return
+
+    profile_res = supabase_admin.table("profiles").select("*").eq("id", st.session_state.user_id).execute()
+
+    if not profile_res.data:
+        return
+
+    profile_data = profile_res.data[0]
+    user_name = profile_data.get("full_name", "")
+    user_email = profile_data.get("email", "")
+    manager_name = profile_data.get("manager_name", "")
+    manager_email = profile_data.get("manager_email", "")
+
+    if not manager_email:
+        return
+
+    sent = send_completion_email_to_manager(
+        user_name=user_name,
+        user_email=user_email,
+        manager_name=manager_name,
+        manager_email=manager_email,
+        selected_path=st.session_state.selected_path
+    )
+
+    if sent:
+        mark_completion_email_as_sent(st.session_state.user_id)
+
 MANDATORY_COURSES = [
     {
         "key": "mandatory_1_completed",
@@ -203,9 +290,29 @@ MANAGERS = [
         "email": "kubra.eker@alstomgroup.com"
     },
     {
+        "name": "Sirrican Karadogan",
+        "email": "sirrican.karadogan@alstomgroup.com"
+    },
+    {
+        "name": "Diaa Eldin Salah",
+        "email": "diaa-eldin.salah@alstomgroup.com"
+    },
+    {
+        "name": "Diaa ElDin Reda",
+        "email": "diaa-eldin.reda@alstomgroup.com"
+    },
+    {
         "name": "Burak Bingol",
         "email": "burak.bingol@alstomgroup.com"
-    }
+    },
+    {
+        "name": "Ahmet KILICARSLAN",
+        "email": "ahmet.kilicarslan@alstomgroup.com"
+    },
+    {
+        "name": "Eslam Gamal",
+        "email": "eslam.gamal@alstomgroup.com"
+    },
 ]
 
 STAGE1_ITEMS = [
@@ -2176,6 +2283,7 @@ This stage introduces:
                 if selected:
                     st.session_state.selected_path = selected
                     save_progress()
+                    check_and_send_completion_email()
                     st.success(f"Specialization selected: {selected}")
                     st.rerun()
                 else:
