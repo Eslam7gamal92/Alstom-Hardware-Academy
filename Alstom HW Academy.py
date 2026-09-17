@@ -278,18 +278,6 @@ def is_training_fully_completed():
         and bool(st.session_state.selected_path)
     )
 
-def has_completion_email_been_sent(user_id):
-    result = supabase_admin.table("user_progress").select("completion_email_sent").eq("user_id", user_id).execute()
-
-    if result.data:
-        return result.data[0].get("completion_email_sent", False)
-
-    return False
-
-def mark_completion_email_as_sent(user_id):
-    supabase_admin.table("user_progress").update({
-        "completion_email_sent": True
-    }).eq("user_id", user_id).execute()
 
 MANDATORY_COURSES = [
     {
@@ -1640,8 +1628,13 @@ elif st.session_state.current_page == "home":
             </div>
             """, unsafe_allow_html=True)
 
-            if st.button("Enter Stage 2", use_container_width=True, key="open_stage2"):
-                go_to("learning")
+            if st.button(
+                "Enter Stage 2",
+                use_container_width=True,
+                key="open_stage2",
+                disabled=not st.session_state.stage1_completed
+            ):
+                go_to("stage2")
                 st.rerun()
 
         with c4:
