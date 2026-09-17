@@ -11,7 +11,7 @@ from PIL import Image
 # Page Config
 # ---------------------------------------------------
 st.set_page_config(
-    page_title="Alstom Hardware Academy",
+    page_title="Alstom Hardware & Installation Academy",
     page_icon="🚆",
     layout="wide"
 )
@@ -281,6 +281,10 @@ MANDATORY_COURSES = [
 ]
 
 MANAGERS = [
+    {
+        "name": "Yusuf BASEGMEZ",
+        "email": "yusuf.basegmez@alstomgroup.com"
+    },
     {
         "name": "Mohammed Ibrahim AbdelShafy",
         "email": "mohammed.abdelshafy@alstomgroup.com"
@@ -899,10 +903,10 @@ if st.session_state.current_page == "landing":
     with nav1:
         try:
             st.image("alstom_logo.png", width=180)
-            st.caption("Alstom Hardware Academy")
+            st.caption("Alstom Hardware & Installation Academy")
         except:
             st.markdown("## **ALSTOM**")
-            st.caption("Alstom Hardware Academy")
+            st.caption("Alstom Hardware & Installation Academy")
 
     with nav2:
         st.markdown(
@@ -933,7 +937,7 @@ if st.session_state.current_page == "landing":
         <div class="small-title">Structured Learning for New Joiners</div>
         <div class="main-title">A structured onboarding and learning journey for new hardware engineers</div>
         <div class="hero-text">
-            Alstom Hardware Academy is designed to support newly joined engineers with a guided learning experience,
+            Alstom Hardware and Installation Academy is designed to support newly joined engineers with a guided learning experience,
             starting from company introduction and railway system fundamentals, moving into signalling and hardware basics,
             and finally leading into specialized technical paths such as Pedals, OBC, HVITC, and Cable Chassis.
         </div>
@@ -1000,7 +1004,7 @@ if st.session_state.current_page == "landing":
         <div class="white-box">
             <div class="section-title">Why This Platform Matters</div>
             <div class="section-text">
-                New engineers often face scattered resources and inconsistent onboarding. Alstom Hardware Academy gives each newcomer
+                New engineers often face scattered resources and inconsistent onboarding. Alstom Hardware and Installation Academy gives each newcomer
                 a guided learning flow, clear stages, and measurable progress toward technical readiness.
             </div>
         </div>
@@ -1019,7 +1023,7 @@ if st.session_state.current_page == "landing":
             hardware function, understanding the company context is essential — not only from a business perspective, but also from
             a technical and project integration perspective.
             <br><br>
-            Alstom Hardware Academy was created to make that onboarding journey clearer, more structured, and more engaging.
+            Alstom Hardware and Installation Academy was created to make that onboarding journey clearer, more structured, and more engaging.
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1096,7 +1100,7 @@ if st.session_state.current_page == "landing":
 
     # 9. Explore Learning Areas
     st.markdown('<h2 style="color:#1F3552; font-weight:700;">Explore Learning Areas</h2>', unsafe_allow_html=True)
-    st.write("Discover the main learning tracks included in Alstom Hardware Academy.")
+    st.write("Discover the main learning tracks included in Alstom Hardware and Installation Academy.")
 
     card1, card2 = st.columns(2)
 
@@ -1162,12 +1166,12 @@ if st.session_state.current_page == "landing":
         </div>
         """, unsafe_allow_html=True)
 
-    # 10. Why Alstom Hardware Academy?
+    # 10. Why Alstom Hardware and Installation Academy?
     st.markdown("""
     <div class="section-box">
-        <div class="section-title">Why Alstom Hardware Academy?</div>
+        <div class="section-title">Why Alstom Hardware and Installation Academy?</div>
         <div class="section-text">
-            Alstom Hardware Academy is more than a content repository. It is a guided experience built to reduce confusion,
+            Alstom Hardware and Installation Academy is more than a content repository. It is a guided experience built to reduce confusion,
             improve onboarding quality, and create a shared technical language across newcomers, senior engineers, and managers.
             <br><br>
             Instead of relying only on scattered files or informal support, the platform provides a structured route:
@@ -1182,7 +1186,7 @@ if st.session_state.current_page == "landing":
     <div class="hero-box" style="padding:30px 34px;">
         <div class="section-title" style="color:white;">Start your learning journey today</div>
         <div class="hero-text">
-            Join Alstom Hardware Academy and begin a structured onboarding experience tailored for new hardware engineers.
+            Join Alstom Hardware and Installation Academy and begin a structured onboarding experience tailored for new hardware engineers.
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1203,7 +1207,7 @@ if st.session_state.current_page == "landing":
     st.markdown("""
     <hr style="margin-top:28px; margin-bottom:12px;">
     <div class="footer-text">
-        <strong>Alstom Hardware Academy Platform</strong><br>
+        <strong>Alstom Hardware and Installation Academy Platform</strong><br>
         Built to support onboarding, technical learning, and knowledge development for hardware engineers at Alstom.
     </div>
     """, unsafe_allow_html=True)
@@ -1263,7 +1267,7 @@ elif st.session_state.current_page == "auth":
         st.image("alstom_logo.png", width=180)
     except:
         st.markdown("## **ALSTOM**")
-    st.caption("Alstom Hardware Academy")
+    st.caption("Alstom Hardware & Installation Academy")
 
     st.write("")
 
@@ -1272,7 +1276,7 @@ elif st.session_state.current_page == "auth":
     <div class="auth-left-box">
         <div class="auth-left-title">Start your onboarding journey with confidence</div>
         <div class="auth-left-text">
-            Alstom Hardware Academy is designed to give new hardware engineers a clear and structured learning experience.
+            Alstom Hardware and Installation Academy is designed to give new hardware engineers a clear and structured learning experience.
         </div>
         <div class="auth-left-text">
             Through this platform, you will explore:
@@ -1442,7 +1446,7 @@ elif st.session_state.current_page == "home":
                 st.image("alstom_logo.png", width=180)
             except:
                 st.markdown("## **ALSTOM**")
-            st.caption("Alstom Hardware Academy")
+            st.caption("Alstom Hardware & Installation Academy")
 
         with top3:
             if st.button("Logout", use_container_width=True, key="home_logout"):
@@ -1473,7 +1477,7 @@ elif st.session_state.current_page == "home":
         <div class="info-panel" style="margin-bottom:22px;">
             <h3 style="color:#1F3552; margin-bottom:12px;">About Your Journey</h3>
             <p style="font-size:16px; color:#374151; line-height:1.75; margin-bottom:0;">
-                Alstom Hardware Academy is designed to make onboarding clearer, faster, and more structured.
+                Alstom Hardware and Installation Academy is designed to make onboarding clearer, faster, and more structured.
                 Instead of navigating scattered documents, you will move through a defined learning path,
                 starting with the railway system, then hardware fundamentals, and finally your technical specialization.
             </p>
