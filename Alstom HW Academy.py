@@ -33,16 +33,21 @@ defaults = {
     "mandatory_6_completed": False,
     "mandatory_7_completed": False,
     "stage1_doc_completed": False,
+    "stage1_quiz_submitted": False,
+    "stage1_quiz_score": 0,
     "stage1_quiz_completed": False,
     "stage1_current_item": 0,
     "stage1_completed": False,
     "stage2_doc1_completed": False,
     "stage2_doc2_completed": False,
+    "stage2_quiz_submitted": False,
+    "stage2_quiz_score": 0,
     "stage2_quiz_completed": False,
     "stage2_current_item": 0,
     "stage2_completed": False,
     "selected_path": "",
-    "current_page": "landing"
+    "current_page": "landing",
+
 }
 
 for key, value in defaults.items():
@@ -69,11 +74,15 @@ def logout():
     st.session_state.mandatory_6_completed = False
     st.session_state.mandatory_7_completed = False
     st.session_state.stage1_doc_completed = False
+    st.session_state.stage1_quiz_submitted = False
+    st.session_state.stage1_quiz_score = 0
     st.session_state.stage1_quiz_completed = False
     st.session_state.stage1_current_item = 0
     st.session_state.stage1_completed = False
     st.session_state.stage2_doc1_completed = False
     st.session_state.stage2_doc2_completed = False
+    st.session_state.stage2_quiz_submitted = False
+    st.session_state.stage2_quiz_score = 0
     st.session_state.stage2_quiz_completed = False
     st.session_state.stage2_current_item = 0
     st.session_state.stage2_completed = False
@@ -137,20 +146,9 @@ def save_progress():
         on_conflict="user_id"
     ).execute()
 
-def send_completion_email_to_manager(user_name, user_email, manager_name, manager_email, selected_path):
+def send_email_to_manager(manager_email, subject, body):
     sender_email = st.secrets["SENDER_EMAIL"]
     sender_password = st.secrets["SENDER_APP_PASSWORD"]
-
-    subject = "Training Completion Notification"
-
-    body = f"""
-Hello {manager_name},
-
-This is to inform you that {user_name} has successfully completed the Alstom Hardware & Installation Academy training journey.
-
-Best regards,
-Alstom Hardware & Installation Academy
-"""
 
     msg = MIMEMultipart()
     msg["From"] = sender_email
@@ -167,7 +165,107 @@ Alstom Hardware & Installation Academy
     except Exception as e:
         print("Email sending error:", e)
         return False
-    
+
+def get_email_flags(user_id):
+    result = supabase_admin.table("user_progress").select(
+        "mandatory_email_sent, stage1_email_sent, stage2_email_sent, full_completion_email_sent"
+    ).eq("user_id", user_id).execute()
+
+    if result.data:
+        return result.data[0]
+
+    return {
+        "mandatory_email_sent": False,
+        "stage1_email_sent": False,
+        "stage2_email_sent": False,
+        "full_completion_email_sent": False
+    }
+
+def mark_email_flag_as_sent(user_id, flag_name):
+    supabase_admin.table("user_progress").update({
+        flag_name: True
+    }).eq("user_id", user_id).execute()
+
+def check_and_send_milestone_emails():
+    user_id = st.session_state.user_id
+
+    if not user_id:
+        return
+
+    profile_res = supabase_admin.table("profiles").select("*").eq("id", user_id).execute()
+    if not profile_res.data:
+        return
+
+    profile_data = profile_res.data[0]
+    user_name = profile_data.get("full_name", "")
+    manager_name = profile_data.get("manager_name", "")
+    manager_email = profile_data.get("manager_email", "")
+
+    if not manager_email:
+        return
+
+    email_flags = get_email_flags(user_id)
+
+    # 1) Mandatory completed email
+    if st.session_state.mandatory_completed and not email_flags.get("mandatory_email_sent", False):
+        subject = "Mandatory Trainings Completion Notification"
+        body = f"""
+Hello {manager_name},
+
+This is to inform you that {user_name} has successfully completed the Mandatory Trainings in the Alstom Hardware & Installation Academy journey.
+
+Best regards,
+Alstom Hardware & Installation Academy
+"""
+        sent = send_email_to_manager(manager_email, subject, body)
+        if sent:
+            mark_email_flag_as_sent(user_id, "mandatory_email_sent")
+
+    # 2) Stage 1 completed email
+    if st.session_state.stage1_completed and not email_flags.get("stage1_email_sent", False):
+        subject = "Stage 1 Completion Notification"
+        body = f"""
+Hello {manager_name},
+
+This is to inform you that {user_name} has successfully completed Stage 1: Railway System in the Alstom Hardware & Installation Academy journey.
+
+Best regards,
+Alstom Hardware & Installation Academy
+"""
+        sent = send_email_to_manager(manager_email, subject, body)
+        if sent:
+            mark_email_flag_as_sent(user_id, "stage1_email_sent")
+
+    # 3) Stage 2 completed email
+    if st.session_state.stage2_completed and not email_flags.get("stage2_email_sent", False):
+        subject = "Stage 2 Completion Notification"
+        body = f"""
+Hello {manager_name},
+
+This is to inform you that {user_name} has successfully completed Stage 2: Signalling & Hardware in the Alstom Hardware & Installation Academy journey.
+
+Best regards,
+Alstom Hardware & Installation Academy
+"""
+        sent = send_email_to_manager(manager_email, subject, body)
+        if sent:
+            mark_email_flag_as_sent(user_id, "stage2_email_sent")
+
+    # 4) Full training completion email
+    if is_training_fully_completed() and not email_flags.get("full_completion_email_sent", False):
+        subject = "Full Training Completion Notification"
+        body = f"""
+Hello {manager_name},
+
+This is to inform you that {user_name} has successfully completed the Alstom Hardware & Installation Academy training journey.
+
+Best regards,
+Alstom Hardware & Installation Academy
+"""
+        sent = send_email_to_manager(manager_email, subject, body)
+        if sent:
+            mark_email_flag_as_sent(user_id, "full_completion_email_sent")
+   
 def is_training_fully_completed():
     return (
         st.session_state.mandatory_completed
@@ -188,38 +286,6 @@ def mark_completion_email_as_sent(user_id):
     supabase_admin.table("user_progress").update({
         "completion_email_sent": True
     }).eq("user_id", user_id).execute()
-
-def check_and_send_completion_email():
-    if not is_training_fully_completed():
-        return
-
-    if has_completion_email_been_sent(st.session_state.user_id):
-        return
-
-    profile_res = supabase_admin.table("profiles").select("*").eq("id", st.session_state.user_id).execute()
-
-    if not profile_res.data:
-        return
-
-    profile_data = profile_res.data[0]
-    user_name = profile_data.get("full_name", "")
-    user_email = profile_data.get("email", "")
-    manager_name = profile_data.get("manager_name", "")
-    manager_email = profile_data.get("manager_email", "")
-
-    if not manager_email:
-        return
-
-    sent = send_completion_email_to_manager(
-        user_name=user_name,
-        user_email=user_email,
-        manager_name=manager_name,
-        manager_email=manager_email,
-        selected_path=st.session_state.selected_path
-    )
-
-    if sent:
-        mark_completion_email_as_sent(st.session_state.user_id)
 
 MANDATORY_COURSES = [
     {
@@ -1687,6 +1753,7 @@ elif st.session_state.current_page == "mandatory_trainings":
                             st.session_state[course["key"]] = True
                             update_mandatory_completion()
                             save_progress()
+                            check_and_send_milestone_emails()
                             st.rerun()
                     else:
                         st.button("Completed", use_container_width=True, key=f'done_{course["key"]}', disabled=True)
@@ -1856,42 +1923,64 @@ elif st.session_state.current_page == "stage1":
                     if not st.session_state.stage1_doc_completed:
                         st.info("Please complete the document first before attempting the quiz.")
                     else:
-                        if not st.session_state.stage1_quiz_completed:
-                            st.subheader("Stage 1 Quiz")
+                        st.subheader("Stage 1 Quiz")
 
-                            user_answers = []
+                        user_answers = []
 
-                            for i, q in enumerate(STAGE1_QUIZ_QUESTIONS, start=1):
-                                answer = st.radio(
-                                    f"Q{i}. {q['question']}",
-                                    q["options"],
-                                    key=f"stage1_quiz_q{i}"
-                                )
-                                user_answers.append(answer)
+                        for i, q in enumerate(STAGE1_QUIZ_QUESTIONS, start=1):
+                            answer = st.radio(
+                                f"Q{i}. {q['question']}",
+                                q["options"],
+                                key=f"stage1_quiz_q{i}"
+                            )
+                            user_answers.append(answer)
 
-                            if st.button("Submit Quiz ✅", use_container_width=True, key="stage1_submit_quiz_page"):
-                                correct_count = 0
-
-                                for user_answer, q in zip(user_answers, STAGE1_QUIZ_QUESTIONS):
-                                    if user_answer == q["answer"]:
-                                        correct_count += 1
-
-                                total_questions = len(STAGE1_QUIZ_QUESTIONS)
-                                required_score = int(total_questions * 0.8)
-
-                                st.write(f"Your score: **{correct_count}/{total_questions}**")
-
-                                if correct_count >= required_score:
-                                    st.session_state.stage1_quiz_completed = True
-                                    st.session_state.stage1_completed = True
-                                    save_progress()
-                                    st.success("Stage 1 completed successfully!")
-                                    st.rerun()
+                            if st.session_state.stage1_quiz_submitted:
+                                if answer == q["answer"]:
+                                    st.success("✅ Correct")
                                 else:
-                                    st.error(f"You need at least {required_score}/{total_questions} correct answers to pass. Please try again.")
-                        else:
-                            st.success("Quiz completed ✅")
-                            st.success("Stage 1 completed successfully ✅")
+                                    st.error("❌ Wrong")
+
+                        if st.button("Submit Quiz ✅", use_container_width=True, key="stage1_submit_quiz_page"):
+                            correct_count = 0
+
+                            for user_answer, q in zip(user_answers, STAGE1_QUIZ_QUESTIONS):
+                                if user_answer == q["answer"]:
+                                    correct_count += 1
+
+                            total_questions = len(STAGE1_QUIZ_QUESTIONS)
+                            required_score = int(total_questions * 0.8)
+
+                            st.session_state.stage1_quiz_submitted = True
+                            st.session_state.stage1_quiz_score = correct_count
+
+                            if correct_count >= required_score:
+                                st.session_state.stage1_quiz_completed = True
+                                st.session_state.stage1_completed = True
+                                save_progress()
+                                check_and_send_milestone_emails()
+                            else:
+                                st.session_state.stage1_quiz_completed = False
+                                st.session_state.stage1_completed = False
+
+                            st.rerun()
+
+                        if st.session_state.stage1_quiz_submitted:
+                            total_questions = len(STAGE1_QUIZ_QUESTIONS)
+                            required_score = int(total_questions * 0.8)
+
+                            st.write(f"Your score: **{st.session_state.stage1_quiz_score}/{total_questions}**")
+
+                            if st.session_state.stage1_quiz_score >= required_score:
+                                st.success("You passed the quiz successfully ✅")
+                                st.success("Stage 1 completed successfully ✅")
+
+                                st.write("")
+                                if st.button("Go to Stage 2", use_container_width=True, key="stage1_go_stage2"):
+                                    go_to("stage2")
+                                    st.rerun()
+                            else:
+                                st.error(f"You need at least {required_score}/{total_questions} correct answers to pass.")
 
                     st.write("")
                     back_col1, back_col2 = st.columns([1, 2.4])
@@ -1899,12 +1988,6 @@ elif st.session_state.current_page == "stage1":
                     with back_col1:
                         if st.button("← Back", use_container_width=True, key="stage1_back_to_doc"):
                             st.session_state.stage1_current_item = 0
-                            st.rerun()
-
-                    if st.session_state.stage1_quiz_completed:
-                        st.write("")
-                        if st.button("Go to Stage 2", use_container_width=True, key="stage1_go_stage2"):
-                            go_to("stage2")
                             st.rerun()
 
 # ---------------------------------------------------
@@ -2097,56 +2180,72 @@ elif st.session_state.current_page == "stage2":
                     if not st.session_state.stage2_doc1_completed or not st.session_state.stage2_doc2_completed:
                         st.info("Please complete both documents first before attempting the quiz.")
                     else:
-                        if not st.session_state.stage2_quiz_completed:
-                            st.subheader("Stage 2 Quiz")
+                        st.subheader("Stage 2 Quiz")
 
-                            user_answers = []
+                        user_answers = []
 
-                            for i, q in enumerate(STAGE2_QUIZ_QUESTIONS, start=1):
-                                answer = st.radio(
-                                    f"Q{i}. {q['question']}",
-                                    q["options"],
-                                    key=f"stage2_quiz_q{i}"
-                                )
-                                user_answers.append(answer)
+                        for i, q in enumerate(STAGE2_QUIZ_QUESTIONS, start=1):
+                            answer = st.radio(
+                                f"Q{i}. {q['question']}",
+                                q["options"],
+                                key=f"stage2_quiz_q{i}"
+                            )
+                            user_answers.append(answer)
 
-                            if st.button("Submit Quiz ✅", use_container_width=True, key="stage2_submit_quiz_page"):
-                                correct_count = 0
-
-                                for user_answer, q in zip(user_answers, STAGE2_QUIZ_QUESTIONS):
-                                    if user_answer == q["answer"]:
-                                        correct_count += 1
-
-                                total_questions = len(STAGE2_QUIZ_QUESTIONS)
-                                required_score = int(total_questions * 0.8)
-
-                                st.write(f"Your score: **{correct_count}/{total_questions}**")
-
-                                if correct_count >= required_score:
-                                    st.session_state.stage2_quiz_completed = True
-                                    st.session_state.stage2_completed = True
-                                    save_progress()
-                                    st.success("Stage 2 completed successfully!")
-                                    st.rerun()
+                            if st.session_state.stage2_quiz_submitted:
+                                if answer == q["answer"]:
+                                    st.success("✅ Correct")
                                 else:
-                                    st.error(f"You need at least {required_score}/{total_questions} correct answers to pass. Please try again.")
-                        else:
-                            st.success("Quiz completed ✅")
-                            st.success("Stage 2 completed successfully ✅")
+                                    st.error("❌ Wrong")
 
-                        st.write("")
-                        back_col1, back_col2 = st.columns([1, 2.4])
+                        if st.button("Submit Quiz ✅", use_container_width=True, key="stage2_submit_quiz_page"):
+                            correct_count = 0
 
-                        with back_col1:
-                            if st.button("← Back", use_container_width=True, key="stage2_back_to_doc2"):
-                                st.session_state.stage2_current_item = 1
-                                st.rerun()
+                            for user_answer, q in zip(user_answers, STAGE2_QUIZ_QUESTIONS):
+                                if user_answer == q["answer"]:
+                                    correct_count += 1
 
-                        if st.session_state.stage2_quiz_completed:
-                            st.write("")
-                            if st.button("Go to Stage 3", use_container_width=True, key="stage2_go_stage3"):
-                                go_to("learning")
-                                st.rerun()
+                            total_questions = len(STAGE2_QUIZ_QUESTIONS)
+                            required_score = int(total_questions * 0.8)
+
+                            st.session_state.stage2_quiz_submitted = True
+                            st.session_state.stage2_quiz_score = correct_count
+
+                            if correct_count >= required_score:
+                                st.session_state.stage2_quiz_completed = True
+                                st.session_state.stage2_completed = True
+                                save_progress()
+                                check_and_send_milestone_emails()
+                            else:
+                                st.session_state.stage2_quiz_completed = False
+                                st.session_state.stage2_completed = False
+
+                            st.rerun()
+
+                        if st.session_state.stage2_quiz_submitted:
+                            total_questions = len(STAGE2_QUIZ_QUESTIONS)
+                            required_score = int(total_questions * 0.8)
+
+                            st.write(f"Your score: **{st.session_state.stage2_quiz_score}/{total_questions}**")
+
+                            if st.session_state.stage2_quiz_score >= required_score:
+                                st.success("You passed the quiz successfully ✅")
+                                st.success("Stage 2 completed successfully ✅")
+
+                                st.write("")
+                                if st.button("Go to Stage 3", use_container_width=True, key="stage2_go_stage3"):
+                                    go_to("learning")
+                                    st.rerun()
+                            else:
+                                st.error(f"You need at least {required_score}/{total_questions} correct answers to pass.")
+
+                    st.write("")
+                    back_col1, back_col2 = st.columns([1, 2.4])
+
+                    with back_col1:
+                        if st.button("← Back", use_container_width=True, key="stage2_back_to_doc2"):
+                            st.session_state.stage2_current_item = 1
+                            st.rerun()
 
 # ---------------------------------------------------
 # Learning Journey Page
@@ -2287,7 +2386,7 @@ This stage introduces:
                 if selected:
                     st.session_state.selected_path = selected
                     save_progress()
-                    check_and_send_completion_email()
+                    check_and_send_milestone_emails()
                     st.success(f"Specialization selected: {selected}")
                     st.rerun()
                 else:
