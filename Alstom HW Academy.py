@@ -34,6 +34,7 @@ defaults = {
     "mandatory_7_completed": False,
     "stage1_doc_completed": False,
     "stage1_quiz_submitted": False,
+    "stage1_submitted_answers": [],
     "stage1_quiz_score": 0,
     "stage1_quiz_completed": False,
     "stage1_current_item": 0,
@@ -41,6 +42,7 @@ defaults = {
     "stage2_doc1_completed": False,
     "stage2_doc2_completed": False,
     "stage2_quiz_submitted": False,
+    "stage2_submitted_answers": [],
     "stage2_quiz_score": 0,
     "stage2_quiz_completed": False,
     "stage2_current_item": 0,
@@ -77,11 +79,13 @@ def logout():
     st.session_state.stage1_quiz_submitted = False
     st.session_state.stage1_quiz_score = 0
     st.session_state.stage1_quiz_completed = False
+    st.session_state.stage1_submitted_answers = []
     st.session_state.stage1_current_item = 0
     st.session_state.stage1_completed = False
     st.session_state.stage2_doc1_completed = False
     st.session_state.stage2_doc2_completed = False
     st.session_state.stage2_quiz_submitted = False
+    st.session_state.stage2_submitted_answers = []
     st.session_state.stage2_quiz_score = 0
     st.session_state.stage2_quiz_completed = False
     st.session_state.stage2_current_item = 0
@@ -1935,8 +1939,10 @@ elif st.session_state.current_page == "stage1":
                             )
                             user_answers.append(answer)
 
-                            if st.session_state.stage1_quiz_submitted:
-                                if answer == q["answer"]:
+                            if st.session_state.stage1_quiz_submitted and len(st.session_state.stage1_submitted_answers) == len(STAGE1_QUIZ_QUESTIONS):
+                                submitted_answer = st.session_state.stage1_submitted_answers[i - 1]
+
+                                if submitted_answer == q["answer"]:
                                     st.success("✅ Correct")
                                 else:
                                     st.error("❌ Wrong")
@@ -1944,14 +1950,17 @@ elif st.session_state.current_page == "stage1":
                         if st.button("Submit Quiz ✅", use_container_width=True, key="stage1_submit_quiz_page"):
                             correct_count = 0
 
-                            for user_answer, q in zip(user_answers, STAGE1_QUIZ_QUESTIONS):
+                            # save submitted answers snapshot
+                            st.session_state.stage1_submitted_answers = user_answers.copy()
+                            st.session_state.stage1_quiz_submitted = True
+
+                            for user_answer, q in zip(st.session_state.stage1_submitted_answers, STAGE1_QUIZ_QUESTIONS):
                                 if user_answer == q["answer"]:
                                     correct_count += 1
 
                             total_questions = len(STAGE1_QUIZ_QUESTIONS)
                             required_score = int(total_questions * 0.8)
 
-                            st.session_state.stage1_quiz_submitted = True
                             st.session_state.stage1_quiz_score = correct_count
 
                             if correct_count >= required_score:
@@ -2192,8 +2201,10 @@ elif st.session_state.current_page == "stage2":
                             )
                             user_answers.append(answer)
 
-                            if st.session_state.stage2_quiz_submitted:
-                                if answer == q["answer"]:
+                            if st.session_state.stage2_quiz_submitted and len(st.session_state.stage2_submitted_answers) == len(STAGE2_QUIZ_QUESTIONS):
+                                submitted_answer = st.session_state.stage2_submitted_answers[i - 1]
+
+                                if submitted_answer == q["answer"]:
                                     st.success("✅ Correct")
                                 else:
                                     st.error("❌ Wrong")
@@ -2201,14 +2212,17 @@ elif st.session_state.current_page == "stage2":
                         if st.button("Submit Quiz ✅", use_container_width=True, key="stage2_submit_quiz_page"):
                             correct_count = 0
 
-                            for user_answer, q in zip(user_answers, STAGE2_QUIZ_QUESTIONS):
+                            # save submitted answers snapshot
+                            st.session_state.stage2_submitted_answers = user_answers.copy()
+                            st.session_state.stage2_quiz_submitted = True
+
+                            for user_answer, q in zip(st.session_state.stage2_submitted_answers, STAGE2_QUIZ_QUESTIONS):
                                 if user_answer == q["answer"]:
                                     correct_count += 1
 
                             total_questions = len(STAGE2_QUIZ_QUESTIONS)
                             required_score = int(total_questions * 0.8)
 
-                            st.session_state.stage2_quiz_submitted = True
                             st.session_state.stage2_quiz_score = correct_count
 
                             if correct_count >= required_score:
