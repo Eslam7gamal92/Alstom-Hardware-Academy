@@ -6,6 +6,7 @@ from PIL import Image
 from supabase import create_client, Client
 import streamlit as st
 from PIL import Image
+import streamlit.components.v1 as components
 
 # ---------------------------------------------------
 # Page Config
@@ -61,6 +62,16 @@ for key, value in defaults.items():
 # ---------------------------------------------------
 def go_to(page_name):
     st.session_state.current_page = page_name
+
+def scroll_to_top():
+    components.html(
+        """
+        <script>
+            window.parent.scrollTo(0, 0);
+        </script>
+        """,
+        height=0,
+    )
 
 def logout():
     st.session_state.logged_in = False
@@ -955,6 +966,8 @@ st.markdown("""
 # Landing Page
 # ---------------------------------------------------
 if st.session_state.current_page == "landing":
+    scroll_to_top()
+
 
     nav1, nav2, nav3 = st.columns([2.2, 3.6, 2.2])
 
@@ -1077,9 +1090,8 @@ if st.session_state.current_page == "landing":
             infrastructure, rolling stock, digital systems, and services. The company contributes to building safer, more efficient,
             and more sustainable transportation systems across the world.
             <br><br>
-            In Egypt, Alstom plays an important role in mobility development and railway modernization. For a newcomer joining the
-            hardware function, understanding the company context is essential — not only from a business perspective, but also from
-            a technical and project integration perspective.
+            For newcomers joining the hardware and installation functions, understanding the company context is essential — not only
+            from a business perspective, but also from a technical, operational, and project integration perspective.
             <br><br>
             Alstom Hardware and Installation Academy was created to make that onboarding journey clearer, more structured, and more engaging.
         </div>
@@ -1140,23 +1152,7 @@ if st.session_state.current_page == "landing":
     </div>
     """, unsafe_allow_html=True)
 
-    # 8. Alstom in Egypt
-    st.markdown("""
-    <div class="section-box">
-        <div class="section-title">Alstom in Egypt</div>
-        <div class="section-text">
-            In Egypt, Alstom is associated with major mobility and railway development ambitions, supporting the
-            transformation of transportation systems and contributing to modern infrastructure initiatives. For local teams,
-            this creates an environment where newcomers are not only joining a company, but also becoming part of long-term
-            projects that carry technical, operational, and strategic impact.
-            <br><br>
-            Understanding this local context helps new engineers connect faster with the business purpose, the project
-            environment, and the expectations of their technical role.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # 9. Explore Learning Areas
+    # 8. Explore Learning Areas
     st.markdown('<h2 style="color:#1F3552; font-weight:700;">Explore Learning Areas</h2>', unsafe_allow_html=True)
     st.write("Discover the main learning tracks included in Alstom Hardware and Installation Academy.")
 
@@ -1224,7 +1220,7 @@ if st.session_state.current_page == "landing":
         </div>
         """, unsafe_allow_html=True)
 
-    # 10. Why Alstom Hardware and Installation Academy?
+    # 9. Why Alstom Hardware and Installation Academy?
     st.markdown("""
     <div class="section-box">
         <div class="section-title">Why Alstom Hardware and Installation Academy?</div>
@@ -1239,7 +1235,7 @@ if st.session_state.current_page == "landing":
     </div>
     """, unsafe_allow_html=True)
 
-    # 11. Final CTA
+    # 10. Final CTA
     st.markdown("""
     <div class="hero-box" style="padding:30px 34px;">
         <div class="section-title" style="color:white;">Start your learning journey today</div>
@@ -1261,7 +1257,7 @@ if st.session_state.current_page == "landing":
             go_to("auth")
             st.rerun()
 
-    # 12. Footer
+    # 11. Footer
     st.markdown("""
     <hr style="margin-top:28px; margin-bottom:12px;">
     <div class="footer-text">
@@ -1274,6 +1270,7 @@ if st.session_state.current_page == "landing":
 # Authentication Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "auth":
+    scroll_to_top()
 
     st.markdown("""
     <style>
@@ -1435,6 +1432,8 @@ elif st.session_state.current_page == "auth":
             if st.button("Create Account", use_container_width=True, key="auth_create_account"):
                 if not full_name or not signup_email or not password or not confirm_password or not selected_manager_name:
                     st.error("Please complete all fields.")
+                elif not signup_email.lower().endswith("@alstomgroup.com"):
+                    st.error("Sorry, this platform is available for Alstom employees only.")
                 elif password != confirm_password:
                     st.error("Passwords do not match.")
                 else:
@@ -1491,6 +1490,7 @@ elif st.session_state.current_page == "auth":
 # Home Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "home":
+    scroll_to_top()
     if not st.session_state.logged_in:
         st.warning("Please login first.")
         if st.button("Go to Login", key="home_go_to_login"):
@@ -1657,6 +1657,7 @@ elif st.session_state.current_page == "home":
 # Mandatory Trainings Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "mandatory_trainings":
+    scroll_to_top()
     if not st.session_state.logged_in:
         st.warning("Please login first.")
         if st.button("Go to Login", key="mandatory_go_to_login"):
@@ -1775,6 +1776,7 @@ elif st.session_state.current_page == "mandatory_trainings":
 # Stage 1 Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "stage1":
+    scroll_to_top()
     if not st.session_state.logged_in:
         st.warning("Please login first.")
         if st.button("Go to Login", key="stage1_go_to_login"):
@@ -1996,6 +1998,7 @@ elif st.session_state.current_page == "stage1":
 # Stage 2 Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "stage2":
+    scroll_to_top()
     if not st.session_state.logged_in:
         st.warning("Please login first.")
         if st.button("Go to Login", key="stage2_go_to_login"):
@@ -2258,6 +2261,7 @@ elif st.session_state.current_page == "stage2":
 # Learning Journey Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "learning":
+    scroll_to_top()
     if not st.session_state.logged_in:
         st.warning("Please login first.")
         if st.button("Go to Login", key="learning_go_to_login"):
@@ -2406,6 +2410,7 @@ This stage introduces:
 # Profile Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "profile":
+    scroll_to_top()
     if not st.session_state.logged_in:
         st.warning("Please login first.")
         if st.button("Go to Login", key="profile_go_to_login"):
