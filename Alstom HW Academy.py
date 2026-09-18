@@ -49,6 +49,19 @@ defaults = {
     "stage2_current_item": 0,
     "stage2_completed": False,
     "selected_path": "",
+    "pedal_doc_completed": False,
+    "pedal_quiz_submitted": False,
+    "pedal_submitted_answers": [],
+    "pedal_quiz_score": 0,
+    "pedal_quiz_completed": False,
+    "pedal_current_item": 0,
+    "hvitc_doc_completed": False,
+    "hvitc_quiz_submitted": False,
+    "hvitc_submitted_answers": [],
+    "hvitc_quiz_score": 0,
+    "hvitc_quiz_completed": False,
+    "hvitc_current_item": 0,
+    "stage3_completed": False,
     "current_page": "landing",
 
 }
@@ -62,16 +75,6 @@ for key, value in defaults.items():
 # ---------------------------------------------------
 def go_to(page_name):
     st.session_state.current_page = page_name
-
-def scroll_to_top():
-    components.html(
-        """
-        <script>
-            window.parent.scrollTo(0, 0);
-        </script>
-        """,
-        height=0,
-    )
 
 def logout():
     st.session_state.logged_in = False
@@ -102,6 +105,19 @@ def logout():
     st.session_state.stage2_current_item = 0
     st.session_state.stage2_completed = False
     st.session_state.selected_path = ""
+    st.session_state.pedal_doc_completed = False
+    st.session_state.pedal_quiz_submitted = False
+    st.session_state.pedal_submitted_answers = []
+    st.session_state.pedal_quiz_score = 0
+    st.session_state.pedal_quiz_completed = False
+    st.session_state.pedal_current_item = 0
+    st.session_state.hvitc_doc_completed = False
+    st.session_state.hvitc_quiz_submitted = False
+    st.session_state.hvitc_submitted_answers = []
+    st.session_state.hvitc_quiz_score = 0
+    st.session_state.hvitc_quiz_completed = False
+    st.session_state.hvitc_current_item = 0
+    st.session_state.stage3_completed = False
     st.session_state.current_page = "landing"
 
 def calculate_progress():
@@ -112,7 +128,7 @@ def calculate_progress():
         progress += 30
     if st.session_state.stage2_completed:
         progress += 30
-    if st.session_state.selected_path:
+    if st.session_state.stage3_completed:
         progress += 20
     return progress
 
@@ -156,6 +172,11 @@ def save_progress():
             "stage2_quiz_completed": st.session_state.stage2_quiz_completed,
             "stage2_completed": st.session_state.stage2_completed,
             "selected_path": st.session_state.selected_path,
+            "pedal_doc_completed": st.session_state.pedal_doc_completed,
+            "pedal_quiz_completed": st.session_state.pedal_quiz_completed,
+            "hvitc_doc_completed": st.session_state.hvitc_doc_completed,
+            "hvitc_quiz_completed": st.session_state.hvitc_quiz_completed,
+            "stage3_completed": st.session_state.stage3_completed,
             "progress_percent": progress
         },
         on_conflict="user_id"
@@ -640,6 +661,150 @@ STAGE2_QUIZ_QUESTIONS = [
     }
 ]
 
+PEDAL_ITEMS = [
+    {
+        "key": "pedal_doc_completed",
+        "title": "Pedal Presentation",
+        "type": "PowerPoint",
+        "duration": "Self-paced",
+        "description": "Study the Pedal presentation before proceeding to the quiz.",
+        "file": "pedal_presentation.pptx"
+    },
+    {
+        "key": "pedal_quiz_completed",
+        "title": "Pedal Quiz",
+        "type": "Quiz",
+        "duration": "Short assessment",
+        "description": "Complete the quiz based on the Pedal presentation.",
+        "file": ""
+    }
+]
+
+PEDAL_QUIZ_QUESTIONS = [
+    {
+        "question": "What is the primary role of a Pedal Cabinet in a railway signaling system?",
+        "options": [
+            "Train propulsion control",
+            "Passenger information management",
+            "Interface between field detection devices and the signaling/control system",
+            "Communication with the driver's cabin"
+        ],
+        "answer": "Interface between field detection devices and the signaling/control system"
+    },
+    {
+        "question": "Which board sends different axle counter states to the CCM-E controller according to train detection status?",
+        "options": [
+            "SIC Board",
+            "BSI004 Board",
+            "IMC063 Evaluation Board",
+            "Rectifier Unit"
+        ],
+        "answer": "IMC063 Evaluation Board"
+    },
+    {
+        "question": "What is the main function of the BSI004 board?",
+        "options": [
+            "Power conversion from AC to DC",
+            "Fuse protection",
+            "Surge protection for detector cables",
+            "Train direction calculation"
+        ],
+        "answer": "Surge protection for detector cables"
+    },
+    {
+        "question": "In the Pedal Cabinet, which cable type is used for power distribution from the SIC999 Board to the IMC063 Evaluation Board?",
+        "options": [
+            "MAN0125300",
+            "MAN0125600",
+            "MAN0125700",
+            "MAN0125800"
+        ],
+        "answer": "MAN0125700"
+    },
+    {
+        "question": "Which detection philosophy is associated with the DA/EP configuration?",
+        "options": [
+            "Negative Detection Philosophy",
+            "Positive Detection Philosophy",
+            "Predictive Detection Philosophy",
+            "Dynamic Detection Philosophy"
+        ],
+        "answer": "Positive Detection Philosophy"
+    }
+]
+
+HVITC_ITEMS = [
+    {
+        "key": "hvitc_doc_completed",
+        "title": "HVITC Presentation",
+        "type": "PowerPoint",
+        "duration": "Self-paced",
+        "description": "Study the HVITC presentation before proceeding to the quiz.",
+        "file": "hvitc_presentation.pptx"
+    },
+    {
+        "key": "hvitc_quiz_completed",
+        "title": "HVITC Quiz",
+        "type": "Quiz",
+        "duration": "Short assessment",
+        "description": "Complete the quiz based on the HVITC presentation.",
+        "file": ""
+    }
+]
+
+HVITC_QUIZ_QUESTIONS = [
+    {
+        "question": "What does HVITC stand for?",
+        "options": [
+            "High Voltage Integrated Track Controller",
+            "High Voltage Impulse Track Circuit",
+            "High Voltage Internal Track Circuit",
+            "Heavy Voltage Impulse Traction Circuit"
+        ],
+        "answer": "High Voltage Impulse Track Circuit"
+    },
+    {
+        "question": "Which of the following is NOT a function of the HVITC system?",
+        "options": [
+            "Detect train occupancy",
+            "Prove track vacancy",
+            "Control train speed",
+            "Detect broken rail conditions"
+        ],
+        "answer": "Control train speed"
+    },
+    {
+        "question": "What are the three parameters checked by the RUTA receiver?",
+        "options": [
+            "Voltage, current, and resistance",
+            "Pulse polarity, pulse energy, and pulse frequency",
+            "Temperature, voltage, and frequency",
+            "Track length, polarity, and speed"
+        ],
+        "answer": "Pulse polarity, pulse energy, and pulse frequency"
+    },
+    {
+        "question": "What is the primary function of the Impedance Bond (CI/CIT 1000 CT3)?",
+        "options": [
+            "Generate track impulses",
+            "Protect against lightning strikes",
+            "Pass traction return current while allowing HVITC signaling pulses to pass",
+            "Convert AC power to DC power"
+        ],
+        "answer": "Pass traction return current while allowing HVITC signaling pulses to pass"
+    },
+    {
+        "question": "Why is return current continuity important in railway systems?",
+        "options": [
+            "It increases train speed.",
+            "It closes the electrical traction circuit and ensures safe current return.",
+            "It powers the station lighting system.",
+            "It controls signal aspects."
+        ],
+        "answer": "It closes the electrical traction circuit and ensures safe current return."
+    }
+]
+
 # ---------------------------------------------------
 # Supabase Connection
 # ---------------------------------------------------
@@ -966,8 +1131,6 @@ st.markdown("""
 # Landing Page
 # ---------------------------------------------------
 if st.session_state.current_page == "landing":
-    scroll_to_top()
-
 
     nav1, nav2, nav3 = st.columns([2.2, 3.6, 2.2])
 
@@ -1086,14 +1249,16 @@ if st.session_state.current_page == "landing":
     <div class="section-box">
         <div class="section-title">About Alstom</div>
         <div class="section-text">
-            Alstom is a global leader in smart and sustainable mobility, delivering integrated railway solutions across signaling,
-            infrastructure, rolling stock, digital systems, and services. The company contributes to building safer, more efficient,
-            and more sustainable transportation systems across the world.
+            Alstom is a global leader in smart and sustainable mobility, with a strong presence across the railway and transportation sector.
+            The company designs, develops, and delivers a wide range of integrated solutions including signaling, infrastructure, rolling stock,
+            digital systems, services, and maintenance support.
             <br><br>
-            For newcomers joining the hardware and installation functions, understanding the company context is essential — not only
-            from a business perspective, but also from a technical, operational, and project integration perspective.
+            With operations and expertise spread across many countries, Alstom plays a major role in shaping the future of safer,
+            smarter, and more sustainable transportation. Its long-standing industry experience, technical excellence, and innovation-driven
+            approach make it one of the leading organizations in modern mobility worldwide.
             <br><br>
-            Alstom Hardware and Installation Academy was created to make that onboarding journey clearer, more structured, and more engaging.
+            For engineers, Alstom represents a professional environment where technology, collaboration, safety, and continuous improvement
+            are deeply connected to real-world transportation impact.
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1262,7 +1427,7 @@ if st.session_state.current_page == "landing":
     <hr style="margin-top:28px; margin-bottom:12px;">
     <div class="footer-text">
         <strong>Alstom Hardware and Installation Academy Platform</strong><br>
-        Built to support onboarding, technical learning, and knowledge development for hardware engineers at Alstom.
+        Built to support onboarding, technical learning, and knowledge development for hardware and installation engineers at Alstom.
     </div>
     """, unsafe_allow_html=True)
 
@@ -1270,7 +1435,6 @@ if st.session_state.current_page == "landing":
 # Authentication Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "auth":
-    scroll_to_top()
 
     st.markdown("""
     <style>
@@ -1402,6 +1566,13 @@ elif st.session_state.current_page == "auth":
                                 st.session_state.stage2_current_item = 0
                                 st.session_state.stage2_completed = progress_data.get("stage2_completed", False)
                                 st.session_state.selected_path = progress_data.get("selected_path", "")
+                                st.session_state.pedal_doc_completed = progress_data.get("pedal_doc_completed", False)
+                                st.session_state.pedal_quiz_completed = progress_data.get("pedal_quiz_completed", False)
+                                st.session_state.pedal_current_item = 0
+                                st.session_state.hvitc_doc_completed = progress_data.get("hvitc_doc_completed", False)
+                                st.session_state.hvitc_quiz_completed = progress_data.get("hvitc_quiz_completed", False)
+                                st.session_state.hvitc_current_item = 0
+                                st.session_state.stage3_completed = progress_data.get("stage3_completed", False)
 
                             go_to("home")
                             st.success("Login successful!")
@@ -1490,7 +1661,6 @@ elif st.session_state.current_page == "auth":
 # Home Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "home":
-    scroll_to_top()
     if not st.session_state.logged_in:
         st.warning("Please login first.")
         if st.button("Go to Login", key="home_go_to_login"):
@@ -1649,15 +1819,19 @@ elif st.session_state.current_page == "home":
             </div>
             """, unsafe_allow_html=True)
 
-            if st.button("Enter Stage 3", use_container_width=True, key="open_stage3"):
-                go_to("learning")
+            if st.button(
+                "Enter Stage 3",
+                use_container_width=True,
+                key="open_stage3",
+                disabled=not st.session_state.stage2_completed
+            ):
+                go_to("stage3")
                 st.rerun()
 
 # ---------------------------------------------------
 # Mandatory Trainings Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "mandatory_trainings":
-    scroll_to_top()
     if not st.session_state.logged_in:
         st.warning("Please login first.")
         if st.button("Go to Login", key="mandatory_go_to_login"):
@@ -1776,7 +1950,6 @@ elif st.session_state.current_page == "mandatory_trainings":
 # Stage 1 Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "stage1":
-    scroll_to_top()
     if not st.session_state.logged_in:
         st.warning("Please login first.")
         if st.button("Go to Login", key="stage1_go_to_login"):
@@ -1998,7 +2171,6 @@ elif st.session_state.current_page == "stage1":
 # Stage 2 Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "stage2":
-    scroll_to_top()
     if not st.session_state.logged_in:
         st.warning("Please login first.")
         if st.button("Go to Login", key="stage2_go_to_login"):
@@ -2244,7 +2416,7 @@ elif st.session_state.current_page == "stage2":
 
                                 st.write("")
                                 if st.button("Go to Stage 3", use_container_width=True, key="stage2_go_stage3"):
-                                    go_to("learning")
+                                    go_to("stage3")
                                     st.rerun()
                             else:
                                 st.error(f"You need at least {required_score}/{total_questions} correct answers to pass.")
@@ -2258,10 +2430,587 @@ elif st.session_state.current_page == "stage2":
                             st.rerun()
 
 # ---------------------------------------------------
+# Stage 3 Page
+# ---------------------------------------------------
+elif st.session_state.current_page == "stage3":
+    if not st.session_state.logged_in:
+        st.warning("Please login first.")
+        if st.button("Go to Login", key="stage3_go_to_login"):
+            go_to("auth")
+            st.rerun()
+    else:
+        top1, top2, top3 = st.columns([2, 4, 2])
+
+        with top1:
+            if st.button("← Home", use_container_width=True, key="stage3_home"):
+                go_to("home")
+                st.rerun()
+
+        with top3:
+            if st.button("Profile", use_container_width=True, key="stage3_profile"):
+                go_to("profile")
+                st.rerun()
+
+        st.markdown("""
+        <div class="stage-page-hero">
+            <div class="stage-page-hero-title">Stage 3: Specialization</div>
+            <div class="stage-page-hero-text">
+                In this final stage, you will select your specialization path based on your team or technical area.
+                After selecting your path, you will continue to the dedicated learning page for that specialization.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        progress = calculate_progress()
+        st.markdown(f"### Progress: {progress}%")
+        st.progress(progress / 100)
+        st.write("")
+
+        if not st.session_state.stage2_completed:
+            st.info("This stage is locked. Complete Stage 2 first.")
+        else:
+            st.markdown("## Select Your Specialization Path")
+            st.write("Choose the path that matches your team or technical learning direction.")
+
+            selected = st.selectbox(
+                "Choose your path",
+                ["", "Pedal", "HVITC", "OBC", "Cable Chassis"],
+                index=0,
+                key="stage3_path_select"
+            )
+
+            st.write("")
+
+            if st.button("Enter Selected Path", use_container_width=True, key="enter_selected_path"):
+                if not selected:
+                    st.error("Please choose a specialization path first.")
+                else:
+                    # Save selected_path only the first time
+                    if not st.session_state.selected_path:
+                        st.session_state.selected_path = selected
+                        save_progress()
+
+                    if selected == "Pedal":
+                        go_to("stage3_pedal")
+                    elif selected == "HVITC":
+                        go_to("stage3_hvitc")
+                    elif selected == "OBC":
+                        go_to("stage3_obc")
+                    elif selected == "Cable Chassis":
+                        go_to("stage3_cable")
+
+                    st.rerun()
+
+# ---------------------------------------------------
+# Stage 3 - Pedal Page
+# ---------------------------------------------------
+elif st.session_state.current_page == "stage3_pedal":
+    if not st.session_state.logged_in:
+        st.warning("Please login first.")
+        if st.button("Go to Login", key="pedal_go_to_login"):
+            go_to("auth")
+            st.rerun()
+    else:
+        top1, top2, top3 = st.columns([2, 4, 2])
+
+        with top1:
+            if st.button("← Stage 3", use_container_width=True, key="pedal_back_stage3"):
+                go_to("stage3")
+                st.rerun()
+
+        with top3:
+            if st.button("Profile", use_container_width=True, key="pedal_profile"):
+                go_to("profile")
+                st.rerun()
+
+        st.markdown("""
+        <div class="stage-page-hero">
+            <div class="stage-page-hero-title">Pedal Specialization</div>
+            <div class="stage-page-hero-text">
+                In this specialization path, you will explore the Pedal Cabinet and its main components,
+                then complete the final quiz to validate your understanding.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        progress = calculate_progress()
+        st.markdown(f"### Progress: {progress}%")
+        st.progress(progress / 100)
+        st.write("")
+
+        if not st.session_state.stage2_completed:
+            st.info("This path is locked. Complete Stage 2 first.")
+        else:
+            if st.session_state.pedal_current_item not in [0, 1]:
+                st.session_state.pedal_current_item = 0
+
+            left_col, right_col = st.columns([0.9, 2.3])
+
+            # -----------------------------
+            # Left Sidebar (Display Only)
+            # -----------------------------
+            with left_col:
+                st.markdown("### Pedal Content")
+
+                for idx, item in enumerate(PEDAL_ITEMS):
+                    completed = st.session_state[item["key"]]
+                    is_current = st.session_state.pedal_current_item == idx
+
+                    icon = "✅" if completed else "⬜"
+
+                    if is_current:
+                        st.markdown(
+                            f"""
+                            <div style="
+                                background-color:#E8F0FE;
+                                border:1px solid #BFDBFE;
+                                border-radius:12px;
+                                padding:10px 12px;
+                                margin-bottom:10px;
+                                font-weight:700;
+                                color:#1F3552;
+                            ">
+                                {icon} {item['title']}
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
+                    else:
+                        st.markdown(
+                            f"""
+                            <div style="
+                                background-color:white;
+                                border:1px solid #E5E7EB;
+                                border-radius:12px;
+                                padding:10px 12px;
+                                margin-bottom:10px;
+                                font-weight:500;
+                                color:#374151;
+                            ">
+                                {icon} {item['title']}
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
+
+            # -----------------------------
+            # Main Content Area
+            # -----------------------------
+            with right_col:
+                current_index = st.session_state.pedal_current_item
+                current_item = PEDAL_ITEMS[current_index]
+
+                st.markdown(f"## {current_item['title']}")
+                st.write(f"**Type:** {current_item['type']}")
+                st.write(f"**Duration:** {current_item['duration']}")
+                st.write(current_item["description"])
+                st.write("")
+
+                # -------------------------
+                # Item 1: Presentation
+                # -------------------------
+                if current_index == 0:
+                    try:
+                        with open(current_item["file"], "rb") as doc_file:
+                            st.download_button(
+                                label="Download Pedal Presentation",
+                                data=doc_file,
+                                file_name=current_item["file"],
+                                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                                use_container_width=True,
+                                key="pedal_download_doc"
+                            )
+                    except Exception:
+                        st.error(f"File not found: {current_item['file']}")
+
+                    st.write("")
+
+                    if not st.session_state.pedal_doc_completed:
+                        if st.button("Mark Presentation as Completed ✅", use_container_width=True, key="pedal_doc_complete"):
+                            st.session_state.pedal_doc_completed = True
+                            save_progress()
+                            st.success("Presentation marked as completed.")
+                            st.rerun()
+                    else:
+                        st.success("Presentation completed ✅")
+
+                    st.write("")
+
+                    next_col1, next_col2 = st.columns([1, 2.4])
+
+                    with next_col1:
+                        if st.button("Go to Next Item →", use_container_width=True, key="pedal_next_to_quiz"):
+                            st.session_state.pedal_current_item = 1
+                            st.rerun()
+
+                # -------------------------
+                # Item 2: Quiz
+                # -------------------------
+                elif current_index == 1:
+                    if not st.session_state.pedal_doc_completed:
+                        st.info("Please complete the presentation first before attempting the quiz.")
+                    else:
+                        st.subheader("Pedal Quiz")
+
+                        user_answers = []
+
+                        for i, q in enumerate(PEDAL_QUIZ_QUESTIONS, start=1):
+                            answer = st.radio(
+                                f"Q{i}. {q['question']}",
+                                q["options"],
+                                key=f"pedal_quiz_q{i}"
+                            )
+                            user_answers.append(answer)
+
+                            if st.session_state.pedal_quiz_submitted and len(st.session_state.pedal_submitted_answers) == len(PEDAL_QUIZ_QUESTIONS):
+                                submitted_answer = st.session_state.pedal_submitted_answers[i - 1]
+
+                                if submitted_answer == q["answer"]:
+                                    st.success("✅ Correct")
+                                else:
+                                    st.error("❌ Wrong")
+
+                        if st.button("Submit Quiz ✅", use_container_width=True, key="pedal_submit_quiz_page"):
+                            correct_count = 0
+
+                            st.session_state.pedal_submitted_answers = user_answers.copy()
+                            st.session_state.pedal_quiz_submitted = True
+
+                            for user_answer, q in zip(st.session_state.pedal_submitted_answers, PEDAL_QUIZ_QUESTIONS):
+                                if user_answer == q["answer"]:
+                                    correct_count += 1
+
+                            total_questions = len(PEDAL_QUIZ_QUESTIONS)
+                            required_score = int(total_questions * 0.8)
+
+                            st.session_state.pedal_quiz_score = correct_count
+
+                            if correct_count >= required_score:
+                                st.session_state.pedal_quiz_completed = True
+                                st.session_state.stage3_completed = True
+                                save_progress()
+                                check_and_send_milestone_emails()
+                            else:
+                                st.session_state.pedal_quiz_completed = False
+                                st.session_state.stage3_completed = False
+
+                            st.rerun()
+
+                        if st.session_state.pedal_quiz_submitted:
+                            total_questions = len(PEDAL_QUIZ_QUESTIONS)
+                            required_score = int(total_questions * 0.8)
+
+                            st.write(f"Your score: **{st.session_state.pedal_quiz_score}/{total_questions}**")
+
+                            if st.session_state.pedal_quiz_score >= required_score:
+                                st.success("You passed the quiz successfully ✅")
+                                st.success("Pedal specialization completed successfully ✅")
+                            else:
+                                st.error(f"You need at least {required_score}/{total_questions} correct answers to pass.")
+
+                    st.write("")
+                    back_col1, back_col2 = st.columns([1, 2.4])
+
+                    with back_col1:
+                        if st.button("← Back", use_container_width=True, key="pedal_back_to_doc"):
+                            st.session_state.pedal_current_item = 0
+                            st.rerun()
+
+# ---------------------------------------------------
+# Stage 3 - HVITC Page
+# ---------------------------------------------------
+elif st.session_state.current_page == "stage3_hvitc":
+    if not st.session_state.logged_in:
+        st.warning("Please login first.")
+        if st.button("Go to Login", key="hvitc_go_to_login"):
+            go_to("auth")
+            st.rerun()
+    else:
+        top1, top2, top3 = st.columns([2, 4, 2])
+
+        with top1:
+            if st.button("← Stage 3", use_container_width=True, key="hvitc_back_stage3"):
+                go_to("stage3")
+                st.rerun()
+
+        with top3:
+            if st.button("Profile", use_container_width=True, key="hvitc_profile"):
+                go_to("profile")
+                st.rerun()
+
+        st.markdown("""
+        <div class="stage-page-hero">
+            <div class="stage-page-hero-title">HVITC Specialization</div>
+            <div class="stage-page-hero-text">
+                In this specialization path, you will explore HVITC concepts and components,
+                then complete the final quiz to validate your understanding.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        progress = calculate_progress()
+        st.markdown(f"### Progress: {progress}%")
+        st.progress(progress / 100)
+        st.write("")
+
+        if not st.session_state.stage2_completed:
+            st.info("This path is locked. Complete Stage 2 first.")
+        else:
+            if st.session_state.hvitc_current_item not in [0, 1]:
+                st.session_state.hvitc_current_item = 0
+
+            left_col, right_col = st.columns([0.9, 2.3])
+
+            # -----------------------------
+            # Left Sidebar (Display Only)
+            # -----------------------------
+            with left_col:
+                st.markdown("### HVITC Content")
+
+                for idx, item in enumerate(HVITC_ITEMS):
+                    completed = st.session_state[item["key"]]
+                    is_current = st.session_state.hvitc_current_item == idx
+
+                    icon = "✅" if completed else "⬜"
+
+                    if is_current:
+                        st.markdown(
+                            f"""
+                            <div style="
+                                background-color:#E8F0FE;
+                                border:1px solid #BFDBFE;
+                                border-radius:12px;
+                                padding:10px 12px;
+                                margin-bottom:10px;
+                                font-weight:700;
+                                color:#1F3552;
+                            ">
+                                {icon} {item['title']}
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
+                    else:
+                        st.markdown(
+                            f"""
+                            <div style="
+                                background-color:white;
+                                border:1px solid #E5E7EB;
+                                border-radius:12px;
+                                padding:10px 12px;
+                                margin-bottom:10px;
+                                font-weight:500;
+                                color:#374151;
+                            ">
+                                {icon} {item['title']}
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
+
+            # -----------------------------
+            # Main Content Area
+            # -----------------------------
+            with right_col:
+                current_index = st.session_state.hvitc_current_item
+                current_item = HVITC_ITEMS[current_index]
+
+                st.markdown(f"## {current_item['title']}")
+                st.write(f"**Type:** {current_item['type']}")
+                st.write(f"**Duration:** {current_item['duration']}")
+                st.write(current_item["description"])
+                st.write("")
+
+                # -------------------------
+                # Item 1: Presentation
+                # -------------------------
+                if current_index == 0:
+                    try:
+                        with open(current_item["file"], "rb") as doc_file:
+                            st.download_button(
+                                label="Download HVITC Presentation",
+                                data=doc_file,
+                                file_name=current_item["file"],
+                                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                                use_container_width=True,
+                                key="hvitc_download_doc"
+                            )
+                    except Exception:
+                        st.error(f"File not found: {current_item['file']}")
+
+                    st.write("")
+
+                    if not st.session_state.hvitc_doc_completed:
+                        if st.button("Mark Presentation as Completed ✅", use_container_width=True, key="hvitc_doc_complete"):
+                            st.session_state.hvitc_doc_completed = True
+                            save_progress()
+                            st.success("Presentation marked as completed.")
+                            st.rerun()
+                    else:
+                        st.success("Presentation completed ✅")
+
+                    st.write("")
+
+                    next_col1, next_col2 = st.columns([1, 2.4])
+
+                    with next_col1:
+                        if st.button("Go to Next Item →", use_container_width=True, key="hvitc_next_to_quiz"):
+                            st.session_state.hvitc_current_item = 1
+                            st.rerun()
+
+                # -------------------------
+                # Item 2: Quiz
+                # -------------------------
+                elif current_index == 1:
+                    if not st.session_state.hvitc_doc_completed:
+                        st.info("Please complete the presentation first before attempting the quiz.")
+                    else:
+                        st.subheader("HVITC Quiz")
+
+                        user_answers = []
+
+                        for i, q in enumerate(HVITC_QUIZ_QUESTIONS, start=1):
+                            answer = st.radio(
+                                f"Q{i}. {q['question']}",
+                                q["options"],
+                                key=f"hvitc_quiz_q{i}"
+                            )
+                            user_answers.append(answer)
+
+                            if st.session_state.hvitc_quiz_submitted and len(st.session_state.hvitc_submitted_answers) == len(HVITC_QUIZ_QUESTIONS):
+                                submitted_answer = st.session_state.hvitc_submitted_answers[i - 1]
+
+                                if submitted_answer == q["answer"]:
+                                    st.success("✅ Correct")
+                                else:
+                                    st.error("❌ Wrong")
+
+                        if st.button("Submit Quiz ✅", use_container_width=True, key="hvitc_submit_quiz_page"):
+                            correct_count = 0
+
+                            st.session_state.hvitc_submitted_answers = user_answers.copy()
+                            st.session_state.hvitc_quiz_submitted = True
+
+                            for user_answer, q in zip(st.session_state.hvitc_submitted_answers, HVITC_QUIZ_QUESTIONS):
+                                if user_answer == q["answer"]:
+                                    correct_count += 1
+
+                            total_questions = len(HVITC_QUIZ_QUESTIONS)
+                            required_score = int(total_questions * 0.8)
+
+                            st.session_state.hvitc_quiz_score = correct_count
+
+                            if correct_count >= required_score:
+                                st.session_state.hvitc_quiz_completed = True
+                                st.session_state.stage3_completed = True
+                                save_progress()
+                                check_and_send_milestone_emails()
+                            else:
+                                st.session_state.hvitc_quiz_completed = False
+                                st.session_state.stage3_completed = False
+
+                            st.rerun()
+
+                        if st.session_state.hvitc_quiz_submitted:
+                            total_questions = len(HVITC_QUIZ_QUESTIONS)
+                            required_score = int(total_questions * 0.8)
+
+                            st.write(f"Your score: **{st.session_state.hvitc_quiz_score}/{total_questions}**")
+
+                            if st.session_state.hvitc_quiz_score >= required_score:
+                                st.success("You passed the quiz successfully ✅")
+                                st.success("HVITC specialization completed successfully ✅")
+                            else:
+                                st.error(f"You need at least {required_score}/{total_questions} correct answers to pass.")
+
+                    st.write("")
+                    back_col1, back_col2 = st.columns([1, 2.4])
+
+                    with back_col1:
+                        if st.button("← Back", use_container_width=True, key="hvitc_back_to_doc"):
+                            st.session_state.hvitc_current_item = 0
+                            st.rerun()
+
+# ---------------------------------------------------
+# Stage 3 - OBC Page
+# ---------------------------------------------------
+elif st.session_state.current_page == "stage3_obc":
+    if not st.session_state.logged_in:
+        st.warning("Please login first.")
+        if st.button("Go to Login", key="obc_go_to_login"):
+            go_to("auth")
+            st.rerun()
+    else:
+        top1, top2, top3 = st.columns([2, 4, 2])
+
+        with top1:
+            if st.button("← Stage 3", use_container_width=True, key="obc_back_stage3"):
+                go_to("stage3")
+                st.rerun()
+
+        with top3:
+            if st.button("Profile", use_container_width=True, key="obc_profile"):
+                go_to("profile")
+                st.rerun()
+
+        st.markdown("""
+        <div class="stage-page-hero">
+            <div class="stage-page-hero-title">OBC Specialization</div>
+            <div class="stage-page-hero-text">
+                This specialization path will provide focused learning content related to the OBC team and its technical scope.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        progress = calculate_progress()
+        st.markdown(f"### Progress: {progress}%")
+        st.progress(progress / 100)
+        st.write("")
+
+        st.info("This specialization path is currently under development. Content will be added soon.")
+
+# ---------------------------------------------------
+# Stage 3 - Cable Chassis Page
+# ---------------------------------------------------
+elif st.session_state.current_page == "stage3_cable":
+    if not st.session_state.logged_in:
+        st.warning("Please login first.")
+        if st.button("Go to Login", key="cable_go_to_login"):
+            go_to("auth")
+            st.rerun()
+    else:
+        top1, top2, top3 = st.columns([2, 4, 2])
+
+        with top1:
+            if st.button("← Stage 3", use_container_width=True, key="cable_back_stage3"):
+                go_to("stage3")
+                st.rerun()
+
+        with top3:
+            if st.button("Profile", use_container_width=True, key="cable_profile"):
+                go_to("profile")
+                st.rerun()
+
+        st.markdown("""
+        <div class="stage-page-hero">
+            <div class="stage-page-hero-title">Cable Chassis Specialization</div>
+            <div class="stage-page-hero-text">
+                This specialization path will provide focused learning content related to the Cable Chassis team and its technical scope.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        progress = calculate_progress()
+        st.markdown(f"### Progress: {progress}%")
+        st.progress(progress / 100)
+        st.write("")
+
+        st.info("This specialization path is currently under development. Content will be added soon.")
+
+# ---------------------------------------------------
 # Learning Journey Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "learning":
-    scroll_to_top()
     if not st.session_state.logged_in:
         st.warning("Please login first.")
         if st.button("Go to Login", key="learning_go_to_login"):
@@ -2410,7 +3159,6 @@ This stage introduces:
 # Profile Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "profile":
-    scroll_to_top()
     if not st.session_state.logged_in:
         st.warning("Please login first.")
         if st.button("Go to Login", key="profile_go_to_login"):
