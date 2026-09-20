@@ -1359,10 +1359,10 @@ if st.session_state.current_page == "landing":
 
     with card3:
         try:
-            img3 = resize_image_to_height("specialized_paths.jpg", 320)
+            img3 = resize_image_to_height("specialized_paths.jpeg", 320)
             st.image(img3, use_container_width=True)
         except:
-            st.info("Add image: specialized_paths.jpg")
+            st.info("Add image: specialized_paths.jpeg")
         st.markdown("""
         <div style="padding:8px 10px 12px 6px;">
             <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Specialized Paths</h3>
