@@ -3165,28 +3165,65 @@ elif st.session_state.current_page == "profile":
             go_to("auth")
             st.rerun()
     else:
-        if st.button("← Back to Learning", key="profile_back_learning"):
-            go_to("learning")
+        if st.button("← Back to Home", key="profile_back_home"):
+            go_to("home")
             st.rerun()
 
         st.title("My Profile")
 
         progress = calculate_progress()
 
-        st.write(f"**Name:** {st.session_state.user_name}")
-        st.write(f"**Email:** {st.session_state.user_email}")
-        st.write(f"**Stage 1 Completed:** {'Yes' if st.session_state.stage1_completed else 'No'}")
-        st.write(f"**Stage 2 Completed:** {'Yes' if st.session_state.stage2_completed else 'No'}")
-        st.write(f"**Selected Path:** {st.session_state.selected_path if st.session_state.selected_path else 'Not selected'}")
-        st.write(f"**Overall Progress:** {progress}%")
-
-        st.write("---")
-        st.subheader("Mandatory Trainings")
-
-        st.write(f"**Mandatory Trainings Completed:** {'Yes' if st.session_state.mandatory_completed else 'No'}")
-
-        for i, course in enumerate(MANDATORY_COURSES, start=1):
-            status = "Yes" if st.session_state[course["key"]] else "No"
-            st.write(f"**Course {i}: {course['title']}** — {status}")
+        # Hero / Summary
+        st.markdown(f"""
+        <div class="info-panel" style="margin-bottom:22px;">
+            <h2 style="color:#1F3552; margin-bottom:8px;">{st.session_state.user_name}</h2>
+            <p style="font-size:16px; color:#4B5563; margin-bottom:6px;"><strong>Email:</strong> {st.session_state.user_email}</p>
+            <p style="font-size:16px; color:#4B5563; margin-bottom:0;"><strong>Overall Progress:</strong> {progress}%</p>
+        </div>
+        """, unsafe_allow_html=True)
 
         st.progress(progress / 100)
+
+        st.write("")
+
+        # Main profile details
+        c1, c2 = st.columns(2)
+
+        with c1:
+            st.markdown("""
+            <div class="info-panel">
+                <h3 style="color:#1F3552; margin-bottom:14px;">Profile Details</h3>
+            """, unsafe_allow_html=True)
+
+            st.write(f"**Full Name:** {st.session_state.user_name}")
+            st.write(f"**Email:** {st.session_state.user_email}")
+            st.write(f"**Selected Path:** {st.session_state.selected_path if st.session_state.selected_path else 'Not selected'}")
+
+            st.markdown("</div>", unsafe_allow_html=True)
+
+        with c2:
+            st.markdown("""
+            <div class="info-panel">
+                <h3 style="color:#1F3552; margin-bottom:14px;">Journey Summary</h3>
+            """, unsafe_allow_html=True)
+
+            st.write(f"**Mandatory Trainings:** {'Completed' if st.session_state.mandatory_completed else 'Not completed'}")
+            st.write(f"**Stage 1:** {'Completed' if st.session_state.stage1_completed else 'Not completed'}")
+            st.write(f"**Stage 2:** {'Completed' if st.session_state.stage2_completed else 'Not completed'}")
+            st.write(f"**Stage 3:** {'Completed' if st.session_state.stage3_completed else 'Not completed'}")
+
+            st.markdown("</div>", unsafe_allow_html=True)
+
+        st.write("")
+
+        # Mandatory trainings breakdown
+        st.markdown("""
+        <div class="info-panel" style="margin-top:10px;">
+            <h3 style="color:#1F3552; margin-bottom:14px;">Mandatory Trainings Breakdown</h3>
+        """, unsafe_allow_html=True)
+
+        for i, course in enumerate(MANDATORY_COURSES, start=1):
+            status = "✅ Completed" if st.session_state[course["key"]] else "⬜ Not completed"
+            st.write(f"**Course {i}: {course['title']}** — {status}")
+
+        st.markdown("</div>", unsafe_allow_html=True)
