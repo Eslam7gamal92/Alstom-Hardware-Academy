@@ -3190,8 +3190,8 @@ elif st.session_state.current_page == "profile":
 
         with c1:
             st.markdown(f"""
-            <div class="white-box" style="min-height: 180px;">
-                <h3 style="color:#1F3552; margin-bottom:14px;">Profile Details</h3>
+            <div class="white-box" style="min-height: 220px;">
+                <h3 style="color:#1F3552; font-size:20px; font-weight:700; margin-bottom:14px;">Profile Details</h3>
                 <p style="font-size:16px; color:#374151; margin-bottom:10px;"><strong>Full Name:</strong> {st.session_state.user_name}</p>
                 <p style="font-size:16px; color:#374151; margin-bottom:10px;"><strong>Email:</strong> {st.session_state.user_email}</p>
                 <p style="font-size:16px; color:#374151; margin-bottom:0;"><strong>Selected Path:</strong> {st.session_state.selected_path if st.session_state.selected_path else 'Not selected'}</p>
@@ -3200,8 +3200,8 @@ elif st.session_state.current_page == "profile":
 
         with c2:
             st.markdown(f"""
-            <div class="white-box" style="min-height: 180px;">
-                <h3 style="color:#1F3552; margin-bottom:14px;">Journey Summary</h3>
+            <div class="white-box" style="min-height: 220px;">
+                <h3 style="color:#1F3552; font-size:20px; font-weight:700; margin-bottom:14px;">Journey Summary</h3>
                 <p style="font-size:16px; color:#374151; margin-bottom:10px;"><strong>Mandatory Trainings:</strong> {'Completed' if st.session_state.mandatory_completed else 'Not completed'}</p>
                 <p style="font-size:16px; color:#374151; margin-bottom:10px;"><strong>Stage 1:</strong> {'Completed' if st.session_state.stage1_completed else 'Not completed'}</p>
                 <p style="font-size:16px; color:#374151; margin-bottom:10px;"><strong>Stage 2:</strong> {'Completed' if st.session_state.stage2_completed else 'Not completed'}</p>
@@ -3214,7 +3214,7 @@ elif st.session_state.current_page == "profile":
         # Mandatory breakdown
         st.markdown("""
         <div class="white-box" style="min-height: auto;">
-            <h3 style="color:#1F3552; margin-bottom:14px;">Mandatory Trainings Breakdown</h3>
+            <h3 style="color:#1F3552; font-size:20px; font-weight:700; margin-bottom:14px;">Mandatory Trainings Breakdown</h3>
         """, unsafe_allow_html=True)
 
         for i, course in enumerate(MANDATORY_COURSES, start=1):
