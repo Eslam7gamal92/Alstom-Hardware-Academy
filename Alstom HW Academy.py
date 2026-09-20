@@ -1321,6 +1321,7 @@ if st.session_state.current_page == "landing":
     st.markdown('<h2 style="color:#1F3552; font-weight:700;">Explore Learning Areas</h2>', unsafe_allow_html=True)
     st.write("Discover the main learning tracks included in Alstom Hardware and Installation Academy.")
 
+    # Row 1
     card1, card2 = st.columns(2)
 
     with card1:
@@ -1340,25 +1341,8 @@ if st.session_state.current_page == "landing":
 
     with card2:
         try:
-            img2 = resize_image_to_height("specialized_paths.jpg", 320)
+            img2 = Image.open("signalling_hardware.jpg")
             st.image(img2, use_container_width=True)
-        except:
-            st.info("Add image: specialized_paths.jpg")
-        st.markdown("""
-        <div style="padding:8px 10px 12px 6px;">
-            <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Specialized Paths</h3>
-            <p style="font-size:16px; color:#374151; line-height:1.55;">
-                Move into focused technical areas such as Pedals, OBC, Cable Chassis, and HVITC based on your role and learning goals.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-    card3, card4 = st.columns(2)
-
-    with card3:
-        try:
-            img3 = Image.open("signalling_hardware.jpg")
-            st.image(img3, width=760)
         except:
             st.info("Add image: signalling_hardware.jpg")
         st.markdown("""
@@ -1366,6 +1350,24 @@ if st.session_state.current_page == "landing":
             <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Signalling & Hardware Fundamentals</h3>
             <p style="font-size:16px; color:#374151; line-height:1.55;">
                 Learn key hardware concepts, system interfaces, signalling basics, component understanding, and engineering principles.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # Row 2
+    card3, card4 = st.columns(2)
+
+    with card3:
+        try:
+            img3 = resize_image_to_height("specialized_paths.jpg", 320)
+            st.image(img3, use_container_width=True)
+        except:
+            st.info("Add image: specialized_paths.jpg")
+        st.markdown("""
+        <div style="padding:8px 10px 12px 6px;">
+            <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Specialized Paths</h3>
+            <p style="font-size:16px; color:#374151; line-height:1.55;">
+                Move into focused technical areas such as Pedals, OBC, Cable Chassis, and HVITC based on your role and learning goals.
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -1381,6 +1383,24 @@ if st.session_state.current_page == "landing":
             <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Progress Tracking</h3>
             <p style="font-size:16px; color:#374151; line-height:1.55;">
                 Track learning completion, unlock stages, validate understanding through quizzes, and monitor your progress step by step.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # Row 3 - centered
+    left_tool, center_tool, right_tool = st.columns([1, 1.4, 1])
+
+    with center_tool:
+        try:
+            img5 = resize_image_to_height("alstom_tools.jpg", 320)
+            st.image(img5, use_container_width=True)
+        except:
+            st.info("Add image: alstom_tools.jpg")
+        st.markdown("""
+        <div style="padding:8px 10px 12px 6px;">
+            <h3 style="color:#0B3D91; margin-top:0px; margin-bottom:6px;">Alstom Tools</h3>
+            <p style="font-size:16px; color:#374151; line-height:1.55;">
+                Discover useful internal tools and platforms such as Hydra, Orchestra, DOC4A, and other references that may support engineering and project activities.
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -3006,6 +3026,91 @@ elif st.session_state.current_page == "stage3_cable":
         st.write("")
 
         st.info("This specialization path is currently under development. Content will be added soon.")
+
+# ---------------------------------------------------
+# Alstom Tools Page
+# ---------------------------------------------------
+elif st.session_state.current_page == "alstom_tools":
+    if not st.session_state.logged_in:
+        st.warning("Please login first.")
+        if st.button("Go to Login", key="tools_go_to_login"):
+            go_to("auth")
+            st.rerun()
+    else:
+        top1, top2, top3 = st.columns([2, 4, 2])
+
+        with top1:
+            if st.button("← Home", use_container_width=True, key="tools_back_home"):
+                go_to("home")
+                st.rerun()
+
+        with top3:
+            if st.button("Profile", use_container_width=True, key="tools_profile"):
+                go_to("profile")
+                st.rerun()
+
+        st.markdown("""
+        <div class="stage-page-hero">
+            <div class="stage-page-hero-title">Alstom Tools</div>
+            <div class="stage-page-hero-text">
+                This section gives you access to useful Alstom tools and internal platforms that may support
+                your engineering activities, project work, and technical learning journey.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown('<h2 style="color:#1F3552; font-weight:700;">Available Tools</h2>', unsafe_allow_html=True)
+        st.write("Explore useful internal tools and platforms.")
+
+        t1, t2 = st.columns(2)
+
+        with t1:
+            st.markdown("""
+            <div class="white-box">
+                <div class="section-title">Hydra</div>
+                <div class="section-text">
+                    An internal Alstom platform that may support project and engineering-related workflows.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            st.link_button("Open Hydra", "https://example.com", use_container_width=True)
+
+        with t2:
+            st.markdown("""
+            <div class="white-box">
+                <div class="section-title">Orchestra</div>
+                <div class="section-text">
+                    A useful internal tool that can support collaboration, workflow visibility, and project execution.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            st.link_button("Open Orchestra", "https://example.com", use_container_width=True)
+
+        t3, t4 = st.columns(2)
+
+        with t3:
+            st.markdown("""
+            <div class="white-box">
+                <div class="section-title">DOC4A</div>
+                <div class="section-text">
+                    A document-related platform that can help users access technical references and documentation.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            st.link_button("Open DOC4A", "https://example.com", use_container_width=True)
+
+        with t4:
+            st.markdown("""
+            <div class="white-box">
+                <div class="section-title">More Tools</div>
+                <div class="section-text">
+                    More Alstom tools and internal references can be added here as the platform evolves.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 # ---------------------------------------------------
 # Learning Journey Page
