@@ -2494,8 +2494,8 @@ elif st.session_state.current_page == "stage3":
         <div class="stage-page-hero">
             <div class="stage-page-hero-title">Stage 3: Specialization</div>
             <div class="stage-page-hero-text">
-                In this final stage, you will select your specialization path based on your team or technical area.
-                After selecting your path, you will continue to the dedicated learning page for that specialization.
+                In this final stage, you will choose your specialization path based on your team or technical focus.
+                Once selected, you will continue to the dedicated learning page for that path and complete its final materials and quiz.
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -2511,12 +2511,15 @@ elif st.session_state.current_page == "stage3":
             st.markdown("## Select Your Specialization Path")
             st.write("Choose the path that matches your team or technical learning direction.")
 
-            selected = st.selectbox(
-                "Choose your path",
-                ["", "Pedal", "HVITC", "OBC", "Cable Chassis"],
-                index=0,
-                key="stage3_path_select"
-            )
+            select_col1, select_col2 = st.columns([1.3, 1.7])
+
+            with select_col1:
+                selected = st.selectbox(
+                    "Select your specialization path",
+                    ["", "Pedal", "HVITC", "OBC", "Cable Chassis"],
+                    index=0,
+                    key="stage3_path_select"
+                )
 
             st.write("")
 
