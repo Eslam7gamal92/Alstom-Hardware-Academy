@@ -1186,7 +1186,7 @@ if st.session_state.current_page == "landing":
         st.markdown("""
         <div class="stats-box">
             <h2 style="color:#0B3D91; font-size:48px; margin-bottom:8px;">100%</h2>
-            <p style="font-size:15px;">Structured onboarding flow</p>
+            <p style="font-size:15px; font-weight:700;">Structured onboarding flow</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1194,7 +1194,7 @@ if st.session_state.current_page == "landing":
         st.markdown("""
         <div class="stats-box">
             <h2 style="color:#0B3D91; font-size:48px; margin-bottom:8px;">3</h2>
-            <p style="font-size:15px;">Main learning stages</p>
+            <p style="font-size:15px; font-weight:700;">Main learning stages</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1202,7 +1202,7 @@ if st.session_state.current_page == "landing":
         st.markdown("""
         <div class="stats-box">
             <h2 style="color:#0B3D91; font-size:48px; margin-bottom:8px;">1</h2>
-            <p style="font-size:15px;">Centralized learning platform</p>
+            <p style="font-size:15px; font-weight:700;">Centralized learning platform</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1210,7 +1210,7 @@ if st.session_state.current_page == "landing":
         st.markdown("""
         <div class="stats-box">
             <h2 style="color:#0B3D91; font-size:48px; margin-bottom:8px;">∞</h2>
-            <p style="font-size:15px;">Continuous learning potential</p>
+            <p style="font-size:15px; font-weight:700;">Continuous learning potential</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1495,11 +1495,11 @@ elif st.session_state.current_page == "auth":
     <div class="auth-left-box">
         <div class="auth-left-title">Start your onboarding journey with confidence</div>
         <div class="auth-left-text">
-            Alstom Hardware and Installation Academy is designed to give new hardware engineers a clear and structured learning experience.
+            Alstom Hardware and Installation Academy is designed to give new hardware and installation engineers a clear and structured learning experience.
         </div>
         <div class="auth-left-text">
             Through this platform, you will explore:
-            <br><br>
+            <br>
             • Railway System fundamentals<br>
             • Signalling & Hardware basics<br>
             • Role-based specialization paths<br>
