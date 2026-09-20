@@ -1728,14 +1728,14 @@ elif st.session_state.current_page == "home":
             <p style="font-size:16px; color:#374151; line-height:1.75; margin-bottom:0;">
                 Alstom Hardware and Installation Academy is designed to make onboarding clearer, faster, and more structured.
                 Instead of navigating scattered documents, you will move through a defined learning path,
-                starting with the railway system, then hardware fundamentals, and finally your technical specialization.
+                starting with Mandatory Trainings, then continuing through railway system knowledge, hardware fundamentals, and finally your technical specialization.
             </p>
         </div>
         """, unsafe_allow_html=True)
 
         # Stage cards title
         st.markdown('<h2 style="color:#1F3552; font-weight:700;">Your Learning Journey</h2>', unsafe_allow_html=True)
-        st.write("Start with the Mandatory Trainings, then continue through the three technical stages of your journey.")
+        st.write("Start with the Mandatory Trainings, continue through the three technical stages, and explore optional Alstom Tools when needed.")
 
         # Status logic
         if st.session_state.mandatory_completed:
@@ -1859,7 +1859,7 @@ elif st.session_state.current_page == "home":
                 <div class="stage-card-title">Alstom Tools</div>
                 <div class="stage-card-text">
                     Explore useful Alstom tools and internal platforms such as Hydra, Orchestra, DOC4A,
-                    and other references that may support engineering and project activities.
+                    and other helpful engineering references.
                 </div>
             </div>
             """, unsafe_allow_html=True)
