@@ -1169,11 +1169,11 @@ if st.session_state.current_page == "landing":
     st.markdown("""
     <div class="hero-box">
         <div class="small-title">Structured Learning for New Joiners</div>
-        <div class="main-title">A structured onboarding and learning journey for new hardware engineers</div>
+        <div class="main-title">A structured onboarding and learning journey for new hardware and installation engineers</div>
         <div class="hero-text">
             Alstom Hardware and Installation Academy is designed to support newly joined engineers with a guided learning experience,
             starting from company introduction and railway system fundamentals, moving into signalling and hardware basics,
-            and finally leading into specialized technical paths such as Pedals, OBC, HVITC, and Cable Chassis.
+            and finally leading into specialized technical paths and practical learning areas such as Pedals, OBC, HVITC, Cable Chassis, and other relevant engineering tools and references.
         </div>
     </div>
     """, unsafe_allow_html=True)
