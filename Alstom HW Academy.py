@@ -1688,9 +1688,9 @@ elif st.session_state.current_page == "home":
         <div class="home-hero">
             <div class="home-hero-title">Welcome, {st.session_state.user_name} 👋</div>
             <div class="home-hero-text">
-                Your onboarding journey is organized into three guided stages: Railway System,
-                Signalling & Hardware Fundamentals, and your final Specialization path.
-                Follow them step by step to build your technical foundation and track your readiness.
+                Your onboarding journey starts with Mandatory Trainings and continues through three guided technical stages:
+                Railway System, Signalling & Hardware Fundamentals, and your final Specialization path.
+                Follow the journey step by step to build your knowledge, track your progress, and complete your onboarding experience.
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -1714,7 +1714,7 @@ elif st.session_state.current_page == "home":
 
         # Stage cards title
         st.markdown('<h2 style="color:#1F3552; font-weight:700;">Your Learning Journey</h2>', unsafe_allow_html=True)
-        st.write("Explore the three stages of your journey and continue from your current step.")
+        st.write("Start with the Mandatory Trainings, then continue through the three technical stages of your journey.")
 
         # Status logic
         if st.session_state.mandatory_completed:
