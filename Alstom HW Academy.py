@@ -810,14 +810,14 @@ ALSTOM_TOOLS = [
         "title": "Hydra",
         "description": "An internal Alstom platform that can support engineering and project-related workflows.",
         "image": "hydra_tool.jpg",
-        "tool_link": "https://hydra.bt.bombardier.net/Hydra/OAuthServer/Account/Login?ReturnUrl=%2FHydra%2FOAuthServer%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3DInnovatorClient%26redirect_uri%3Dhttps%253A%252F%252Fhydra.bt.bombardier.net%252Fhydra%252FClient%252FOAuth%252FRedirectCallback%26response_type%3Dcode%26scope%3Dopenid%2520Innovator%2520offline_access%26state%3D0251b3ce44394e2686fbc11c7b2a6418%26code_challenge%3D6tC6Rlp39XcNxxYtF12lDMHwpZUqTG0yOIrSwhmoGcw%26code_challenge_method%3DS256%26response_mode%3Dquery",
+        "tool_link": "https://hydra.bt.bombardier.net/hydra/Client/",
         "learning_link": "https://example.com/hydra-learning"
     },
     {
         "title": "Orchestra",
         "description": "A useful internal platform that may help users navigate project and collaboration activities.",
         "image": "orchestra_tool.jpg",
-        "tool_link": "https://datamanagement.alstom.com/ReferenceData/www/common/html/indexForAlstom.html",
+        "tool_link": "https://datamanagement.alstom.com/ebx-ui/ui/custom/Public_Master_Data/action/378",
         "learning_link": "https://alstomgroup.sharepoint.com/sites/My_Data_Journey/SitePages/Your-very-first-steps-in-Orchestra.aspx"
     },
     {
