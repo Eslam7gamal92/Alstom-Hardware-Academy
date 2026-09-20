@@ -2097,7 +2097,7 @@ elif st.session_state.current_page == "stage1":
                     try:
                         with open(current_item["file"], "rb") as pdf_file:
                             st.download_button(
-                                label="Download Stage 1 Document",
+                                label="Download Railway System Document",
                                 data=pdf_file,
                                 file_name=current_item["file"],
                                 mime="application/pdf",
@@ -2523,25 +2523,28 @@ elif st.session_state.current_page == "stage3":
 
             st.write("")
 
-            if st.button("Enter Selected Path", use_container_width=True, key="enter_selected_path"):
-                if not selected:
-                    st.error("Please choose a specialization path first.")
-                else:
-                    # Save selected_path only the first time
-                    if not st.session_state.selected_path:
-                        st.session_state.selected_path = selected
-                        save_progress()
+            button_col1, button_col2 = st.columns([1.3, 1.7])
 
-                    if selected == "Pedal":
-                        go_to("stage3_pedal")
-                    elif selected == "HVITC":
-                        go_to("stage3_hvitc")
-                    elif selected == "OBC":
-                        go_to("stage3_obc")
-                    elif selected == "Cable Chassis":
-                        go_to("stage3_cable")
+            with button_col1:
+                if st.button("Enter Selected Path", use_container_width=True, key="enter_selected_path"):
+                    if not selected:
+                        st.error("Please choose a specialization path first.")
+                    else:
+                        # Save selected_path only the first time
+                        if not st.session_state.selected_path:
+                            st.session_state.selected_path = selected
+                            save_progress()
 
-                    st.rerun()
+                        if selected == "Pedal":
+                            go_to("stage3_pedal")
+                        elif selected == "HVITC":
+                            go_to("stage3_hvitc")
+                        elif selected == "OBC":
+                            go_to("stage3_obc")
+                        elif selected == "Cable Chassis":
+                            go_to("stage3_cable")
+
+                        st.rerun()
 
 # ---------------------------------------------------
 # Stage 3 - Pedal Page
