@@ -880,7 +880,7 @@ st.markdown("""
 }
 
 .main-title {
-    font-size: 40px;
+    font-size: 36px;
     font-weight: 700;
     color: white;
     line-height: 1.18;
@@ -1193,8 +1193,8 @@ if st.session_state.current_page == "landing":
     with s2:
         st.markdown("""
         <div class="stats-box">
-            <h2 style="color:#0B3D91; font-size:48px; margin-bottom:8px;">3</h2>
-            <p style="font-size:15px; font-weight:700;">Main learning stages</p>
+            <h2 style="color:#0B3D91; font-size:48px; margin-bottom:8px;">4</h2>
+            <p style="font-size:15px; font-weight:700;">Core onboarding stages</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -1319,7 +1319,7 @@ if st.session_state.current_page == "landing":
 
     # 8. Explore Learning Areas
     st.markdown('<h2 style="color:#1F3552; font-weight:700;">Explore Learning Areas</h2>', unsafe_allow_html=True)
-    st.write("Discover the main learning tracks included in Alstom Hardware and Installation Academy.")
+    st.write("Discover the main learning areas, specialization paths, and useful internal references included in Alstom Hardware and Installation Academy.")
 
     # Row 1
     card1, card2 = st.columns(2)
@@ -1425,7 +1425,7 @@ if st.session_state.current_page == "landing":
     <div class="hero-box" style="padding:30px 34px;">
         <div class="section-title" style="color:white;">Start your learning journey today</div>
         <div class="hero-text">
-            Join Alstom Hardware and Installation Academy and begin a structured onboarding experience tailored for new hardware engineers.
+            Join Alstom Hardware and Installation Academy and begin a structured onboarding experience tailored for new hardware and installation engineers.
         </div>
     </div>
     """, unsafe_allow_html=True)
