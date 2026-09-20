@@ -1849,6 +1849,24 @@ elif st.session_state.current_page == "home":
                 go_to("stage3")
                 st.rerun()
 
+        # Row 3 - Alstom Tools
+        left_tools, center_tools, right_tools = st.columns([1, 1.2, 1])
+
+        with center_tools:
+            st.markdown("""
+            <div class="stage-card">
+                <div class="stage-badge-current">Optional</div>
+                <div class="stage-card-title">Alstom Tools</div>
+                <div class="stage-card-text">
+                    Explore useful Alstom tools and internal platforms such as Hydra, Orchestra, DOC4A,
+                    and other references that may support engineering and project activities.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            if st.button("Open Alstom Tools", use_container_width=True, key="open_alstom_tools"):
+                go_to("alstom_tools")
+                st.rerun()
 # ---------------------------------------------------
 # Mandatory Trainings Page
 # ---------------------------------------------------
