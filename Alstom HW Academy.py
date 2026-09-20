@@ -818,7 +818,7 @@ ALSTOM_TOOLS = [
         "description": "A useful internal platform that may help users navigate project and collaboration activities.",
         "image": "orchestra_tool.jpg",
         "tool_link": "https://datamanagement.alstom.com/ReferenceData/www/common/html/indexForAlstom.html",
-        "learning_link": "https://example.com/orchestra-learning"
+        "learning_link": "https://alstomgroup.sharepoint.com/sites/My_Data_Journey/SitePages/Your-very-first-steps-in-Orchestra.aspx"
     },
     {
         "title": "DOC4A",
