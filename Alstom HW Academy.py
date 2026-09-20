@@ -1513,13 +1513,14 @@ elif st.session_state.current_page == "auth":
     # Full width blue intro box
     st.markdown("""
     <div class="auth-left-box">
-        <div class="auth-left-title">Start your onboarding journey with confidence</div>
+        <div class="auth-left-title">Start your onboarding journey with clarity and confidence</div>
         <div class="auth-left-text">
             Alstom Hardware and Installation Academy is designed to give new hardware and installation engineers a clear and structured learning experience.
         </div>
         <div class="auth-left-text">
             Through this platform, you will explore:
             <br>
+            • Mandatory Trainings<br>
             • Railway System fundamentals<br>
             • Signalling & Hardware basics<br>
             • Role-based specialization paths<br>
