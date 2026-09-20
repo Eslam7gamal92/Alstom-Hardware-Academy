@@ -3099,67 +3099,35 @@ elif st.session_state.current_page == "alstom_tools":
                 st.rerun()
 
         st.markdown("""
-        <div class="stage-page-hero">
-            <div class="stage-page-hero-title">Alstom Tools</div>
-            <div class="stage-page-hero-text">
-                This section gives you access to useful Alstom tools and internal platforms that may support
-                your engineering activities, project work, and technical learning journey.
+        <div class="mandatory-hero">
+            <div class="mandatory-hero-title">Alstom Tools</div>
+            <div class="mandatory-hero-text">
+                Explore useful Alstom tools and internal platforms that may support your engineering work,
+                project activities, and technical learning journey.
             </div>
         </div>
         """, unsafe_allow_html=True)
 
         st.markdown('<h2 style="color:#1F3552; font-weight:700;">Available Tools</h2>', unsafe_allow_html=True)
-        st.write("Explore useful internal tools and platforms.")
+        st.write("Discover useful internal platforms and their related learning materials.")
 
-        t1, t2 = st.columns(2)
+        cols = st.columns(3)
 
-        with t1:
-            st.markdown("""
-            <div class="white-box">
-                <div class="section-title">Hydra</div>
-                <div class="section-text">
-                    An internal Alstom platform that may support project and engineering-related workflows.
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+        for col, tool in zip(cols, ALSTOM_TOOLS):
+            with col:
+                try:
+                    tool_img = resize_image_to_height(tool["image"], 220)
+                    st.image(tool_img, use_container_width=True)
+                except:
+                    st.info(f"Add image: {tool['image']}")
 
-            st.link_button("Open Hydra", "https://example.com", use_container_width=True)
+                st.markdown(f'<div class="mandatory-card-title">{tool["title"]}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="mandatory-card-text">{tool["description"]}</div>', unsafe_allow_html=True)
 
-        with t2:
-            st.markdown("""
-            <div class="white-box">
-                <div class="section-title">Orchestra</div>
-                <div class="section-text">
-                    A useful internal tool that can support collaboration, workflow visibility, and project execution.
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+                st.link_button("Open Tool", tool["tool_link"], use_container_width=True)
+                st.link_button("Open Learning Material", tool["learning_link"], use_container_width=True)
 
-            st.link_button("Open Orchestra", "https://example.com", use_container_width=True)
-
-        t3, t4 = st.columns(2)
-
-        with t3:
-            st.markdown("""
-            <div class="white-box">
-                <div class="section-title">DOC4A</div>
-                <div class="section-text">
-                    A document-related platform that can help users access technical references and documentation.
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            st.link_button("Open DOC4A", "https://example.com", use_container_width=True)
-
-        with t4:
-            st.markdown("""
-            <div class="white-box">
-                <div class="section-title">More Tools</div>
-                <div class="section-text">
-                    More Alstom tools and internal references can be added here as the platform evolves.
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+                st.write("")
 
 # ---------------------------------------------------
 # Learning Journey Page
