@@ -1177,7 +1177,7 @@ st.markdown("""
 # ---------------------------------------------------
 if st.session_state.current_page == "landing":
 
-    nav1, nav2 = st.columns([1, 1])
+    nav1, nav2 = st.columns([1.4, 1])
 
     with nav1:
         try:
@@ -1188,7 +1188,7 @@ if st.session_state.current_page == "landing":
             st.caption("Alstom Hardware & Installation Academy")
 
     with nav2:
-        b1, b2 = st.columns(2)
+        space, b1, b2 = st.columns([1.2, 1, 1])
         with b1:
             if st.button("Log in", use_container_width=True, key="landing_login"):
                 go_to("auth")
