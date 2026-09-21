@@ -1188,14 +1188,27 @@ if st.session_state.current_page == "landing":
             st.caption("Alstom Hardware & Installation Academy")
 
     with nav2:
-        st.markdown(
-            """
-            <div class="nav-center">
-            Explore &nbsp;&nbsp;&nbsp; Learning Journey &nbsp;&nbsp;&nbsp; Specializations &nbsp;&nbsp;&nbsp; About
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        n1, n2, n3, n4 = st.columns(4)
+
+        with n1:
+            if st.button("Explore", use_container_width=True, key="nav_explore"):
+                go_to("explore")
+                st.rerun()
+
+        with n2:
+            if st.button("Learning Journey", use_container_width=True, key="nav_learning_journey"):
+                go_to("learning_journey_info")
+                st.rerun()
+
+        with n3:
+            if st.button("Specializations", use_container_width=True, key="nav_specializations"):
+                go_to("specializations_info")
+                st.rerun()
+
+        with n4:
+            if st.button("About", use_container_width=True, key="nav_about"):
+                go_to("about_info")
+                st.rerun()
 
     with nav3:
         b1, b2 = st.columns(2)
@@ -1495,6 +1508,7 @@ if st.session_state.current_page == "landing":
         Built to support onboarding, technical learning, and knowledge development for hardware and installation engineers at Alstom.
     </div>
     """, unsafe_allow_html=True)
+    
 
 # ---------------------------------------------------
 # Authentication Page
@@ -3198,154 +3212,6 @@ elif st.session_state.current_page == "alstom_tools":
                 st.write("")
 
 # ---------------------------------------------------
-# Learning Journey Page
-# ---------------------------------------------------
-elif st.session_state.current_page == "learning":
-    if not st.session_state.logged_in:
-        st.warning("Please login first.")
-        if st.button("Go to Login", key="learning_go_to_login"):
-            go_to("auth")
-            st.rerun()
-    else:
-        top1, top2, top3 = st.columns([2, 4, 2])
-
-        with top1:
-            if st.button("← Home", use_container_width=True, key="learning_home"):
-                go_to("home")
-                st.rerun()
-
-        with top3:
-            if st.button("Profile", use_container_width=True, key="learning_profile"):
-                go_to("profile")
-                st.rerun()
-
-        st.title("Learning Journey")
-
-        progress = calculate_progress()
-        st.progress(progress / 100)
-        st.write(f"Overall Progress: **{progress}%**")
-
-        st.write("---")
-
-        st.header("Stage 1: Railway System")
-
-        if not st.session_state.mandatory_completed:
-            st.info("This stage is locked. Complete Mandatory Trainings first.")
-        else:
-            st.write("""
-        This stage introduces the learner to:
-        - Railway ecosystem
-        - Rolling stock
-        - Infrastructure
-        - Power systems
-        - General railway understanding
-        """)
-
-            with st.expander("Open Stage 1 Content"):
-                st.write("Here you can later add:")
-                st.write("- Videos")
-                st.write("- PDF files")
-                st.write("- Technical articles")
-                st.write("- Introductory presentations")
-
-            if not st.session_state.stage1_completed:
-                st.subheader("Stage 1 Quiz")
-                q1 = st.radio(
-                    "What is the main purpose of railway signalling?",
-                    [
-                        "Entertainment",
-                        "Train safety and control",
-                        "Food service"
-                    ],
-                    key="q1"
-                )
-
-                if st.button("Submit Stage 1 Quiz", use_container_width=True, key="submit_stage1"):
-                    if q1 == "Train safety and control":
-                        st.session_state.stage1_completed = True
-                        save_progress()
-                        st.success("Stage 1 completed successfully!")
-                        st.rerun()
-                    else:
-                        st.error("Incorrect answer. Please try again.")
-            else:
-                st.success("Stage 1 completed ✅")
-
-        st.write("---")
-
-        st.header("Stage 2: Signalling & Hardware Fundamentals")
-
-        if not st.session_state.stage1_completed:
-            st.info("This stage is locked. Complete Stage 1 first.")
-        else:
-            st.write("""
-This stage introduces:
-- Signalling basics
-- Hardware concepts
-- Interfaces and system components
-- General hardware application principles
-""")
-
-            with st.expander("Open Stage 2 Content"):
-                st.write("Here you can later add:")
-                st.write("- Hardware training files")
-                st.write("- Fundamentals videos")
-                st.write("- Engineering articles")
-                st.write("- Department presentations")
-
-            if not st.session_state.stage2_completed:
-                st.subheader("Stage 2 Quiz")
-                q2 = st.radio(
-                    "What is the goal of hardware fundamentals training?",
-                    [
-                        "Understand technical system components",
-                        "Learn graphic design",
-                        "Manage cafeteria operations"
-                    ],
-                    key="q2"
-                )
-
-                if st.button("Submit Stage 2 Quiz", use_container_width=True, key="submit_stage2"):
-                    if q2 == "Understand technical system components":
-                        st.session_state.stage2_completed = True
-                        save_progress()
-                        st.success("Stage 2 completed successfully!")
-                        st.rerun()
-                    else:
-                        st.error("Incorrect answer. Please try again.")
-            else:
-                st.success("Stage 2 completed ✅")
-
-        st.write("---")
-
-        st.header("Stage 3: Choose Your Specialization")
-
-        if not st.session_state.stage2_completed:
-            st.info("This stage is locked. Complete Stage 2 first.")
-        else:
-            st.write("Select the technical path you want to explore:")
-
-            selected = st.selectbox(
-                "Choose your path",
-                ["", "Pedals", "OBC", "Cable Chassis", "HVITC"],
-                index=0,
-                key="specialization_select"
-            )
-
-            if st.button("Confirm Specialization", use_container_width=True, key="confirm_specialization"):
-                if selected:
-                    st.session_state.selected_path = selected
-                    save_progress()
-                    check_and_send_milestone_emails()
-                    st.success(f"Specialization selected: {selected}")
-                    st.rerun()
-                else:
-                    st.error("Please choose a specialization.")
-
-            if st.session_state.selected_path:
-                st.success(f"Selected Path: {st.session_state.selected_path} ✅")
-
-# ---------------------------------------------------
 # Profile Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "profile":
@@ -3412,3 +3278,142 @@ elif st.session_state.current_page == "profile":
             st.write(f"**Course {i}: {course['title']}** — {status}")
 
         st.markdown("</div>", unsafe_allow_html=True)
+
+# ---------------------------------------------------
+# Explore Page
+# ---------------------------------------------------
+elif st.session_state.current_page == "explore":
+    nav1, nav2, nav3 = st.columns([2.2, 3.6, 2.2])
+
+    with nav1:
+        try:
+            st.image("alstom_logo.png", width=180)
+            st.caption("Alstom Hardware & Installation Academy")
+        except:
+            st.markdown("## **ALSTOM**")
+            st.caption("Alstom Hardware & Installation Academy")
+
+    with nav2:
+        st.markdown(
+            """
+            <div class="nav-center">
+            Explore &nbsp;&nbsp;&nbsp; Learning Journey &nbsp;&nbsp;&nbsp; Specializations &nbsp;&nbsp;&nbsp; About
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    with nav3:
+        b1, b2 = st.columns(2)
+        with b1:
+            if st.button("Log in", use_container_width=True, key="explore_login"):
+                go_to("auth")
+                st.rerun()
+        with b2:
+            if st.button("Join Now", use_container_width=True, key="explore_join"):
+                go_to("auth")
+                st.rerun()
+
+    st.write("")
+
+    st.markdown("""
+    <div class="hero-box">
+        <div class="small-title">Platform Overview</div>
+        <div class="main-title">Explore the purpose and structure of Alstom Hardware & Installation Academy</div>
+        <div class="hero-text">
+            This platform is designed to support new engineers through a structured onboarding and learning experience,
+            combining mandatory trainings, technical foundations, specialization paths, and useful internal references.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="section-box">
+        <div class="section-title">What Is This Platform?</div>
+        <div class="section-text">
+            Alstom Hardware & Installation Academy is a guided learning platform created to help engineers move through
+            onboarding in a clearer, faster, and more structured way. Instead of depending on scattered resources, users
+            can follow a defined learning route and track their progress step by step.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown('<h2 style="color:#1F3552; font-weight:700;">What the Platform Includes</h2>', unsafe_allow_html=True)
+
+    c1, c2 = st.columns(2)
+
+    with c1:
+        st.markdown("""
+        <div class="white-box">
+            <div class="section-title">Core Onboarding Flow</div>
+            <div class="section-text">
+                • Mandatory Trainings<br>
+                • Stage 1: Railway System<br>
+                • Stage 2: Signalling & Hardware<br>
+                • Stage 3: Specialization
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with c2:
+        st.markdown("""
+        <div class="white-box">
+            <div class="section-title">Additional Support</div>
+            <div class="section-text">
+                • Progress tracking<br>
+                • Quiz-based validation<br>
+                • Internal tool references<br>
+                • Structured learning experience
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="section-box">
+        <div class="section-title">Who Is It For?</div>
+        <div class="section-text">
+            The platform is intended for new hardware and installation engineers who need a structured introduction to
+            Alstom-related technical learning areas, mandatory knowledge, and role-based specialization content.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="section-box">
+        <div class="section-title">Why It Matters</div>
+        <div class="section-text">
+            A structured platform helps new engineers build confidence faster, understand what they need to learn,
+            and progress through onboarding with greater clarity. It also supports consistency across teams and improves
+            the overall learning experience.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="hero-box" style="padding:30px 34px;">
+        <div class="section-title" style="color:white;">Ready to start exploring the platform?</div>
+        <div class="hero-text">
+            Continue to the platform to begin your learning journey, access training stages, and explore internal tools.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    btn_left, btn1, btn2, btn_right = st.columns([1.5, 1, 1, 1.5])
+
+    with btn1:
+        if st.button("Create Account", use_container_width=True, key="explore_create_account"):
+            go_to("auth")
+            st.rerun()
+
+    with btn2:
+        if st.button("Access Platform", use_container_width=True, key="explore_access_platform"):
+            go_to("auth")
+            st.rerun()
+
+    st.markdown("""
+    <hr style="margin-top:28px; margin-bottom:12px;">
+    <div class="footer-text">
+        <strong>Alstom Hardware & Installation Academy</strong><br>
+        Explore the platform structure, learning flow, and available training paths.
+    </div>
+    """, unsafe_allow_html=True)
