@@ -3138,7 +3138,7 @@ elif st.session_state.current_page == "alstom_tools":
             with col:
                 try:
                     tool_img = resize_and_crop_image(tool["image"], 320, 180)
-                    st.image(tool_img, use_container_width=True)
+                    img_left, img_center, img_right = st.columns([0.12, 0.76, 0.12])
                 except:
                     st.info(f"Add image: {tool['image']}")
 
