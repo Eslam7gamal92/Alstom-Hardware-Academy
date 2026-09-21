@@ -3145,7 +3145,7 @@ elif st.session_state.current_page == "alstom_tools":
                 st.markdown(f'<div class="mandatory-card-title">{tool["title"]}</div>', unsafe_allow_html=True)
                 st.markdown(
                     f'''
-                    <div class="mandatory-card-text" style="min-height: 45px;">
+                    <div class="mandatory-card-text" style="min-height: 50px;">
                         {tool["description"]}
                     </div>
                     ''',
