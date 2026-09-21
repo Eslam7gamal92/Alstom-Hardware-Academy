@@ -310,6 +310,31 @@ def is_training_fully_completed():
         and bool(st.session_state.selected_path)
     )
 
+def resize_and_crop_image(image_path, target_width=320, target_height=180):
+    img = Image.open(image_path)
+    width, height = img.size
+
+    target_ratio = target_width / target_height
+    image_ratio = width / height
+
+    if image_ratio > target_ratio:
+        # Image is wider than target → crop sides
+        new_height = target_height
+        new_width = int(new_height * image_ratio)
+    else:
+        # Image is taller than target → crop top/bottom
+        new_width = target_width
+        new_height = int(new_width / image_ratio)
+
+    img = img.resize((new_width, new_height))
+
+    left = (new_width - target_width) / 2
+    top = (new_height - target_height) / 2
+    right = left + target_width
+    bottom = top + target_height
+
+    img = img.crop((left, top, right, bottom))
+    return img
 
 MANDATORY_COURSES = [
     {
@@ -3112,7 +3137,7 @@ elif st.session_state.current_page == "alstom_tools":
         for col, tool in zip(cols, ALSTOM_TOOLS):
             with col:
                 try:
-                    tool_img = resize_image_to_height(tool["image"], 50)
+                    tool_img = resize_and_crop_image(tool["image"], 320, 180)
                     st.image(tool_img, use_container_width=True)
                 except:
                     st.info(f"Add image: {tool['image']}")
