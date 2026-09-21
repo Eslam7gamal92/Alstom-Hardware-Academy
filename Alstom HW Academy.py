@@ -3112,7 +3112,7 @@ elif st.session_state.current_page == "alstom_tools":
         for col, tool in zip(cols, ALSTOM_TOOLS):
             with col:
                 try:
-                    tool_img = resize_image_to_height(tool["image"], 180)
+                    tool_img = resize_image_to_height(tool["image"], 50)
                     st.image(tool_img, use_container_width=True)
                 except:
                     st.info(f"Add image: {tool['image']}")
