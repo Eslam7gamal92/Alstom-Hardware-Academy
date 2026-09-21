@@ -847,7 +847,14 @@ ALSTOM_TOOLS = [
         "image": "doc4a_tool.png",
         "tool_link": "https://alstomgroup.sharepoint.com/sites/DOC4A",
         "learning_link": "https://example.com/doc4a-learning"
-    }
+    },
+    {
+        "title": "PLM",
+        "description": "Access the PLM platform and related engineering resources.",
+        "image": "plm.jpg",
+        "tool_link": "https://plm.alstom.hub/enovia/common/emxNavigator.jsp",
+        "learning_link": "https://example.com/doc4a-learning"
+    },
 ]
 
 # ---------------------------------------------------
@@ -3123,70 +3130,72 @@ elif st.session_state.current_page == "alstom_tools":
         st.markdown('<h2 style="color:#1F3552; font-weight:700;">Available Tools</h2>', unsafe_allow_html=True)
         st.write("Discover useful internal platforms and their related learning materials.")
 
-        cols = st.columns(3)
+        for i in range(0, len(ALSTOM_TOOLS), 2):
+            cols = st.columns(2)
+            row_tools = ALSTOM_TOOLS[i:i+2]
 
-        for col, tool in zip(cols, ALSTOM_TOOLS):
-            with col:
-                try:
-                    tool_img = resize_and_crop_image(tool["image"], 320, 180)
-                    st.image(tool_img, use_container_width=True)
-                except:
-                    st.info(f"Add image: {tool['image']}")
+            for col, tool in zip(cols, row_tools):
+                with col:
+                    try:
+                        tool_img = resize_and_crop_image(tool["image"], 320, 180)
+                        st.image(tool_img, use_container_width=True)
+                    except:
+                        st.info(f"Add image: {tool['image']}")
 
-                st.markdown(f'<div class="mandatory-card-title">{tool["title"]}</div>', unsafe_allow_html=True)
-                st.markdown(
-                    f'''
-                    <div class="mandatory-card-text" style="min-height: 50px;">
-                        {tool["description"]}
-                    </div>
-                    ''',
-                    unsafe_allow_html=True
-                )
-
-                st.markdown(
-                    f"""
-                    <a href="{tool['tool_link']}" target="_blank" style="text-decoration:none;">
-                        <div style="
-                            background-color:#0B3D91;
-                            color:white;
-                            text-align:center;
-                            padding:12px 14px;
-                            border-radius:12px;
-                            font-weight:700;
-                            font-size:16px;
-                            margin-top:8px;
-                            margin-bottom:10px;
-                        ">
-                            Open Tool
+                    st.markdown(f'<div class="mandatory-card-title">{tool["title"]}</div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'''
+                        <div class="mandatory-card-text" style="min-height: 50px;">
+                            {tool["description"]}
                         </div>
-                    </a>
-                    """,
-                    unsafe_allow_html=True
-                )
+                        ''',
+                        unsafe_allow_html=True
+                    )
 
-                st.markdown(
-                    f"""
-                    <a href="{tool['learning_link']}" target="_blank" style="text-decoration:none;">
-                        <div style="
-                            background-color:#F3F4F6;
-                            color:#1F3552;
-                            text-align:center;
-                            padding:12px 14px;
-                            border-radius:12px;
-                            font-weight:700;
-                            font-size:16px;
-                            margin-top:6px;
-                            margin-bottom:10px;
-                            border:1px solid #D1D5DB;
-                        ">
-                            Open Learning Material
-                        </div>
-                    </a>
-                    """,
-                    unsafe_allow_html=True
-                )
+                    st.markdown(
+                        f"""
+                        <a href="{tool['tool_link']}" target="_blank" style="text-decoration:none;">
+                            <div style="
+                                background-color:#0B3D91;
+                                color:white;
+                                text-align:center;
+                                padding:12px 14px;
+                                border-radius:12px;
+                                font-weight:700;
+                                font-size:16px;
+                                margin-top:8px;
+                                margin-bottom:10px;
+                            ">
+                                Open Tool
+                            </div>
+                        </a>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
-                st.write("")
+                    st.markdown(
+                        f"""
+                        <a href="{tool['learning_link']}" target="_blank" style="text-decoration:none;">
+                            <div style="
+                                background-color:#F3F4F6;
+                                color:#1F3552;
+                                text-align:center;
+                                padding:12px 14px;
+                                border-radius:12px;
+                                font-weight:700;
+                                font-size:16px;
+                                margin-top:6px;
+                                margin-bottom:10px;
+                                border:1px solid #D1D5DB;
+                            ">
+                                Open Learning Material
+                            </div>
+                        </a>
+                        """,
+                        unsafe_allow_html=True
+                    )
+
+                    st.write("")
 
 # ---------------------------------------------------
 # Profile Page
@@ -3255,142 +3264,3 @@ elif st.session_state.current_page == "profile":
             st.write(f"**Course {i}: {course['title']}** — {status}")
 
         st.markdown("</div>", unsafe_allow_html=True)
-
-# ---------------------------------------------------
-# Explore Page
-# ---------------------------------------------------
-elif st.session_state.current_page == "explore":
-    nav1, nav2, nav3 = st.columns([2.2, 3.6, 2.2])
-
-    with nav1:
-        try:
-            st.image("alstom_logo.png", width=180)
-            st.caption("Alstom Hardware & Installation Academy")
-        except:
-            st.markdown("## **ALSTOM**")
-            st.caption("Alstom Hardware & Installation Academy")
-
-    with nav2:
-        st.markdown(
-            """
-            <div class="nav-center">
-            Explore &nbsp;&nbsp;&nbsp; Learning Journey &nbsp;&nbsp;&nbsp; Specializations &nbsp;&nbsp;&nbsp; About
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    with nav3:
-        b1, b2 = st.columns(2)
-        with b1:
-            if st.button("Log in", use_container_width=True, key="explore_login"):
-                go_to("auth")
-                st.rerun()
-        with b2:
-            if st.button("Join Now", use_container_width=True, key="explore_join"):
-                go_to("auth")
-                st.rerun()
-
-    st.write("")
-
-    st.markdown("""
-    <div class="hero-box">
-        <div class="small-title">Platform Overview</div>
-        <div class="main-title">Explore the purpose and structure of Alstom Hardware & Installation Academy</div>
-        <div class="hero-text">
-            This platform is designed to support new engineers through a structured onboarding and learning experience,
-            combining mandatory trainings, technical foundations, specialization paths, and useful internal references.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="section-box">
-        <div class="section-title">What Is This Platform?</div>
-        <div class="section-text">
-            Alstom Hardware & Installation Academy is a guided learning platform created to help engineers move through
-            onboarding in a clearer, faster, and more structured way. Instead of depending on scattered resources, users
-            can follow a defined learning route and track their progress step by step.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown('<h2 style="color:#1F3552; font-weight:700;">What the Platform Includes</h2>', unsafe_allow_html=True)
-
-    c1, c2 = st.columns(2)
-
-    with c1:
-        st.markdown("""
-        <div class="white-box">
-            <div class="section-title">Core Onboarding Flow</div>
-            <div class="section-text">
-                • Mandatory Trainings<br>
-                • Stage 1: Railway System<br>
-                • Stage 2: Signalling & Hardware<br>
-                • Stage 3: Specialization
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with c2:
-        st.markdown("""
-        <div class="white-box">
-            <div class="section-title">Additional Support</div>
-            <div class="section-text">
-                • Progress tracking<br>
-                • Quiz-based validation<br>
-                • Internal tool references<br>
-                • Structured learning experience
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="section-box">
-        <div class="section-title">Who Is It For?</div>
-        <div class="section-text">
-            The platform is intended for new hardware and installation engineers who need a structured introduction to
-            Alstom-related technical learning areas, mandatory knowledge, and role-based specialization content.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="section-box">
-        <div class="section-title">Why It Matters</div>
-        <div class="section-text">
-            A structured platform helps new engineers build confidence faster, understand what they need to learn,
-            and progress through onboarding with greater clarity. It also supports consistency across teams and improves
-            the overall learning experience.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="hero-box" style="padding:30px 34px;">
-        <div class="section-title" style="color:white;">Ready to start exploring the platform?</div>
-        <div class="hero-text">
-            Continue to the platform to begin your learning journey, access training stages, and explore internal tools.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    btn_left, btn1, btn2, btn_right = st.columns([1.5, 1, 1, 1.5])
-
-    with btn1:
-        if st.button("Create Account", use_container_width=True, key="explore_create_account"):
-            go_to("auth")
-            st.rerun()
-
-    with btn2:
-        if st.button("Access Platform", use_container_width=True, key="explore_access_platform"):
-            go_to("auth")
-            st.rerun()
-
-    st.markdown("""
-    <hr style="margin-top:28px; margin-bottom:12px;">
-    <div class="footer-text">
-        <strong>Alstom Hardware & Installation Academy</strong><br>
-        Explore the platform structure, learning flow, and available training paths.
-    </div>
-    """, unsafe_allow_html=True)
