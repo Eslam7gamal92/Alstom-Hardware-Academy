@@ -829,14 +829,14 @@ HVITC_QUIZ_QUESTIONS = [
 ALSTOM_TOOLS = [
     {
         "title": "Hydra",
-        "description": "An internal Alstom platform that can support engineering and project-related workflows.                  ",
+        "description": "An internal Alstom platform that can support engineering and project-related workflows.",
         "image": "hydra_tool.jpg",
         "tool_link": "https://hydra.bt.bombardier.net/hydra/Client/",
         "learning_link": "https://example.com/hydra-learning"
     },
     {
         "title": "Orchestra",
-        "description": "A useful internal platform that may help users navigate project and collaboration activities.           ",
+        "description": "A useful internal platform that may help users navigate project and collaboration activities.",
         "image": "orchestra_tool.png",
         "tool_link": "https://datamanagement.alstom.com/ebx-ui/ui/custom/Public_Master_Data/action/378",
         "learning_link": "https://alstomgroup.sharepoint.com/sites/My_Data_Journey/SitePages/Your-very-first-steps-in-Orchestra.aspx"
@@ -3143,7 +3143,14 @@ elif st.session_state.current_page == "alstom_tools":
                     st.info(f"Add image: {tool['image']}")
 
                 st.markdown(f'<div class="mandatory-card-title">{tool["title"]}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="mandatory-card-text">{tool["description"]}</div>', unsafe_allow_html=True)
+                st.markdown(
+                    f'''
+                    <div class="mandatory-card-text" style="min-height: 78px;">
+                        {tool["description"]}
+                    </div>
+                    ''',
+                    unsafe_allow_html=True
+                )
 
                 st.markdown(
                     f"""
