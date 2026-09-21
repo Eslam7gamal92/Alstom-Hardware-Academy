@@ -1177,7 +1177,7 @@ st.markdown("""
 # ---------------------------------------------------
 if st.session_state.current_page == "landing":
 
-    nav1, nav2, nav3 = st.columns([2.2, 3.6, 2.2])
+    nav1, nav2 = st.columns([1, 1])
 
     with nav1:
         try:
@@ -1188,29 +1188,6 @@ if st.session_state.current_page == "landing":
             st.caption("Alstom Hardware & Installation Academy")
 
     with nav2:
-        n1, n2, n3, n4 = st.columns(4)
-
-        with n1:
-            if st.button("Explore", use_container_width=True, key="nav_explore"):
-                go_to("explore")
-                st.rerun()
-
-        with n2:
-            if st.button("Learning Journey", use_container_width=True, key="nav_learning_journey"):
-                go_to("learning_journey_info")
-                st.rerun()
-
-        with n3:
-            if st.button("Specializations", use_container_width=True, key="nav_specializations"):
-                go_to("specializations_info")
-                st.rerun()
-
-        with n4:
-            if st.button("About", use_container_width=True, key="nav_about"):
-                go_to("about_info")
-                st.rerun()
-
-    with nav3:
         b1, b2 = st.columns(2)
         with b1:
             if st.button("Log in", use_container_width=True, key="landing_login"):
