@@ -3112,7 +3112,7 @@ elif st.session_state.current_page == "alstom_tools":
         for col, tool in zip(cols, ALSTOM_TOOLS):
             with col:
                 try:
-                    tool_img = resize_image_to_height(tool["image"], 220)
+                    tool_img = resize_image_to_height(tool["image"], 180)
                     st.image(tool_img, use_container_width=True)
                 except:
                     st.info(f"Add image: {tool['image']}")
@@ -3120,8 +3120,48 @@ elif st.session_state.current_page == "alstom_tools":
                 st.markdown(f'<div class="mandatory-card-title">{tool["title"]}</div>', unsafe_allow_html=True)
                 st.markdown(f'<div class="mandatory-card-text">{tool["description"]}</div>', unsafe_allow_html=True)
 
-                st.link_button("Open Tool", tool["tool_link"], use_container_width=True)
-                st.link_button("Open Learning Material", tool["learning_link"], use_container_width=True)
+                st.markdown(
+                    f"""
+                    <a href="{tool['tool_link']}" target="_blank" style="text-decoration:none;">
+                        <div style="
+                            background-color:#0B3D91;
+                            color:white;
+                            text-align:center;
+                            padding:12px 14px;
+                            border-radius:12px;
+                            font-weight:700;
+                            font-size:16px;
+                            margin-top:8px;
+                            margin-bottom:10px;
+                        ">
+                            Open Tool
+                        </div>
+                    </a>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+                st.markdown(
+                    f"""
+                    <a href="{tool['learning_link']}" target="_blank" style="text-decoration:none;">
+                        <div style="
+                            background-color:#F3F4F6;
+                            color:#1F3552;
+                            text-align:center;
+                            padding:12px 14px;
+                            border-radius:12px;
+                            font-weight:700;
+                            font-size:16px;
+                            margin-top:6px;
+                            margin-bottom:10px;
+                            border:1px solid #D1D5DB;
+                        ">
+                            Open Learning Material
+                        </div>
+                    </a>
+                    """,
+                    unsafe_allow_html=True
+                )
 
                 st.write("")
 
