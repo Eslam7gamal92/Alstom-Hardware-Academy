@@ -554,28 +554,25 @@ STAGE1_QUIZ_QUESTIONS = [
 
 STAGE2_ITEMS = [
     {
-        "key": "stage2_doc1_completed",
-        "title": "Stage 2 Document 1",
-        "type": "PowerPoint",
-        "duration": "Self-paced",
-        "description": "Study the first Stage 2 presentation before proceeding to the next item.",
-        "file": "stage2_document_1.pptx"
+        "title": "Railway Signalling Overview",
+        "type": "External Course",
+        "duration": "3 Hours",
+        "description": "This course introduces the basics of railway signalling, including how signalling works, the main challenges involved, and the core technologies used in railway signalling systems.",
+        "key": "stage2_doc1_completed"
     },
     {
-        "key": "stage2_doc2_completed",
-        "title": "Stage 2 Document 2",
-        "type": "PowerPoint",
-        "duration": "Self-paced",
-        "description": "Study the second Stage 2 presentation before proceeding to the quiz.",
-        "file": "stage2_document_2.pptx"
+        "title": "D&IS Technical Onboarding: Core Technology Introduction",
+        "type": "External Course",
+        "duration": "47 min",
+        "description": "This course provides an introduction to Core Technology within Alstom, including organization, ways of working, technology systems, governance, and the main platforms and products used in railway signalling.",
+        "key": "stage2_doc2_completed"
     },
     {
-        "key": "stage2_quiz_completed",
         "title": "Stage 2 Quiz",
-        "type": "Quiz",
-        "duration": "Short assessment",
-        "description": "Complete the quiz based on the Stage 2 materials.",
-        "file": ""
+        "type": "Assessment",
+        "duration": "10–15 min",
+        "description": "Complete the quiz after finishing both courses to validate your understanding and unlock the next stage.",
+        "key": "stage2_quiz_completed"
     }
 ]
 
@@ -2275,7 +2272,7 @@ elif st.session_state.current_page == "stage2":
         <div class="stage-page-hero">
             <div class="stage-page-hero-title">Stage 2: Signalling & Hardware</div>
             <div class="stage-page-hero-text">
-                Continue your journey by studying signalling and hardware fundamentals,
+                Continue your journey by exploring the recommended signalling and hardware learning resources,
                 then complete the assessment to unlock the final specialization stage.
             </div>
         </div>
@@ -2355,32 +2352,40 @@ elif st.session_state.current_page == "stage2":
                 st.write("")
 
                 # -------------------------
-                # Item 1: Document 1
+                # Item 1: Course 1
                 # -------------------------
                 if current_index == 0:
-                    try:
-                        with open(current_item["file"], "rb") as doc_file:
-                            st.download_button(
-                                label="Download Stage 2 Document 1",
-                                data=doc_file,
-                                file_name=current_item["file"],
-                                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
-                                use_container_width=True,
-                                key="stage2_download_doc1"
-                            )
-                    except Exception:
-                        st.error(f"File not found: {current_item['file']}")
+                    st.markdown(
+                        """
+                        <a href="https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/573#/" target="_blank" style="text-decoration:none;">
+                            <div style="
+                                background-color:#0B3D91;
+                                color:white;
+                                text-align:center;
+                                padding:12px 14px;
+                                border-radius:12px;
+                                font-weight:700;
+                                font-size:16px;
+                                margin-top:8px;
+                                margin-bottom:10px;
+                            ">
+                                Open Course
+                            </div>
+                        </a>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
                     st.write("")
 
                     if not st.session_state.stage2_doc1_completed:
-                        if st.button("Mark Document 1 as Completed ✅", use_container_width=True, key="stage2_doc1_complete"):
+                        if st.button("Mark Course 1 as Completed ✅", use_container_width=True, key="stage2_doc1_complete"):
                             st.session_state.stage2_doc1_completed = True
                             save_progress()
-                            st.success("Document 1 marked as completed.")
+                            st.success("Course 1 marked as completed.")
                             st.rerun()
                     else:
-                        st.success("Document 1 completed ✅")
+                        st.success("Course 1 completed ✅")
 
                     st.write("")
 
@@ -2391,32 +2396,40 @@ elif st.session_state.current_page == "stage2":
                             st.rerun()
 
                 # -------------------------
-                # Item 2: Document 2
+                # Item 2: Course 2
                 # -------------------------
                 elif current_index == 1:
-                    try:
-                        with open(current_item["file"], "rb") as doc_file:
-                            st.download_button(
-                                label="Download Stage 2 Document 2",
-                                data=doc_file,
-                                file_name=current_item["file"],
-                                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
-                                use_container_width=True,
-                                key="stage2_download_doc2"
-                            )
-                    except Exception:
-                        st.error(f"File not found: {current_item['file']}")
+                    st.markdown(
+                        """
+                        <a href="https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/10667#/" target="_blank" style="text-decoration:none;">
+                            <div style="
+                                background-color:#0B3D91;
+                                color:white;
+                                text-align:center;
+                                padding:12px 14px;
+                                border-radius:12px;
+                                font-weight:700;
+                                font-size:16px;
+                                margin-top:8px;
+                                margin-bottom:10px;
+                            ">
+                                Open Course
+                            </div>
+                        </a>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
                     st.write("")
 
                     if not st.session_state.stage2_doc2_completed:
-                        if st.button("Mark Document 2 as Completed ✅", use_container_width=True, key="stage2_doc2_complete"):
+                        if st.button("Mark Course 2 as Completed ✅", use_container_width=True, key="stage2_doc2_complete"):
                             st.session_state.stage2_doc2_completed = True
                             save_progress()
-                            st.success("Document 2 marked as completed.")
+                            st.success("Course 2 marked as completed.")
                             st.rerun()
                     else:
-                        st.success("Document 2 completed ✅")
+                        st.success("Course 2 completed ✅")
 
                     st.write("")
 
@@ -2437,7 +2450,7 @@ elif st.session_state.current_page == "stage2":
                 # -------------------------
                 elif current_index == 2:
                     if not st.session_state.stage2_doc1_completed or not st.session_state.stage2_doc2_completed:
-                        st.info("Please complete both documents first before attempting the quiz.")
+                        st.info("Please complete both courses first before attempting the quiz.")
                     else:
                         st.subheader("Stage 2 Quiz")
 
@@ -2462,7 +2475,6 @@ elif st.session_state.current_page == "stage2":
                         if st.button("Submit Quiz ✅", use_container_width=True, key="stage2_submit_quiz_page"):
                             correct_count = 0
 
-                            # save submitted answers snapshot
                             st.session_state.stage2_submitted_answers = user_answers.copy()
                             st.session_state.stage2_quiz_submitted = True
 
