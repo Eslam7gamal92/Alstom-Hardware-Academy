@@ -3131,14 +3131,15 @@ elif st.session_state.current_page == "alstom_tools":
         st.write("Discover useful internal platforms and their related learning materials.")
 
         for i in range(0, len(ALSTOM_TOOLS), 2):
-            cols = st.columns(2)
+            left_space, col1, col2, right_space = st.columns([0.3, 1, 1, 0.3])
+            cols = [col1, col2]
             row_tools = ALSTOM_TOOLS[i:i+2]
 
             for col, tool in zip(cols, row_tools):
                 with col:
                     try:
-                        tool_img = resize_and_crop_image(tool["image"], 320, 180)
-                        st.image(tool_img, use_container_width=True)
+                        tool_img = resize_and_crop_image(tool["image"], 260, 130)
+                        st.image(tool_img, width=260)
                     except:
                         st.info(f"Add image: {tool['image']}")
 
@@ -3159,10 +3160,10 @@ elif st.session_state.current_page == "alstom_tools":
                                 background-color:#0B3D91;
                                 color:white;
                                 text-align:center;
-                                padding:12px 14px;
+                                padding:10px 12px;
                                 border-radius:12px;
                                 font-weight:700;
-                                font-size:16px;
+                                font-size:14px;
                                 margin-top:8px;
                                 margin-bottom:10px;
                             ">
