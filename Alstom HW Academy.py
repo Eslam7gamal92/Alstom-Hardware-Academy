@@ -403,10 +403,6 @@ MANAGERS = [
         "name": "Ahmet KILICARSLAN",
         "email": "ahmet.kilicarslan@alstomgroup.com"
     },
-    {
-        "name": "Eslam Gamal",
-        "email": "eslam.gamal@alstomgroup.com"
-    },
 ]
 
 STAGE1_ITEMS = [
@@ -816,7 +812,7 @@ ALSTOM_TOOLS = [
     {
         "title": "Orchestra",
         "description": "A useful internal platform that may help users navigate project and collaboration activities.",
-        "image": "orchestra_tool.jpg",
+        "image": "orchestra_tool.png",
         "tool_link": "https://datamanagement.alstom.com/ebx-ui/ui/custom/Public_Master_Data/action/378",
         "learning_link": "https://alstomgroup.sharepoint.com/sites/My_Data_Journey/SitePages/Your-very-first-steps-in-Orchestra.aspx"
     },
