@@ -433,6 +433,7 @@ def is_training_fully_completed():
         and st.session_state.stage1_completed
         and st.session_state.stage2_completed
         and bool(st.session_state.selected_path)
+        and st.session_state.stage3_completed
     )
 
 def resize_and_crop_image(image_path, target_width=320, target_height=180):
@@ -553,10 +554,6 @@ MANAGERS = [
         "name": "Ahmet KILICARSLAN",
         "email": "ahmet.kilicarslan@alstomgroup.com"
     },
-    {
-        "name": "Eslam Gamal",
-        "email": "eslam.gamal@alstomgroup.com"
-    },
 ]
 
 STAGE1_ITEMS = [
@@ -566,7 +563,7 @@ STAGE1_ITEMS = [
         "type": "PDF",
         "duration": "Self-paced",
         "description": "Download and study the railway system document before proceeding to the quiz.",
-        "file": "stage1_railway_system.pdf"
+        "file_link": "https://alstomgroup-my.sharepoint.com/:b:/p/eslam_gamal/IQDb7WYfKAsgQLKymXxP4YWEAZRGG0gQzWBL9d29wHrTZRc?e=H6F0li"
     },
     {
         "key": "stage1_quiz_completed",
@@ -815,7 +812,7 @@ PEDAL_ITEMS = [
         "type": "PowerPoint",
         "duration": "Self-paced",
         "description": "Study the Pedal presentation before proceeding to the quiz.",
-        "file": "pedal_presentation.pptx"
+        "file_link": "https://alstomgroup-my.sharepoint.com/:p:/p/eslam_gamal/IQCpT7yy941tQJ0EqhfdOnIGAdrzRih8_ZW5_uMVh_1plEM?e=LFYDyx"
     },
     {
         "key": "pedal_quiz_completed",
@@ -887,7 +884,7 @@ HVITC_ITEMS = [
         "type": "PowerPoint",
         "duration": "Self-paced",
         "description": "Study the HVITC presentation before proceeding to the quiz.",
-        "file": "hvitc_presentation.pptx"
+        "file_link": "https://alstomgroup-my.sharepoint.com/:p:/p/eslam_gamal/IQCZScmP1oC1T6qF3QXmS0ETAX_9ixy4XLPOvcdrVCM4aPc?e=8FHrsb"
     },
     {
         "key": "hvitc_quiz_completed",
@@ -985,7 +982,7 @@ ALSTOM_TOOLS = [
         "title": "ALM4A",
         "description": "ALM4A is Alstom’s integrated engineering platform supporting traceability, collaboration, and workflow management across the full engineering lifecycle.",
         "image": "alm4a.png",
-        "tool_link": "",
+        "tool_link": "#",
         "learning_link_1": "https://alstomuniversity.eu.crossknowledge.com/site/path/62268?origin=sso#tab/path/activity/248902",
         "learning_label_1": "ALM4A Overview in DIS",
         "learning_link_2": "https://alstomgroup.sharepoint.com/sites/DIS_ALM4A_Community_Portal/SitePages/Trainings-EWM.aspx?csf=1&web=1&e=eheDHx",
@@ -2274,17 +2271,28 @@ elif st.session_state.current_page == "stage1":
                 # -------------------------
                 if current_index == 0:
                     try:
-                        with open(current_item["file"], "rb") as pdf_file:
-                            st.download_button(
-                                label="Download Railway System Document",
-                                data=pdf_file,
-                                file_name=current_item["file"],
-                                mime="application/pdf",
-                                use_container_width=True,
-                                key="stage1_download_pdf"
-                            )
+                        st.markdown(
+                            f"""
+                            <a href="{current_item['file_link']}" target="_blank" style="text-decoration:none;">
+                                <div style="
+                                    background-color:#0B3D91;
+                                    color:white;
+                                    text-align:center;
+                                    padding:12px 14px;
+                                    border-radius:12px;
+                                    font-weight:700;
+                                    font-size:16px;
+                                    margin-top:8px;
+                                    margin-bottom:10px;
+                                ">
+                                    Open Learning Material
+                                </div>
+                            </a>
+                            """,
+                            unsafe_allow_html=True
+                        )
                     except Exception:
-                        st.error(f"PDF file not found: {current_item['file']}")
+                        st.error("Learning material link not found.")
 
                     st.write("")
 
@@ -2850,15 +2858,26 @@ elif st.session_state.current_page == "stage3_pedal":
                 # -------------------------
                 if current_index == 0:
                     try:
-                        with open(current_item["file"], "rb") as doc_file:
-                            st.download_button(
-                                label="Download Pedal Presentation",
-                                data=doc_file,
-                                file_name=current_item["file"],
-                                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
-                                use_container_width=True,
-                                key="pedal_download_doc"
-                            )
+                        st.markdown(
+                            f"""
+                            <a href="{current_item['file_link']}" target="_blank" style="text-decoration:none;">
+                                <div style="
+                                    background-color:#0B3D91;
+                                    color:white;
+                                    text-align:center;
+                                    padding:12px 14px;
+                                    border-radius:12px;
+                                    font-weight:700;
+                                    font-size:16px;
+                                    margin-top:8px;
+                                    margin-bottom:10px;
+                                ">
+                                    Open Learning Material
+                                </div>
+                            </a>
+                            """,
+                            unsafe_allow_html=True
+                        )
                     except Exception:
                         st.error(f"File not found: {current_item['file']}")
 
@@ -3065,15 +3084,26 @@ elif st.session_state.current_page == "stage3_hvitc":
                 # -------------------------
                 if current_index == 0:
                     try:
-                        with open(current_item["file"], "rb") as doc_file:
-                            st.download_button(
-                                label="Download HVITC Presentation",
-                                data=doc_file,
-                                file_name=current_item["file"],
-                                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
-                                use_container_width=True,
-                                key="hvitc_download_doc"
-                            )
+                        st.markdown(
+                            f"""
+                            <a href="{current_item['file_link']}" target="_blank" style="text-decoration:none;">
+                                <div style="
+                                    background-color:#0B3D91;
+                                    color:white;
+                                    text-align:center;
+                                    padding:12px 14px;
+                                    border-radius:12px;
+                                    font-weight:700;
+                                    font-size:16px;
+                                    margin-top:8px;
+                                    margin-bottom:10px;
+                                ">
+                                    Open Learning Material
+                                </div>
+                            </a>
+                            """,
+                            unsafe_allow_html=True
+                        )
                     except Exception:
                         st.error(f"File not found: {current_item['file']}")
 
