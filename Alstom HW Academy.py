@@ -231,12 +231,7 @@ def get_progress_status_html(email_type="mandatory"):
     selected_path_display = selected_path if selected_path else "Not selected yet"
 
     if email_type == "mandatory":
-        mandatory_status = "✅ Completed"
-        stage1_status = "⏳ Pending"
-        stage2_status = "⏳ Pending"
-        stage3_status = "⏳ Pending"
-
-        return f"""
+        return """
         <table style="border-collapse:collapse; width:100%; max-width:650px; font-family:Arial, sans-serif; margin-top:16px; margin-bottom:16px;">
             <tr style="background-color:#0B3D91; color:white;">
                 <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Learning Step</th>
@@ -244,23 +239,7 @@ def get_progress_status_html(email_type="mandatory"):
             </tr>
             <tr>
                 <td style="padding:12px; border:1px solid #D1D5DB;">Mandatory Trainings</td>
-                <td style="padding:12px; border:1px solid #D1D5DB;">{mandatory_status}</td>
-            </tr>
-            <tr>
-                <td style="padding:12px; border:1px solid #D1D5DB;">Stage 1: Railway System</td>
-                <td style="padding:12px; border:1px solid #D1D5DB;">{stage1_status}</td>
-            </tr>
-            <tr>
-                <td style="padding:12px; border:1px solid #D1D5DB;">Stage 2: Signalling & Hardware</td>
-                <td style="padding:12px; border:1px solid #D1D5DB;">{stage2_status}</td>
-            </tr>
-            <tr>
-                <td style="padding:12px; border:1px solid #D1D5DB;">Chosen Specialization</td>
-                <td style="padding:12px; border:1px solid #D1D5DB;">{selected_path_display}</td>
-            </tr>
-            <tr>
-                <td style="padding:12px; border:1px solid #D1D5DB;">Stage 3: Specialization</td>
-                <td style="padding:12px; border:1px solid #D1D5DB;">{stage3_status}</td>
+                <td style="padding:12px; border:1px solid #D1D5DB;">✅ Completed</td>
             </tr>
         </table>
         """
@@ -337,15 +316,30 @@ def build_manager_progress_email(manager_name, user_name, completed_step_title, 
         </p>
         """
 
+    if email_type == "full":
+        completion_text = f"""
+        <p>
+            This is to inform you that <strong>{user_name}</strong> has successfully completed
+            <strong>Stage 3: Specialization and Training Journey Completed</strong> in the
+            <strong>Alstom Hardware & Installation Academy</strong>.
+        </p>
+        """
+        next_step_html = ""
+    else:
+        completion_text = f"""
+        <p>
+            This is to inform you that <strong>{user_name}</strong> has successfully completed
+            <strong>{completed_step_title}</strong> in the <strong>Alstom Hardware & Installation Academy</strong>.
+        </p>
+        """
+        next_step_html = f'<p><strong>Next Step:</strong> {next_step}</p>'
+
     return f"""
     <html>
     <body style="font-family:Arial, sans-serif; color:#1F2937; line-height:1.6;">
         <p>Hello {manager_name},</p>
 
-        <p>
-            This is to inform you that <strong>{user_name}</strong> has successfully completed
-            <strong>{completed_step_title}</strong> in the <strong>Alstom Hardware & Installation Academy</strong>.
-        </p>
+        {completion_text}
 
         {extra_note}
 
@@ -353,7 +347,7 @@ def build_manager_progress_email(manager_name, user_name, completed_step_title, 
 
         {progress_table}
 
-        <p><strong>Next Step:</strong> {next_step}</p>
+        {next_step_html}
 
         <p>Best regards,<br>
         Alstom Hardware & Installation Academy</p>
