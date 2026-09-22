@@ -226,45 +226,90 @@ def mark_email_flag_as_sent(user_id, flag_name):
         flag_name: True
     }).eq("user_id", user_id).execute()
 
-
-def get_progress_status_html():
-    mandatory_status = "✅ Completed" if st.session_state.get("mandatory_completed", False) else "⏳ Pending"
-    stage1_status = "✅ Completed" if st.session_state.get("stage1_completed", False) else "⏳ Pending"
-    stage2_status = "✅ Completed" if st.session_state.get("stage2_completed", False) else "⏳ Pending"
-    stage3_status = "✅ Completed" if st.session_state.get("stage3_completed", False) else "⏳ Pending"
-
+def get_progress_status_html(email_type="mandatory"):
     selected_path = st.session_state.get("selected_path", "")
     selected_path_display = selected_path if selected_path else "Not selected yet"
 
-    return f"""
-    <table style="border-collapse:collapse; width:100%; max-width:650px; font-family:Arial, sans-serif; margin-top:16px; margin-bottom:16px;">
-        <tr style="background-color:#0B3D91; color:white;">
-            <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Learning Step</th>
-            <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Status</th>
-        </tr>
-        <tr>
-            <td style="padding:12px; border:1px solid #D1D5DB;">Mandatory Trainings</td>
-            <td style="padding:12px; border:1px solid #D1D5DB;">{mandatory_status}</td>
-        </tr>
-        <tr>
-            <td style="padding:12px; border:1px solid #D1D5DB;">Stage 1: Railway System</td>
-            <td style="padding:12px; border:1px solid #D1D5DB;">{stage1_status}</td>
-        </tr>
-        <tr>
-            <td style="padding:12px; border:1px solid #D1D5DB;">Stage 2: Signalling & Hardware</td>
-            <td style="padding:12px; border:1px solid #D1D5DB;">{stage2_status}</td>
-        </tr>
-        <tr>
-            <td style="padding:12px; border:1px solid #D1D5DB;">Chosen Specialization</td>
-            <td style="padding:12px; border:1px solid #D1D5DB;">{selected_path_display}</td>
-        </tr>
-        <tr>
-            <td style="padding:12px; border:1px solid #D1D5DB;">Stage 3: Specialization</td>
-            <td style="padding:12px; border:1px solid #D1D5DB;">{stage3_status}</td>
-        </tr>
-    </table>
-    """
+    if email_type == "mandatory":
+        mandatory_status = "✅ Completed"
+        stage1_status = "⏳ Pending"
+        stage2_status = "⏳ Pending"
+        stage3_status = "⏳ Pending"
 
+        return f"""
+        <table style="border-collapse:collapse; width:100%; max-width:650px; font-family:Arial, sans-serif; margin-top:16px; margin-bottom:16px;">
+            <tr style="background-color:#0B3D91; color:white;">
+                <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Learning Step</th>
+                <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Status</th>
+            </tr>
+            <tr>
+                <td style="padding:12px; border:1px solid #D1D5DB;">Mandatory Trainings</td>
+                <td style="padding:12px; border:1px solid #D1D5DB;">{mandatory_status}</td>
+            </tr>
+            <tr>
+                <td style="padding:12px; border:1px solid #D1D5DB;">Stage 1: Railway System</td>
+                <td style="padding:12px; border:1px solid #D1D5DB;">{stage1_status}</td>
+            </tr>
+            <tr>
+                <td style="padding:12px; border:1px solid #D1D5DB;">Stage 2: Signalling & Hardware</td>
+                <td style="padding:12px; border:1px solid #D1D5DB;">{stage2_status}</td>
+            </tr>
+            <tr>
+                <td style="padding:12px; border:1px solid #D1D5DB;">Chosen Specialization</td>
+                <td style="padding:12px; border:1px solid #D1D5DB;">{selected_path_display}</td>
+            </tr>
+            <tr>
+                <td style="padding:12px; border:1px solid #D1D5DB;">Stage 3: Specialization</td>
+                <td style="padding:12px; border:1px solid #D1D5DB;">{stage3_status}</td>
+            </tr>
+        </table>
+        """
+
+    elif email_type == "stage1":
+        return """
+        <table style="border-collapse:collapse; width:100%; max-width:650px; font-family:Arial, sans-serif; margin-top:16px; margin-bottom:16px;">
+            <tr style="background-color:#0B3D91; color:white;">
+                <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Learning Step</th>
+                <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Status</th>
+            </tr>
+            <tr>
+                <td style="padding:12px; border:1px solid #D1D5DB;">Stage 1: Railway System</td>
+                <td style="padding:12px; border:1px solid #D1D5DB;">✅ Completed</td>
+            </tr>
+        </table>
+        """
+
+    elif email_type == "stage2":
+        return """
+        <table style="border-collapse:collapse; width:100%; max-width:650px; font-family:Arial, sans-serif; margin-top:16px; margin-bottom:16px;">
+            <tr style="background-color:#0B3D91; color:white;">
+                <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Learning Step</th>
+                <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Status</th>
+            </tr>
+            <tr>
+                <td style="padding:12px; border:1px solid #D1D5DB;">Stage 2: Signalling & Hardware</td>
+                <td style="padding:12px; border:1px solid #D1D5DB;">✅ Completed</td>
+            </tr>
+        </table>
+        """
+
+    elif email_type == "full":
+        return f"""
+        <table style="border-collapse:collapse; width:100%; max-width:650px; font-family:Arial, sans-serif; margin-top:16px; margin-bottom:16px;">
+            <tr style="background-color:#0B3D91; color:white;">
+                <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Learning Step</th>
+                <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Status</th>
+            </tr>
+            <tr>
+                <td style="padding:12px; border:1px solid #D1D5DB;">Stage 3: Specialization</td>
+                <td style="padding:12px; border:1px solid #D1D5DB;">✅ Completed</td>
+            </tr>
+            <tr>
+                <td style="padding:12px; border:1px solid #D1D5DB;">Chosen Specialization</td>
+                <td style="padding:12px; border:1px solid #D1D5DB;">{selected_path_display}</td>
+            </tr>
+        </table>
+        """
 
 def get_next_step():
     if not st.session_state.get("mandatory_completed", False):
@@ -280,10 +325,17 @@ def get_next_step():
     else:
         return "Training Journey Completed"
 
-
-def build_manager_progress_email(manager_name, user_name, completed_step_title):
-    progress_table = get_progress_status_html()
+def build_manager_progress_email(manager_name, user_name, completed_step_title, email_type="mandatory"):
+    progress_table = get_progress_status_html(email_type)
     next_step = get_next_step()
+
+    extra_note = ""
+    if email_type == "mandatory":
+        extra_note = """
+        <p>
+            This milestone includes the completion of the <strong>7 required mandatory courses</strong>.
+        </p>
+        """
 
     return f"""
     <html>
@@ -294,6 +346,8 @@ def build_manager_progress_email(manager_name, user_name, completed_step_title):
             This is to inform you that <strong>{user_name}</strong> has successfully completed
             <strong>{completed_step_title}</strong> in the <strong>Alstom Hardware & Installation Academy</strong>.
         </p>
+
+        {extra_note}
 
         <p>Please find below the current learning progress summary:</p>
 
@@ -306,7 +360,6 @@ def build_manager_progress_email(manager_name, user_name, completed_step_title):
     </body>
     </html>
     """
-
 
 def check_and_send_milestone_emails():
     user_id = st.session_state.user_id
@@ -334,7 +387,8 @@ def check_and_send_milestone_emails():
         body = build_manager_progress_email(
             manager_name=manager_name,
             user_name=user_name,
-            completed_step_title="Mandatory Trainings"
+            completed_step_title="Mandatory Trainings",
+            email_type="mandatory"
         )
         sent = send_email_to_manager(manager_email, subject, body, is_html=True)
         if sent:
@@ -346,7 +400,8 @@ def check_and_send_milestone_emails():
         body = build_manager_progress_email(
             manager_name=manager_name,
             user_name=user_name,
-            completed_step_title="Stage 1: Railway System"
+            completed_step_title="Stage 1: Railway System",
+            email_type="stage1"
         )
         sent = send_email_to_manager(manager_email, subject, body, is_html=True)
         if sent:
@@ -358,7 +413,8 @@ def check_and_send_milestone_emails():
         body = build_manager_progress_email(
             manager_name=manager_name,
             user_name=user_name,
-            completed_step_title="Stage 2: Signalling & Hardware"
+            completed_step_title="Stage 2: Signalling & Hardware",
+            email_type="stage2"
         )
         sent = send_email_to_manager(manager_email, subject, body, is_html=True)
         if sent:
@@ -370,7 +426,8 @@ def check_and_send_milestone_emails():
         body = build_manager_progress_email(
             manager_name=manager_name,
             user_name=user_name,
-            completed_step_title="the full training journey"
+            completed_step_title="Stage 3: Specialization",
+            email_type="full"
         )
         sent = send_email_to_manager(manager_email, subject, body, is_html=True)
         if sent:
