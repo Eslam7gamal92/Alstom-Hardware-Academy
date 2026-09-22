@@ -3156,15 +3156,12 @@ elif st.session_state.current_page == "alstom_tools":
         st.markdown('<h2 style="color:#1F3552; font-weight:700;">Available Tools</h2>', unsafe_allow_html=True)
         st.write("Discover useful internal platforms and their related learning materials.")
 
-
         for i in range(0, len(ALSTOM_TOOLS), 2):
             row_tools = ALSTOM_TOOLS[i:i+2]
-
 
             if len(row_tools) == 2:
                 left_space, col1, col2, right_space = st.columns([0.25, 1, 1, 0.25])
                 cols = [col1, col2]
-
             else:
                 left_space, center_col, right_space = st.columns([0.8, 1, 0.8])
                 cols = [center_col]
@@ -3179,7 +3176,11 @@ elif st.session_state.current_page == "alstom_tools":
                     except:
                         st.info(f"Add image: {tool['image']}")
 
-                    st.markdown(f'<div class="mandatory-card-title">{tool["title"]}</div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'<div class="mandatory-card-title">{tool["title"]}</div>',
+                        unsafe_allow_html=True
+                    )
+
                     st.markdown(
                         f'''
                         <div class="mandatory-card-text" style="min-height: 45px; margin-bottom: 6px;">
@@ -3189,48 +3190,29 @@ elif st.session_state.current_page == "alstom_tools":
                         unsafe_allow_html=True
                     )
 
-                    if tool.get("tool_link"):
-                        st.markdown(
-                            f"""
-                            <a href="{tool.get('tool_link', '#')}" target="_blank" style="text-decoration:none;">
-                                <div style="
-                                    background-color:#0B3D91;
-                                    color:white;
-                                    text-align:center;
-                                    padding:10px 12px;
-                                    border-radius:12px;
-                                    font-weight:700;
-                                    font-size:14px;
-                                    margin-top:6px;
-                                    margin-bottom:6px;
-                                ">
-                                    Open Tool
-                                </div>
-                            </a>
-                            """,
-                            unsafe_allow_html=True
-                        )
-                    else:
-                        st.markdown(
-                            """
+                    # Open Tool button for all tools
+                    st.markdown(
+                        f"""
+                        <a href="{tool.get('tool_link', '#')}" target="_blank" style="text-decoration:none;">
                             <div style="
-                                background-color:#9CA3AF;
+                                background-color:#0B3D91;
                                 color:white;
                                 text-align:center;
                                 padding:10px 12px;
                                 border-radius:12px;
                                 font-weight:700;
                                 font-size:14px;
-                                margin-top:8px;
-                                margin-bottom:8px;
-                                opacity:0.85;
+                                margin-top:6px;
+                                margin-bottom:6px;
                             ">
-                                Coming Soon
+                                Open Tool
                             </div>
-                            """,
-                            unsafe_allow_html=True
-                        )
+                        </a>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
+                    # If the tool has 2 learning links, show them side by side
                     if tool.get("learning_link_1") and tool.get("learning_link_2"):
                         learn_col1, learn_col2 = st.columns(2)
 
@@ -3282,10 +3264,11 @@ elif st.session_state.current_page == "alstom_tools":
                                 unsafe_allow_html=True
                             )
 
+                    # Standard single learning link
                     else:
                         st.markdown(
                             f"""
-                            <a href="{tool['learning_link']}" target="_blank" style="text-decoration:none;">
+                            <a href="{tool.get('learning_link', '#')}" target="_blank" style="text-decoration:none;">
                                 <div style="
                                     background-color:#F3F4F6;
                                     color:#1F3552;
