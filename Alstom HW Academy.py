@@ -428,6 +428,10 @@ MANAGERS = [
         "name": "Ahmet KILICARSLAN",
         "email": "ahmet.kilicarslan@alstomgroup.com"
     },
+    {
+        "name": "Eslam Gamal",
+        "email": "eslam.gamal@alstomgroup.com"
+    },
 ]
 
 STAGE1_ITEMS = [
@@ -3178,7 +3182,7 @@ elif st.session_state.current_page == "alstom_tools":
                     st.markdown(f'<div class="mandatory-card-title">{tool["title"]}</div>', unsafe_allow_html=True)
                     st.markdown(
                         f'''
-                        <div class="mandatory-card-text" style="min-height: 75px;">
+                        <div class="mandatory-card-text" style="min-height: 45px; margin-bottom: 6px;">
                             {tool["description"]}
                         </div>
                         ''',
@@ -3188,7 +3192,7 @@ elif st.session_state.current_page == "alstom_tools":
                     if tool.get("tool_link"):
                         st.markdown(
                             f"""
-                            <a href="{tool['tool_link']}" target="_blank" style="text-decoration:none;">
+                            <a href="{tool.get('tool_link', '#')}" target="_blank" style="text-decoration:none;">
                                 <div style="
                                     background-color:#0B3D91;
                                     color:white;
@@ -3197,8 +3201,8 @@ elif st.session_state.current_page == "alstom_tools":
                                     border-radius:12px;
                                     font-weight:700;
                                     font-size:14px;
-                                    margin-top:8px;
-                                    margin-bottom:8px;
+                                    margin-top:6px;
+                                    margin-bottom:6px;
                                 ">
                                     Open Tool
                                 </div>
