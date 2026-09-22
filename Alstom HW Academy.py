@@ -182,7 +182,7 @@ def save_progress():
         on_conflict="user_id"
     ).execute()
 
-def send_email_to_manager(manager_email, subject, body):
+def send_email_to_manager(manager_email, subject, body, is_html=False):
     sender_email = st.secrets["SENDER_EMAIL"]
     sender_password = st.secrets["SENDER_APP_PASSWORD"]
 
@@ -190,7 +190,9 @@ def send_email_to_manager(manager_email, subject, body):
     msg["From"] = sender_email
     msg["To"] = manager_email
     msg["Subject"] = subject
-    msg.attach(MIMEText(body, "plain"))
+
+    content_type = "html" if is_html else "plain"
+    msg.attach(MIMEText(body, content_type))
 
     try:
         with smtplib.SMTP("smtp.gmail.com", 587) as server:
@@ -201,6 +203,7 @@ def send_email_to_manager(manager_email, subject, body):
     except Exception as e:
         print("Email sending error:", e)
         return False
+
 
 def get_email_flags(user_id):
     result = supabase_admin.table("user_progress").select(
@@ -217,10 +220,93 @@ def get_email_flags(user_id):
         "full_completion_email_sent": False
     }
 
+
 def mark_email_flag_as_sent(user_id, flag_name):
     supabase_admin.table("user_progress").update({
         flag_name: True
     }).eq("user_id", user_id).execute()
+
+
+def get_progress_status_html():
+    mandatory_status = "✅ Completed" if st.session_state.get("mandatory_completed", False) else "⏳ Pending"
+    stage1_status = "✅ Completed" if st.session_state.get("stage1_completed", False) else "⏳ Pending"
+    stage2_status = "✅ Completed" if st.session_state.get("stage2_completed", False) else "⏳ Pending"
+    stage3_status = "✅ Completed" if st.session_state.get("stage3_completed", False) else "⏳ Pending"
+
+    selected_path = st.session_state.get("selected_path", "")
+    selected_path_display = selected_path if selected_path else "Not selected yet"
+
+    return f"""
+    <table style="border-collapse:collapse; width:100%; max-width:650px; font-family:Arial, sans-serif; margin-top:16px; margin-bottom:16px;">
+        <tr style="background-color:#0B3D91; color:white;">
+            <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Learning Step</th>
+            <th style="padding:12px; border:1px solid #D1D5DB; text-align:left;">Status</th>
+        </tr>
+        <tr>
+            <td style="padding:12px; border:1px solid #D1D5DB;">Mandatory Trainings</td>
+            <td style="padding:12px; border:1px solid #D1D5DB;">{mandatory_status}</td>
+        </tr>
+        <tr>
+            <td style="padding:12px; border:1px solid #D1D5DB;">Stage 1: Railway System</td>
+            <td style="padding:12px; border:1px solid #D1D5DB;">{stage1_status}</td>
+        </tr>
+        <tr>
+            <td style="padding:12px; border:1px solid #D1D5DB;">Stage 2: Signalling & Hardware</td>
+            <td style="padding:12px; border:1px solid #D1D5DB;">{stage2_status}</td>
+        </tr>
+        <tr>
+            <td style="padding:12px; border:1px solid #D1D5DB;">Chosen Specialization</td>
+            <td style="padding:12px; border:1px solid #D1D5DB;">{selected_path_display}</td>
+        </tr>
+        <tr>
+            <td style="padding:12px; border:1px solid #D1D5DB;">Stage 3: Specialization</td>
+            <td style="padding:12px; border:1px solid #D1D5DB;">{stage3_status}</td>
+        </tr>
+    </table>
+    """
+
+
+def get_next_step():
+    if not st.session_state.get("mandatory_completed", False):
+        return "Mandatory Trainings"
+    elif not st.session_state.get("stage1_completed", False):
+        return "Stage 1: Railway System"
+    elif not st.session_state.get("stage2_completed", False):
+        return "Stage 2: Signalling & Hardware"
+    elif not st.session_state.get("selected_path", ""):
+        return "Choose Specialization Path"
+    elif not st.session_state.get("stage3_completed", False):
+        return "Stage 3: Specialization"
+    else:
+        return "Training Journey Completed"
+
+
+def build_manager_progress_email(manager_name, user_name, completed_step_title):
+    progress_table = get_progress_status_html()
+    next_step = get_next_step()
+
+    return f"""
+    <html>
+    <body style="font-family:Arial, sans-serif; color:#1F2937; line-height:1.6;">
+        <p>Hello {manager_name},</p>
+
+        <p>
+            This is to inform you that <strong>{user_name}</strong> has successfully completed
+            <strong>{completed_step_title}</strong> in the <strong>Alstom Hardware & Installation Academy</strong>.
+        </p>
+
+        <p>Please find below the current learning progress summary:</p>
+
+        {progress_table}
+
+        <p><strong>Next Step:</strong> {next_step}</p>
+
+        <p>Best regards,<br>
+        Alstom Hardware & Installation Academy</p>
+    </body>
+    </html>
+    """
+
 
 def check_and_send_milestone_emails():
     user_id = st.session_state.user_id
@@ -244,61 +330,49 @@ def check_and_send_milestone_emails():
 
     # 1) Mandatory completed email
     if st.session_state.mandatory_completed and not email_flags.get("mandatory_email_sent", False):
-        subject = "Mandatory Trainings Completion Notification"
-        body = f"""
-Hello {manager_name},
-
-This is to inform you that {user_name} has successfully completed the Mandatory Trainings in the Alstom Hardware & Installation Academy journey.
-
-Best regards,
-Alstom Hardware & Installation Academy
-"""
-        sent = send_email_to_manager(manager_email, subject, body)
+        subject = "Learning Progress Update – Mandatory Trainings Completed"
+        body = build_manager_progress_email(
+            manager_name=manager_name,
+            user_name=user_name,
+            completed_step_title="Mandatory Trainings"
+        )
+        sent = send_email_to_manager(manager_email, subject, body, is_html=True)
         if sent:
             mark_email_flag_as_sent(user_id, "mandatory_email_sent")
 
     # 2) Stage 1 completed email
     if st.session_state.stage1_completed and not email_flags.get("stage1_email_sent", False):
-        subject = "Stage 1 Completion Notification"
-        body = f"""
-Hello {manager_name},
-
-This is to inform you that {user_name} has successfully completed Stage 1: Railway System in the Alstom Hardware & Installation Academy journey.
-
-Best regards,
-Alstom Hardware & Installation Academy
-"""
-        sent = send_email_to_manager(manager_email, subject, body)
+        subject = "Learning Progress Update – Stage 1 Completed"
+        body = build_manager_progress_email(
+            manager_name=manager_name,
+            user_name=user_name,
+            completed_step_title="Stage 1: Railway System"
+        )
+        sent = send_email_to_manager(manager_email, subject, body, is_html=True)
         if sent:
             mark_email_flag_as_sent(user_id, "stage1_email_sent")
 
     # 3) Stage 2 completed email
     if st.session_state.stage2_completed and not email_flags.get("stage2_email_sent", False):
-        subject = "Stage 2 Completion Notification"
-        body = f"""
-Hello {manager_name},
-
-This is to inform you that {user_name} has successfully completed Stage 2: Signalling & Hardware in the Alstom Hardware & Installation Academy journey.
-
-Best regards,
-Alstom Hardware & Installation Academy
-"""
-        sent = send_email_to_manager(manager_email, subject, body)
+        subject = "Learning Progress Update – Stage 2 Completed"
+        body = build_manager_progress_email(
+            manager_name=manager_name,
+            user_name=user_name,
+            completed_step_title="Stage 2: Signalling & Hardware"
+        )
+        sent = send_email_to_manager(manager_email, subject, body, is_html=True)
         if sent:
             mark_email_flag_as_sent(user_id, "stage2_email_sent")
 
     # 4) Full training completion email
     if is_training_fully_completed() and not email_flags.get("full_completion_email_sent", False):
-        subject = "Full Training Completion Notification"
-        body = f"""
-Hello {manager_name},
-
-This is to inform you that {user_name} has successfully completed the Alstom Hardware & Installation Academy training journey.
-
-Best regards,
-Alstom Hardware & Installation Academy
-"""
-        sent = send_email_to_manager(manager_email, subject, body)
+        subject = "Learning Progress Update – Full Training Journey Completed"
+        body = build_manager_progress_email(
+            manager_name=manager_name,
+            user_name=user_name,
+            completed_step_title="the full training journey"
+        )
+        sent = send_email_to_manager(manager_email, subject, body, is_html=True)
         if sent:
             mark_email_flag_as_sent(user_id, "full_completion_email_sent")
    
