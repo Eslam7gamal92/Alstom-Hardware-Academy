@@ -852,6 +852,16 @@ ALSTOM_TOOLS = [
         "tool_link": "https://plm.alstom.hub/enovia/common/emxNavigator.jsp",
         "learning_link": "https://example.com/doc4a-learning"
     },
+    {
+        "title": "ALM4A",
+        "description": "ALM4A is Alstom’s integrated engineering platform supporting traceability, collaboration, and workflow management across the full engineering lifecycle.",
+        "image": "alm4a.png",
+        "tool_link": "",
+        "learning_link_1": "https://alstomuniversity.eu.crossknowledge.com/site/path/62268?origin=sso#tab/path/activity/248902",
+        "learning_label_1": "ALM4A Overview in DIS",
+        "learning_link_2": "https://alstomgroup.sharepoint.com/sites/DIS_ALM4A_Community_Portal/SitePages/Trainings-EWM.aspx?csf=1&web=1&e=eheDHx",
+        "learning_label_2": "EWM Trainings"
+    },
 ]
 
 # ---------------------------------------------------
@@ -3142,17 +3152,25 @@ elif st.session_state.current_page == "alstom_tools":
         st.markdown('<h2 style="color:#1F3552; font-weight:700;">Available Tools</h2>', unsafe_allow_html=True)
         st.write("Discover useful internal platforms and their related learning materials.")
 
+
         for i in range(0, len(ALSTOM_TOOLS), 2):
-            left_space, col1, col2, right_space = st.columns([0.3, 1, 1, 0.3])
-            cols = [col1, col2]
             row_tools = ALSTOM_TOOLS[i:i+2]
+
+
+            if len(row_tools) == 2:
+                left_space, col1, col2, right_space = st.columns([0.25, 1, 1, 0.25])
+                cols = [col1, col2]
+
+            else:
+                left_space, center_col, right_space = st.columns([0.8, 1, 0.8])
+                cols = [center_col]
 
             for col, tool in zip(cols, row_tools):
                 with col:
                     try:
                         img_left, img_center, img_right = st.columns([1, 2, 1])
                         with img_center:
-                            tool_img = resize_and_crop_image(tool["image"], 260, 170)
+                            tool_img = resize_and_crop_image(tool["image"], 260, 160)
                             st.image(tool_img, width=260)
                     except:
                         st.info(f"Add image: {tool['image']}")
@@ -3160,18 +3178,39 @@ elif st.session_state.current_page == "alstom_tools":
                     st.markdown(f'<div class="mandatory-card-title">{tool["title"]}</div>', unsafe_allow_html=True)
                     st.markdown(
                         f'''
-                        <div class="mandatory-card-text" style="min-height: 50px;">
+                        <div class="mandatory-card-text" style="min-height: 75px;">
                             {tool["description"]}
                         </div>
                         ''',
                         unsafe_allow_html=True
                     )
 
-                    st.markdown(
-                        f"""
-                        <a href="{tool['tool_link']}" target="_blank" style="text-decoration:none;">
+                    if tool.get("tool_link"):
+                        st.markdown(
+                            f"""
+                            <a href="{tool['tool_link']}" target="_blank" style="text-decoration:none;">
+                                <div style="
+                                    background-color:#0B3D91;
+                                    color:white;
+                                    text-align:center;
+                                    padding:10px 12px;
+                                    border-radius:12px;
+                                    font-weight:700;
+                                    font-size:14px;
+                                    margin-top:8px;
+                                    margin-bottom:8px;
+                                ">
+                                    Open Tool
+                                </div>
+                            </a>
+                            """,
+                            unsafe_allow_html=True
+                        )
+                    else:
+                        st.markdown(
+                            """
                             <div style="
-                                background-color:#0B3D91;
+                                background-color:#9CA3AF;
                                 color:white;
                                 text-align:center;
                                 padding:10px 12px;
@@ -3179,36 +3218,88 @@ elif st.session_state.current_page == "alstom_tools":
                                 font-weight:700;
                                 font-size:14px;
                                 margin-top:8px;
-                                margin-bottom:10px;
+                                margin-bottom:8px;
+                                opacity:0.85;
                             ">
-                                Open Tool
+                                Coming Soon
                             </div>
-                        </a>
-                        """,
-                        unsafe_allow_html=True
-                    )
+                            """,
+                            unsafe_allow_html=True
+                        )
 
-                    st.markdown(
-                        f"""
-                        <a href="{tool['learning_link']}" target="_blank" style="text-decoration:none;">
-                            <div style="
-                                background-color:#F3F4F6;
-                                color:#1F3552;
-                                text-align:center;
-                                padding:12px 14px;
-                                border-radius:12px;
-                                font-weight:700;
-                                font-size:16px;
-                                margin-top:6px;
-                                margin-bottom:10px;
-                                border:1px solid #D1D5DB;
-                            ">
-                                Open Learning Material
-                            </div>
-                        </a>
-                        """,
-                        unsafe_allow_html=True
-                    )
+                    if tool.get("learning_link_1") and tool.get("learning_link_2"):
+                        learn_col1, learn_col2 = st.columns(2)
+
+                        with learn_col1:
+                            st.markdown(
+                                f"""
+                                <a href="{tool['learning_link_1']}" target="_blank" style="text-decoration:none;">
+                                    <div style="
+                                        background-color:#F3F4F6;
+                                        color:#1F3552;
+                                        text-align:center;
+                                        padding:10px 8px;
+                                        border-radius:12px;
+                                        font-weight:700;
+                                        font-size:13px;
+                                        margin-top:4px;
+                                        margin-bottom:10px;
+                                        border:1px solid #D1D5DB;
+                                        min-height:42px;
+                                    ">
+                                        {tool['learning_label_1']}
+                                    </div>
+                                </a>
+                                """,
+                                unsafe_allow_html=True
+                            )
+
+                        with learn_col2:
+                            st.markdown(
+                                f"""
+                                <a href="{tool['learning_link_2']}" target="_blank" style="text-decoration:none;">
+                                    <div style="
+                                        background-color:#F3F4F6;
+                                        color:#1F3552;
+                                        text-align:center;
+                                        padding:10px 8px;
+                                        border-radius:12px;
+                                        font-weight:700;
+                                        font-size:13px;
+                                        margin-top:4px;
+                                        margin-bottom:10px;
+                                        border:1px solid #D1D5DB;
+                                        min-height:42px;
+                                    ">
+                                        {tool['learning_label_2']}
+                                    </div>
+                                </a>
+                                """,
+                                unsafe_allow_html=True
+                            )
+
+                    else:
+                        st.markdown(
+                            f"""
+                            <a href="{tool['learning_link']}" target="_blank" style="text-decoration:none;">
+                                <div style="
+                                    background-color:#F3F4F6;
+                                    color:#1F3552;
+                                    text-align:center;
+                                    padding:10px 12px;
+                                    border-radius:12px;
+                                    font-weight:700;
+                                    font-size:14px;
+                                    margin-top:4px;
+                                    margin-bottom:10px;
+                                    border:1px solid #D1D5DB;
+                                ">
+                                    Open Learning Material
+                                </div>
+                            </a>
+                            """,
+                            unsafe_allow_html=True
+                        )
 
                     st.write("")
 
