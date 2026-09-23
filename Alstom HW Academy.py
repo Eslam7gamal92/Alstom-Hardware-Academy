@@ -708,104 +708,64 @@ STAGE2_ITEMS = [
 
 STAGE2_QUIZ_QUESTIONS = [
     {
-        "question": "What is the main function of the BSI004 board?",
+        "question": "What is the main purpose of the Railway Signalling Overview course?",
         "options": [
-            "Power conversion",
-            "Fuse protection",
-            "Surge protection for detector cables",
-            "Train speed monitoring"
+            "To explain train mechanical design",
+            "To introduce the basics of railway signalling",
+            "To teach project management methods",
+            "To focus only on rolling stock maintenance"
         ],
-        "answer": "Surge protection for detector cables"
+        "answer": "To introduce the basics of railway signalling"
     },
     {
-        "question": "What does HVITC stand for?",
+        "question": "According to the Railway Signalling Overview course, which of the following is one of the key learning outcomes?",
         "options": [
-            "High Voltage Integrated Track Controller",
-            "High Voltage Impulse Track Circuit",
-            "High Velocity Impulse Track Circuit",
-            "High Voltage Interlocking Track Circuit"
+            "Understanding how railway signalling works",
+            "Learning how to manufacture rails",
+            "Understanding train interior design",
+            "Learning financial reporting methods"
         ],
-        "answer": "High Voltage Impulse Track Circuit"
+        "answer": "Understanding how railway signalling works"
     },
     {
-        "question": "Which IMC063 configuration uses the Negative Detection Philosophy?",
+        "question": "Which topic is included in the Railway Signalling Overview course?",
         "options": [
-            "DA/EP",
-            "AxF/PA",
-            "CCM-E",
-            "SIC999"
+            "Railway signalling challenges",
+            "Passenger ticket pricing",
+            "Train catering systems",
+            "Station retail operations"
         ],
-        "answer": "AxF/PA"
+        "answer": "Railway signalling challenges"
     },
     {
-        "question": "Which HVITC component generates high-voltage impulses and injects them into the rails?",
+        "question": "What is one of the objectives of the D&IS Technical Onboarding: Core Technology Introduction course?",
         "options": [
-            "RUTA",
-            "Impedance Bond",
-            "EMZ",
-            "CCM-E"
+            "Understand the role of Core Technology within Alstom",
+            "Learn how to drive trains manually",
+            "Study civil engineering calculations only",
+            "Prepare customer invoices"
         ],
-        "answer": "EMZ"
+        "answer": "Understand the role of Core Technology within Alstom"
     },
     {
-        "question": "Which cable type provides the 24VDC supply from SIC999 to IMC063?",
+        "question": "Which of the following topics is covered in the Core Technology Introduction course?",
         "options": [
-            "MAN0125300",
-            "MAN0125600",
-            "MAN0125700",
-            "MAN0125800"
+            "Core Technology organization and governance",
+            "Restaurant management in railway stations",
+            "Track painting procedures",
+            "Passenger complaint handling"
         ],
-        "answer": "MAN0125700"
+        "answer": "Core Technology organization and governance"
     },
     {
-        "question": "The HVITC receiver (RUTA) checks:",
+        "question": "According to the Core Technology Introduction course, learners should be able to know:",
         "options": [
-            "Pulse polarity, energy, and frequency",
-            "Axle count only",
-            "Train speed only",
-            "Signal lamp status"
+            "The major platforms/products in use and being developed",
+            "How to operate station elevators",
+            "The salary structure of all employees",
+            "How to manufacture train seats"
         ],
-        "answer": "Pulse polarity, energy, and frequency"
-    },
-    {
-        "question": "In the Pedal Cabinet layout, the BSI004 cards are installed at:",
-        "options": [
-            "+F2",
-            "+F7",
-            "+F9",
-            "+F13"
-        ],
-        "answer": "+F13"
-    },
-    {
-        "question": "What happens if an HVITC signal disappears or becomes distorted?",
-        "options": [
-            "The transmitter resets automatically",
-            "The track relay drops",
-            "The receiver increases sensitivity",
-            "Nothing changes"
-        ],
-        "answer": "The track relay drops"
-    },
-    {
-        "question": "How many IMC063 cards can one SIC Board protect?",
-        "options": [
-            "4",
-            "6",
-            "8",
-            "10"
-        ],
-        "answer": "6"
-    },
-    {
-        "question": "What is the maximum distance between the transmitter and the Impedance Bond when transmission and reception use different cables?",
-        "options": [
-            "1000 m",
-            "1500 m",
-            "2000 m",
-            "2500 m"
-        ],
-        "answer": "2000 m"
+        "answer": "The major platforms/products in use and being developed"
     }
 ]
 
@@ -2367,7 +2327,8 @@ elif st.session_state.current_page == "stage1":
                                     correct_count += 1
 
                             total_questions = len(STAGE1_QUIZ_QUESTIONS)
-                            required_score = int(total_questions * 0.8)
+                            import math
+                            required_score = math.ceil(total_questions * 0.8)
 
                             st.session_state.stage1_quiz_score = correct_count
 
@@ -2384,7 +2345,8 @@ elif st.session_state.current_page == "stage1":
 
                         if st.session_state.stage1_quiz_submitted:
                             total_questions = len(STAGE1_QUIZ_QUESTIONS)
-                            required_score = int(total_questions * 0.8)
+                            import math
+                            required_score = math.ceil(total_questions * 0.8)
 
                             st.write(f"Your score: **{st.session_state.stage1_quiz_score}/{total_questions}**")
 
@@ -2644,7 +2606,8 @@ elif st.session_state.current_page == "stage2":
                                     correct_count += 1
 
                             total_questions = len(STAGE2_QUIZ_QUESTIONS)
-                            required_score = int(total_questions * 0.8)
+                            import math
+                            required_score = math.ceil(total_questions * 0.8)
 
                             st.session_state.stage2_quiz_score = correct_count
 
@@ -2661,7 +2624,8 @@ elif st.session_state.current_page == "stage2":
 
                         if st.session_state.stage2_quiz_submitted:
                             total_questions = len(STAGE2_QUIZ_QUESTIONS)
-                            required_score = int(total_questions * 0.8)
+                            import math
+                            required_score = math.ceil(total_questions * 0.8)
 
                             st.write(f"Your score: **{st.session_state.stage2_quiz_score}/{total_questions}**")
 
@@ -2953,7 +2917,8 @@ elif st.session_state.current_page == "stage3_pedal":
                                     correct_count += 1
 
                             total_questions = len(PEDAL_QUIZ_QUESTIONS)
-                            required_score = int(total_questions * 0.8)
+                            import math
+                            required_score = math.ceil(total_questions * 0.8)
 
                             st.session_state.pedal_quiz_score = correct_count
 
@@ -2970,7 +2935,8 @@ elif st.session_state.current_page == "stage3_pedal":
 
                         if st.session_state.pedal_quiz_submitted:
                             total_questions = len(PEDAL_QUIZ_QUESTIONS)
-                            required_score = int(total_questions * 0.8)
+                            import math
+                            required_score = math.ceil(total_questions * 0.8)
 
                             st.write(f"Your score: **{st.session_state.pedal_quiz_score}/{total_questions}**")
 
@@ -3179,7 +3145,8 @@ elif st.session_state.current_page == "stage3_hvitc":
                                     correct_count += 1
 
                             total_questions = len(HVITC_QUIZ_QUESTIONS)
-                            required_score = int(total_questions * 0.8)
+                            import math
+                            required_score = math.ceil(total_questions * 0.8)
 
                             st.session_state.hvitc_quiz_score = correct_count
 
@@ -3196,7 +3163,8 @@ elif st.session_state.current_page == "stage3_hvitc":
 
                         if st.session_state.hvitc_quiz_submitted:
                             total_questions = len(HVITC_QUIZ_QUESTIONS)
-                            required_score = int(total_questions * 0.8)
+                            import math
+                            required_score = math.ceil(total_questions * 0.8)
 
                             st.write(f"Your score: **{st.session_state.hvitc_quiz_score}/{total_questions}**")
 
