@@ -518,7 +518,17 @@ MANDATORY_COURSES = [
         "link": "https://alstomuniversity.eu.crossknowledge.com/site/path/52725?origin=lc_widget#tab/path/activity/216440",
         "image": "mandatory_7.jpg",
         "description": "Provide a general understanding of what constitutes a dawn raid and the right response."
-    }
+    },
+    {
+        "title": "DOORS 9",
+        "description": "DOORS 9 is a requirements management tool used to create, organize, and track project requirements.",
+        "image": "doors9.jpg",
+        "tool_link": "#",
+        "learning_link_1": "https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/1002#/",
+        "learning_label_1": "Introduction to DOORS 9 Requirements Software",
+        "learning_link_2": "https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/919#/",
+        "learning_label_2": "RM D&IS Methodology (DOORS)"
+    },
 ]
 
 MANAGERS = [
