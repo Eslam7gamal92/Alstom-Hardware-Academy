@@ -3359,10 +3359,31 @@ elif st.session_state.current_page == "alstom_tools":
                         unsafe_allow_html=True
                     )
 
-                    # Open Tool button for all tools
-                    st.markdown(
-                        f"""
-                        <a href="{tool.get('tool_link', '#')}" target="_blank" style="text-decoration:none;">
+                    # Open Tool button
+                    if tool.get("tool_link") and tool.get("tool_link") != "#":
+                        st.markdown(
+                            f"""
+                            <a href="{tool.get('tool_link')}" target="_blank" style="text-decoration:none;">
+                                <div style="
+                                    background-color:#0B3D91;
+                                    color:white;
+                                    text-align:center;
+                                    padding:10px 12px;
+                                    border-radius:12px;
+                                    font-weight:700;
+                                    font-size:14px;
+                                    margin-top:6px;
+                                    margin-bottom:6px;
+                                ">
+                                    Open Tool
+                                </div>
+                            </a>
+                            """,
+                            unsafe_allow_html=True
+                        )
+                    else:
+                        st.markdown(
+                            """
                             <div style="
                                 background-color:#0B3D91;
                                 color:white;
@@ -3373,13 +3394,15 @@ elif st.session_state.current_page == "alstom_tools":
                                 font-size:14px;
                                 margin-top:6px;
                                 margin-bottom:6px;
+                                opacity:0.55;
+                                cursor:not-allowed;
+                                pointer-events:none;
                             ">
                                 Open Tool
                             </div>
-                        </a>
-                        """,
-                        unsafe_allow_html=True
-                    )
+                            """,
+                            unsafe_allow_html=True
+                        )
 
                     # If the tool has 2 learning links, show them side by side
                     if tool.get("learning_link_1") and tool.get("learning_link_2"):
