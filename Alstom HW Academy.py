@@ -42,8 +42,11 @@ defaults = {
     "stage1_quiz_completed": False,
     "stage1_current_item": 0,
     "stage1_completed": False,
-    "stage2_doc1_completed": False,
-    "stage2_doc2_completed": False,
+    "stage2_video1_completed": False,
+    "stage2_video2_completed": False,
+    "stage2_video3_completed": False,
+    "stage2_video4_completed": False,
+    "stage2_video5_completed": False,
     "stage2_quiz_submitted": False,
     "stage2_submitted_answers": [],
     "stage2_quiz_score": 0,
@@ -100,8 +103,11 @@ def logout():
     st.session_state.stage1_submitted_answers = []
     st.session_state.stage1_current_item = 0
     st.session_state.stage1_completed = False
-    st.session_state.stage2_doc1_completed = False
-    st.session_state.stage2_doc2_completed = False
+    st.session_state.stage2_video1_completed = False
+    st.session_state.stage2_video2_completed = False
+    st.session_state.stage2_video3_completed = False
+    st.session_state.stage2_video4_completed = False
+    st.session_state.stage2_video5_completed = False
     st.session_state.stage2_quiz_submitted = False
     st.session_state.stage2_submitted_answers = []
     st.session_state.stage2_quiz_score = 0
@@ -173,8 +179,11 @@ def save_progress():
             "stage1_doc_completed": st.session_state.stage1_doc_completed,
             "stage1_quiz_completed": st.session_state.stage1_quiz_completed,
             "stage1_completed": st.session_state.stage1_completed,
-            "stage2_doc1_completed": st.session_state.stage2_doc1_completed,
-            "stage2_doc2_completed": st.session_state.stage2_doc2_completed,
+            "stage2_video1_completed": st.session_state.stage2_video1_completed,
+            "stage2_video2_completed": st.session_state.stage2_video2_completed,
+            "stage2_video3_completed": st.session_state.stage2_video3_completed,
+            "stage2_video4_completed": st.session_state.stage2_video4_completed,
+            "stage2_video5_completed": st.session_state.stage2_video5_completed,
             "stage2_quiz_completed": st.session_state.stage2_quiz_completed,
             "stage2_completed": st.session_state.stage2_completed,
             "selected_path": st.session_state.selected_path,
@@ -571,7 +580,7 @@ STAGE1_ITEMS = [
         "key": "stage1_video1_completed",
         "title": "Rolling Stock Technologies",
         "type": "Video Course",
-        "duration": "Self-paced",
+        "duration": "2 Hours",
         "description": "Learn the fundamentals of rolling stock technologies, components, and common vocabulary used in the rolling stock context.",
         "file_link": "https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/1075#/"
     },
@@ -579,7 +588,7 @@ STAGE1_ITEMS = [
         "key": "stage1_video2_completed",
         "title": "D&IS Onboarding – Infrastructure awareness",
         "type": "Video Course",
-        "duration": "Self-paced",
+        "duration": "35 Minutes",
         "description": "Get an overview of Infrastructure within Alstom, including Feeding Systems, Power Supply Systems, Track-works, and infrastructure solutions.",
         "file_link": "https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/9738#/"
     },
@@ -707,87 +716,153 @@ STAGE1_QUIZ_QUESTIONS = [
 STAGE2_ITEMS = [
     {
         "title": "Railway Signalling Overview",
-        "type": "External Course",
+        "type": "Video Course",
         "duration": "3 Hours",
         "description": "This course introduces the basics of railway signalling, including how signalling works, the main challenges involved, and the core technologies used in railway signalling systems.",
-        "key": "stage2_doc1_completed"
+        "key": "stage2_video1_completed",
+        "file_link": "https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/573#/"
+    },
+    {
+        "title": "D&IS Tech. Onboarding - Mainline Signalling",
+        "type": "Video Course",
+        "duration": "54 Minutes",
+        "description": "Learn the fundamentals of Mainline Signalling, Alstom Mainline solutions portfolio, market evolution, project examples, and available learning resources.",
+        "key": "stage2_video2_completed",
+        "file_link": "https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/9502#/"
+    },
+    {
+        "title": "Urban Signalling Awareness E-learning",
+        "type": "Video Course",
+        "duration": "50 Minutes",
+        "description": "Understand Urban Signalling within Alstom, including CBTC, Control Center, portfolio, references, footprint, and urban market dynamics.",
+        "key": "stage2_video3_completed",
+        "file_link": "https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/8956#/"
+    },
+    {
+        "title": "Hardware discipline awareness",
+        "type": "Video Course",
+        "duration": "15 Minutes",
+        "description": "Get an overview of the Hardware Discipline process in D&IS, including objective, scope, focus areas, and high-level process understanding.",
+        "key": "stage2_video4_completed",
+        "file_link": "https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/7943#/"
     },
     {
         "title": "D&IS Technical Onboarding: Core Technology Introduction",
-        "type": "External Course",
+        "type": "Video Course",
         "duration": "47 min",
-        "description": "This course provides an introduction to Core Technology within Alstom, including organization, ways of working, technology systems, governance, and the main platforms and products used in railway signalling.",
-        "key": "stage2_doc2_completed"
+        "description": "This course provides an introduction to Core Technology within Alstom, including organization, technologies, governance, and major platforms and products.",
+        "key": "stage2_video5_completed",
+        "file_link": "https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/10667#/"
     },
     {
         "title": "Stage 2 Quiz",
         "type": "Assessment",
         "duration": "10–15 min",
-        "description": "Complete the quiz after finishing both courses to validate your understanding and unlock the next stage.",
+        "description": "Complete the quiz after finishing all Stage 2 learning materials to validate your understanding and unlock the next stage.",
         "key": "stage2_quiz_completed"
     }
 ]
 
 STAGE2_QUIZ_QUESTIONS = [
     {
-        "question": "What is the main purpose of the Railway Signalling Overview course?",
+        "question": "What is the main purpose of railway signalling?",
         "options": [
-            "To explain train mechanical design",
-            "To introduce the basics of railway signalling",
-            "To teach project management methods",
-            "To focus only on rolling stock maintenance"
+            "To improve train seat comfort",
+            "To ensure the safe and efficient movement of trains",
+            "To reduce ticket prices",
+            "To manage station cleaning schedules"
         ],
-        "answer": "To introduce the basics of railway signalling"
+        "answer": "To ensure the safe and efficient movement of trains"
     },
     {
-        "question": "According to the Railway Signalling Overview course, which of the following is one of the key learning outcomes?",
+        "question": "According to the Mainline Signalling course, one important topic is:",
         "options": [
-            "Understanding how railway signalling works",
-            "Learning how to manufacture rails",
-            "Understanding train interior design",
-            "Learning financial reporting methods"
+            "Mainline signalling market evolution",
+            "Train catering services",
+            "Station interior decoration",
+            "Passenger entertainment systems"
         ],
-        "answer": "Understanding how railway signalling works"
+        "answer": "Mainline signalling market evolution"
     },
     {
-        "question": "Which topic is included in the Railway Signalling Overview course?",
+        "question": "Which of the following is part of Alstom Mainline Solutions Portfolio?",
         "options": [
-            "Railway signalling challenges",
-            "Passenger ticket pricing",
-            "Train catering systems",
-            "Station retail operations"
+            "Wayside, Onboard, Control Center, and Track Products",
+            "Ticket offices, restaurants, and elevators",
+            "Passenger seats and luggage racks only",
+            "Train painting and branding tools"
         ],
-        "answer": "Railway signalling challenges"
+        "answer": "Wayside, Onboard, Control Center, and Track Products"
     },
     {
-        "question": "What is one of the objectives of the D&IS Technical Onboarding: Core Technology Introduction course?",
+        "question": "In the Urban Signalling Awareness course, CBTC is mainly related to:",
+        "options": [
+            "Urban signalling technology",
+            "Fuel supply systems",
+            "Train interior lighting",
+            "Mechanical wheel design"
+        ],
+        "answer": "Urban signalling technology"
+    },
+    {
+        "question": "The Urban Signalling course helps learners understand:",
+        "options": [
+            "Urban market dynamics and portfolio",
+            "Payroll calculations",
+            "Office network printers",
+            "Manual welding operations"
+        ],
+        "answer": "Urban market dynamics and portfolio"
+    },
+    {
+        "question": "What is the objective of the Hardware Discipline Awareness training?",
+        "options": [
+            "To give an overview of the Hardware Discipline process in D&IS",
+            "To explain only train maintenance planning",
+            "To teach financial auditing steps",
+            "To focus on customer complaint handling"
+        ],
+        "answer": "To give an overview of the Hardware Discipline process in D&IS"
+    },
+    {
+        "question": "Which of the following is included in the Hardware Discipline Awareness agenda?",
+        "options": [
+            "Objective and scope of the HW Discipline",
+            "Passenger ticket validation process",
+            "Train door painting standards",
+            "Restaurant stock management"
+        ],
+        "answer": "Objective and scope of the HW Discipline"
+    },
+    {
+        "question": "One of the objectives of the Core Technology Introduction course is to:",
         "options": [
             "Understand the role of Core Technology within Alstom",
-            "Learn how to drive trains manually",
-            "Study civil engineering calculations only",
-            "Prepare customer invoices"
+            "Drive trains manually",
+            "Inspect rail welding only",
+            "Manage station security guards"
         ],
         "answer": "Understand the role of Core Technology within Alstom"
     },
     {
-        "question": "Which of the following topics is covered in the Core Technology Introduction course?",
+        "question": "Which topic is covered in the Core Technology Introduction course?",
         "options": [
-            "Core Technology organization and governance",
-            "Restaurant management in railway stations",
-            "Track painting procedures",
-            "Passenger complaint handling"
+            "Technology systems, governance, and platforms/products",
+            "Passenger luggage handling",
+            "Track painting techniques",
+            "Train cabin food service"
         ],
-        "answer": "Core Technology organization and governance"
+        "answer": "Technology systems, governance, and platforms/products"
     },
     {
-        "question": "According to the Core Technology Introduction course, learners should be able to know:",
+        "question": "The Infrastructure Awareness course helps learners understand:",
         "options": [
-            "The major platforms/products in use and being developed",
-            "How to operate station elevators",
-            "The salary structure of all employees",
-            "How to manufacture train seats"
+            "Infrastructure solutions, products, and market needs in Alstom",
+            "Only rolling stock seating design",
+            "Only station retail planning",
+            "Only employee payroll systems"
         ],
-        "answer": "The major platforms/products in use and being developed"
+        "answer": "Infrastructure solutions, products, and market needs in Alstom"
     }
 ]
 
@@ -1755,8 +1830,11 @@ elif st.session_state.current_page == "auth":
                                 st.session_state.stage1_doc_completed = progress_data.get("stage1_doc_completed", False)
                                 st.session_state.stage1_quiz_completed = progress_data.get("stage1_quiz_completed", False)
                                 st.session_state.stage1_completed = progress_data.get("stage1_completed", False)
-                                st.session_state.stage2_doc1_completed = progress_data.get("stage2_doc1_completed", False)
-                                st.session_state.stage2_doc2_completed = progress_data.get("stage2_doc2_completed", False)
+                                st.session_state.stage2_video1_completed = progress_data.get("stage2_video1_completed", False)
+                                st.session_state.stage2_video2_completed = progress_data.get("stage2_video2_completed", False)
+                                st.session_state.stage2_video3_completed = progress_data.get("stage2_video3_completed", False)
+                                st.session_state.stage2_video4_completed = progress_data.get("stage2_video4_completed", False)
+                                st.session_state.stage2_video5_completed = progress_data.get("stage2_video5_completed", False)
                                 st.session_state.stage2_quiz_completed = progress_data.get("stage2_quiz_completed", False)
                                 st.session_state.stage2_current_item = 0
                                 st.session_state.stage2_completed = progress_data.get("stage2_completed", False)
@@ -1842,6 +1920,12 @@ elif st.session_state.current_page == "auth":
                                 "stage1_doc_completed": False,
                                 "stage1_quiz_completed": False,
                                 "stage1_completed": False,
+                                "stage2_video1_completed": False,
+                                "stage2_video2_completed": False,
+                                "stage2_video3_completed": False,
+                                "stage2_video4_completed": False,
+                                "stage2_video5_completed": False,
+                                "stage2_quiz_completed": False,
                                 "stage2_completed": False,
                                 "selected_path": "",
                                 "progress_percent": 0
@@ -2535,7 +2619,7 @@ elif st.session_state.current_page == "stage2":
         if not st.session_state.stage1_completed:
             st.info("This stage is locked. Complete Stage 1 first.")
         else:
-            if st.session_state.stage2_current_item not in [0, 1, 2]:
+            if st.session_state.stage2_current_item not in [0, 1, 2, 3, 4, 5]:
                 st.session_state.stage2_current_item = 0
 
             left_col, right_col = st.columns([0.9, 2.3])
@@ -2601,12 +2685,19 @@ elif st.session_state.current_page == "stage2":
                 st.write("")
 
                 # -------------------------
-                # Item 1: Course 1
+                # Video Items 1 → 5
                 # -------------------------
-                if current_index == 0:
+                if current_index in [0, 1, 2, 3, 4]:
+                    required_prev = current_index - 1
+
+                    if current_index > 0:
+                        prev_key = STAGE2_ITEMS[required_prev]["key"]
+                        if not st.session_state.get(prev_key, False):
+                            st.info(f"Please complete {STAGE2_ITEMS[required_prev]['title']} first.")
+
                     st.markdown(
-                        """
-                        <a href="https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/573#/" target="_blank" style="text-decoration:none;">
+                        f"""
+                        <a href="{current_item['file_link']}" target="_blank" style="text-decoration:none;">
                             <div style="
                                 background-color:#0B3D91;
                                 color:white;
@@ -2618,7 +2709,7 @@ elif st.session_state.current_page == "stage2":
                                 margin-top:8px;
                                 margin-bottom:10px;
                             ">
-                                Open Course
+                                Open Learning Material
                             </div>
                         </a>
                         """,
@@ -2627,79 +2718,47 @@ elif st.session_state.current_page == "stage2":
 
                     st.write("")
 
-                    if not st.session_state.stage2_doc1_completed:
-                        if st.button("Mark Course 1 as Completed ✅", use_container_width=True, key="stage2_doc1_complete"):
-                            st.session_state.stage2_doc1_completed = True
+                    complete_key = current_item["key"]
+                    complete_btn_key = f"{complete_key}_btn"
+
+                    if not st.session_state.get(complete_key, False):
+                        if st.button(f"Mark as Completed ✅", use_container_width=True, key=complete_btn_key):
+                            st.session_state[complete_key] = True
                             save_progress()
-                            st.success("Course 1 marked as completed.")
+                            st.success(f"{current_item['title']} marked as completed.")
                             st.rerun()
                     else:
-                        st.success("Course 1 completed ✅")
+                        st.success("Completed ✅")
 
                     st.write("")
 
-                    next_col1, next_col2 = st.columns([1, 2.4])
-                    with next_col1:
-                        if st.button("Go to Next Item →", use_container_width=True, key="stage2_next_from_doc1"):
-                            st.session_state.stage2_current_item = 1
+                    nav_cols = st.columns([1, 1, 2])
+
+                    if current_index > 0:
+                        with nav_cols[0]:
+                            if st.button("← Back", use_container_width=True, key=f"stage2_back_{current_index}"):
+                                st.session_state.stage2_current_item = current_index - 1
+                                st.rerun()
+
+                    with nav_cols[1]:
+                        if st.button("Go to Next Item →", use_container_width=True, key=f"stage2_next_{current_index}"):
+                            st.session_state.stage2_current_item = current_index + 1
                             st.rerun()
 
                 # -------------------------
-                # Item 2: Course 2
+                # Quiz
                 # -------------------------
-                elif current_index == 1:
-                    st.markdown(
-                        """
-                        <a href="https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/10667#/" target="_blank" style="text-decoration:none;">
-                            <div style="
-                                background-color:#0B3D91;
-                                color:white;
-                                text-align:center;
-                                padding:12px 14px;
-                                border-radius:12px;
-                                font-weight:700;
-                                font-size:16px;
-                                margin-top:8px;
-                                margin-bottom:10px;
-                            ">
-                                Open Course
-                            </div>
-                        </a>
-                        """,
-                        unsafe_allow_html=True
-                    )
+                elif current_index == 5:
+                    all_videos_done = all([
+                        st.session_state.stage2_video1_completed,
+                        st.session_state.stage2_video2_completed,
+                        st.session_state.stage2_video3_completed,
+                        st.session_state.stage2_video4_completed,
+                        st.session_state.stage2_video5_completed,
+                    ])
 
-                    st.write("")
-
-                    if not st.session_state.stage2_doc2_completed:
-                        if st.button("Mark Course 2 as Completed ✅", use_container_width=True, key="stage2_doc2_complete"):
-                            st.session_state.stage2_doc2_completed = True
-                            save_progress()
-                            st.success("Course 2 marked as completed.")
-                            st.rerun()
-                    else:
-                        st.success("Course 2 completed ✅")
-
-                    st.write("")
-
-                    nav_col1, nav_col2, nav_col3 = st.columns([1, 1, 2])
-
-                    with nav_col1:
-                        if st.button("← Back", use_container_width=True, key="stage2_back_to_doc1"):
-                            st.session_state.stage2_current_item = 0
-                            st.rerun()
-
-                    with nav_col2:
-                        if st.button("Go to Next Item →", use_container_width=True, key="stage2_next_to_quiz"):
-                            st.session_state.stage2_current_item = 2
-                            st.rerun()
-
-                # -------------------------
-                # Item 3: Quiz
-                # -------------------------
-                elif current_index == 2:
-                    if not st.session_state.stage2_doc1_completed or not st.session_state.stage2_doc2_completed:
-                        st.info("Please complete both courses first before attempting the quiz.")
+                    if not all_videos_done:
+                        st.info("Please complete all Stage 2 videos first before attempting the quiz.")
                     else:
                         st.subheader("Stage 2 Quiz")
 
@@ -2732,8 +2791,7 @@ elif st.session_state.current_page == "stage2":
                                     correct_count += 1
 
                             total_questions = len(STAGE2_QUIZ_QUESTIONS)
-                            import math
-                            required_score = math.ceil(total_questions * 0.8)
+                            required_score = int(total_questions * 0.8)
 
                             st.session_state.stage2_quiz_score = correct_count
 
@@ -2750,8 +2808,7 @@ elif st.session_state.current_page == "stage2":
 
                         if st.session_state.stage2_quiz_submitted:
                             total_questions = len(STAGE2_QUIZ_QUESTIONS)
-                            import math
-                            required_score = math.ceil(total_questions * 0.8)
+                            required_score = int(total_questions * 0.8)
 
                             st.write(f"Your score: **{st.session_state.stage2_quiz_score}/{total_questions}**")
 
@@ -2767,11 +2824,12 @@ elif st.session_state.current_page == "stage2":
                                 st.error(f"You need at least {required_score}/{total_questions} correct answers to pass.")
 
                     st.write("")
+
                     back_col1, back_col2 = st.columns([1, 2.4])
 
                     with back_col1:
-                        if st.button("← Back", use_container_width=True, key="stage2_back_to_doc2"):
-                            st.session_state.stage2_current_item = 1
+                        if st.button("← Back", use_container_width=True, key="stage2_back_to_video5"):
+                            st.session_state.stage2_current_item = 4
                             st.rerun()
 
 # ---------------------------------------------------
