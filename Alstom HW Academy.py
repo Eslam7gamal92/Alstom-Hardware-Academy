@@ -33,6 +33,8 @@ defaults = {
     "mandatory_5_completed": False,
     "mandatory_6_completed": False,
     "mandatory_7_completed": False,
+    "stage1_video1_completed": False,
+    "stage1_video2_completed": False,
     "stage1_doc_completed": False,
     "stage1_quiz_submitted": False,
     "stage1_submitted_answers": [],
@@ -89,6 +91,8 @@ def logout():
     st.session_state.mandatory_5_completed = False
     st.session_state.mandatory_6_completed = False
     st.session_state.mandatory_7_completed = False
+    st.session_state.stage1_video1_completed = False
+    st.session_state.stage1_video2_completed = False
     st.session_state.stage1_doc_completed = False
     st.session_state.stage1_quiz_submitted = False
     st.session_state.stage1_quiz_score = 0
@@ -164,6 +168,8 @@ def save_progress():
             "mandatory_5_completed": st.session_state.mandatory_5_completed,
             "mandatory_6_completed": st.session_state.mandatory_6_completed,
             "mandatory_7_completed": st.session_state.mandatory_7_completed,
+            "stage1_video1_completed": st.session_state.stage1_video1_completed,
+            "stage1_video2_completed": st.session_state.stage1_video2_completed,
             "stage1_doc_completed": st.session_state.stage1_doc_completed,
             "stage1_quiz_completed": st.session_state.stage1_quiz_completed,
             "stage1_completed": st.session_state.stage1_completed,
@@ -561,6 +567,22 @@ MANAGERS = [
 ]
 
 STAGE1_ITEMS = [
+    {
+        "key": "stage1_video1_completed",
+        "title": "Rolling Stock Technologies",
+        "type": "Video Course",
+        "duration": "Self-paced",
+        "description": "Learn the fundamentals of rolling stock technologies, components, and common vocabulary used in the rolling stock context.",
+        "file_link": "https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/1075#/"
+    },
+    {
+        "key": "stage1_video2_completed",
+        "title": "D&IS Onboarding – Infrastructure awareness",
+        "type": "Video Course",
+        "duration": "Self-paced",
+        "description": "Get an overview of Infrastructure within Alstom, including Feeding Systems, Power Supply Systems, Track-works, and infrastructure solutions.",
+        "file_link": "https://alstomuniversity.eu.crossknowledge.com/site/m/public_training/9738#/"
+    },
     {
         "key": "stage1_doc_completed",
         "title": "Railway System Document",
@@ -1728,6 +1750,8 @@ elif st.session_state.current_page == "auth":
                                 st.session_state.mandatory_5_completed = progress_data.get("mandatory_5_completed", False)
                                 st.session_state.mandatory_6_completed = progress_data.get("mandatory_6_completed", False)
                                 st.session_state.mandatory_7_completed = progress_data.get("mandatory_7_completed", False)
+                                st.session_state.stage1_video1_completed = progress_data.get("stage1_video1_completed", False)
+                                st.session_state.stage1_video2_completed = progress_data.get("stage1_video2_completed", False)
                                 st.session_state.stage1_doc_completed = progress_data.get("stage1_doc_completed", False)
                                 st.session_state.stage1_quiz_completed = progress_data.get("stage1_quiz_completed", False)
                                 st.session_state.stage1_completed = progress_data.get("stage1_completed", False)
@@ -1813,6 +1837,8 @@ elif st.session_state.current_page == "auth":
                                 "mandatory_5_completed": False,
                                 "mandatory_6_completed": False,
                                 "mandatory_7_completed": False,
+                                "stage1_video1_completed": False,
+                                "stage1_video2_completed": False,
                                 "stage1_doc_completed": False,
                                 "stage1_quiz_completed": False,
                                 "stage1_completed": False,
@@ -2175,7 +2201,7 @@ elif st.session_state.current_page == "stage1":
         if not st.session_state.mandatory_completed:
             st.info("This stage is locked. Complete Mandatory Trainings first.")
         else:
-            if st.session_state.stage1_current_item not in [0, 1]:
+            if st.session_state.stage1_current_item not in [0, 1, 2, 3]:
                 st.session_state.stage1_current_item = 0
 
             left_col, right_col = st.columns([0.9, 2.3])
@@ -2241,10 +2267,56 @@ elif st.session_state.current_page == "stage1":
                 st.write("")
 
                 # -------------------------
-                # Item 1: PDF Document
+                # Item 1: Video 1
                 # -------------------------
                 if current_index == 0:
-                    try:
+                    st.markdown(
+                        f"""
+                        <a href="{current_item['file_link']}" target="_blank" style="text-decoration:none;">
+                            <div style="
+                                background-color:#0B3D91;
+                                color:white;
+                                text-align:center;
+                                padding:12px 14px;
+                                border-radius:12px;
+                                font-weight:700;
+                                font-size:16px;
+                                margin-top:8px;
+                                margin-bottom:10px;
+                            ">
+                                Open Learning Material
+                            </div>
+                        </a>
+                        """,
+                        unsafe_allow_html=True
+                    )
+
+                    st.write("")
+
+                    if not st.session_state.stage1_video1_completed:
+                        if st.button("Mark Video 1 as Completed ✅", use_container_width=True, key="stage1_video1_complete"):
+                            st.session_state.stage1_video1_completed = True
+                            save_progress()
+                            st.success("Video 1 marked as completed.")
+                            st.rerun()
+                    else:
+                        st.success("Video 1 completed ✅")
+
+                    st.write("")
+
+                    next_col1, next_col2 = st.columns([1, 2.4])
+                    with next_col1:
+                        if st.button("Go to Next Item →", use_container_width=True, key="stage1_next_from_video1"):
+                            st.session_state.stage1_current_item = 1
+                            st.rerun()
+
+                # -------------------------
+                # Item 2: Video 2
+                # -------------------------
+                elif current_index == 1:
+                    if not st.session_state.stage1_video1_completed:
+                        st.info("Please complete Video 1 first.")
+                    else:
                         st.markdown(
                             f"""
                             <a href="{current_item['file_link']}" target="_blank" style="text-decoration:none;">
@@ -2265,33 +2337,89 @@ elif st.session_state.current_page == "stage1":
                             """,
                             unsafe_allow_html=True
                         )
-                    except Exception:
-                        st.error("Learning material link not found.")
+
+                        st.write("")
+
+                        if not st.session_state.stage1_video2_completed:
+                            if st.button("Mark Video 2 as Completed ✅", use_container_width=True, key="stage1_video2_complete"):
+                                st.session_state.stage1_video2_completed = True
+                                save_progress()
+                                st.success("Video 2 marked as completed.")
+                                st.rerun()
+                        else:
+                            st.success("Video 2 completed ✅")
 
                     st.write("")
 
-                    if not st.session_state.stage1_doc_completed:
-                        if st.button("Mark Document as Completed ✅", use_container_width=True, key="stage1_doc_complete"):
-                            st.session_state.stage1_doc_completed = True
-                            save_progress()
-                            st.success("Document marked as completed.")
+                    nav_col1, nav_col2, nav_col3 = st.columns([1, 1, 2])
+
+                    with nav_col1:
+                        if st.button("← Back", use_container_width=True, key="stage1_back_to_video1"):
+                            st.session_state.stage1_current_item = 0
                             st.rerun()
+
+                    with nav_col2:
+                        if st.button("Go to Next Item →", use_container_width=True, key="stage1_next_from_video2"):
+                            st.session_state.stage1_current_item = 2
+                            st.rerun()
+
+                # -------------------------
+                # Item 3: Document
+                # -------------------------
+                elif current_index == 2:
+                    if not st.session_state.stage1_video1_completed or not st.session_state.stage1_video2_completed:
+                        st.info("Please complete both videos first before opening the document.")
                     else:
-                        st.success("Document completed ✅")
+                        st.markdown(
+                            f"""
+                            <a href="{current_item['file_link']}" target="_blank" style="text-decoration:none;">
+                                <div style="
+                                    background-color:#0B3D91;
+                                    color:white;
+                                    text-align:center;
+                                    padding:12px 14px;
+                                    border-radius:12px;
+                                    font-weight:700;
+                                    font-size:16px;
+                                    margin-top:8px;
+                                    margin-bottom:10px;
+                                ">
+                                    Open Learning Material
+                                </div>
+                            </a>
+                            """,
+                            unsafe_allow_html=True
+                        )
+
+                        st.write("")
+
+                        if not st.session_state.stage1_doc_completed:
+                            if st.button("Mark Document as Completed ✅", use_container_width=True, key="stage1_doc_complete"):
+                                st.session_state.stage1_doc_completed = True
+                                save_progress()
+                                st.success("Document marked as completed.")
+                                st.rerun()
+                        else:
+                            st.success("Document completed ✅")
 
                     st.write("")
 
-                    next_col1, next_col2 = st.columns([1, 2.4])
+                    nav_col1, nav_col2, nav_col3 = st.columns([1, 1, 2])
 
-                    with next_col1:
-                        if st.button("Go to Next Item →", use_container_width=True, key="stage1_next_from_doc"):
+                    with nav_col1:
+                        if st.button("← Back", use_container_width=True, key="stage1_back_to_video2"):
                             st.session_state.stage1_current_item = 1
                             st.rerun()
 
+                    with nav_col2:
+                        if st.button("Go to Next Item →", use_container_width=True, key="stage1_next_from_doc"):
+                            st.session_state.stage1_current_item = 3
+                            st.rerun()
+
                 # -------------------------
-                # Item 2: Quiz
+                # Item 4: Quiz
                 # -------------------------
-                elif current_index == 1:
+                elif current_index == 3:
                     if not st.session_state.stage1_doc_completed:
                         st.info("Please complete the document first before attempting the quiz.")
                     else:
@@ -2318,7 +2446,6 @@ elif st.session_state.current_page == "stage1":
                         if st.button("Submit Quiz ✅", use_container_width=True, key="stage1_submit_quiz_page"):
                             correct_count = 0
 
-                            # save submitted answers snapshot
                             st.session_state.stage1_submitted_answers = user_answers.copy()
                             st.session_state.stage1_quiz_submitted = True
 
@@ -2327,8 +2454,7 @@ elif st.session_state.current_page == "stage1":
                                     correct_count += 1
 
                             total_questions = len(STAGE1_QUIZ_QUESTIONS)
-                            import math
-                            required_score = math.ceil(total_questions * 0.8)
+                            required_score = int(total_questions * 0.8)
 
                             st.session_state.stage1_quiz_score = correct_count
 
@@ -2345,8 +2471,7 @@ elif st.session_state.current_page == "stage1":
 
                         if st.session_state.stage1_quiz_submitted:
                             total_questions = len(STAGE1_QUIZ_QUESTIONS)
-                            import math
-                            required_score = math.ceil(total_questions * 0.8)
+                            required_score = int(total_questions * 0.8)
 
                             st.write(f"Your score: **{st.session_state.stage1_quiz_score}/{total_questions}**")
 
@@ -2362,11 +2487,12 @@ elif st.session_state.current_page == "stage1":
                                 st.error(f"You need at least {required_score}/{total_questions} correct answers to pass.")
 
                     st.write("")
+
                     back_col1, back_col2 = st.columns([1, 2.4])
 
                     with back_col1:
                         if st.button("← Back", use_container_width=True, key="stage1_back_to_doc"):
-                            st.session_state.stage1_current_item = 0
+                            st.session_state.stage1_current_item = 2
                             st.rerun()
 
 # ---------------------------------------------------
