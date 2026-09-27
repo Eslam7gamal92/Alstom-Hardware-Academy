@@ -3402,7 +3402,7 @@ elif st.session_state.current_page == "stage3_obc":
         st.progress(progress / 100)
         st.write("")
 
-        st.info("This specialization path is currently under development. Content will be added soon.")
+        st.info("This specialization path is currently under development. Additional OBC technical content and supporting references are requested from the Türkiye team to complete this module.")
 
 # ---------------------------------------------------
 # Stage 3 - Cable Chassis Page
@@ -3440,7 +3440,7 @@ elif st.session_state.current_page == "stage3_cable":
         st.progress(progress / 100)
         st.write("")
 
-        st.info("This specialization path is currently under development. Content will be added soon.")
+        st.info("This specialization path is currently under development. Additional Cable Chassis technical data, wiring details, drawings, and engineering references are requested from the Türkiye team and Installation Cairo team to finalize this module.")
 
 # ---------------------------------------------------
 # Alstom Tools Page
