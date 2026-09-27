@@ -3402,7 +3402,23 @@ elif st.session_state.current_page == "stage3_obc":
         st.progress(progress / 100)
         st.write("")
 
-        st.info("This specialization path is currently under development. Additional OBC technical content and supporting references are requested from the Türkiye team to complete this module.")
+        st.markdown("""
+        <div style="
+            background-color:#FECACA;
+            border-left:6px solid #DC2626;
+            color:#7F1D1D;
+            padding:16px 18px;
+            border-radius:12px;
+            font-size:17px;
+            font-weight:700;
+            line-height:1.7;
+            margin-top:8px;
+            margin-bottom:10px;
+        ">
+            ⚠️ This specialization path is currently under development.<br>
+            Technical inputs, learning materials, drawings, and project references are requested from the Türkiye OBC team to finalize and activate this module.
+        </div>
+        """, unsafe_allow_html=True)
 
 # ---------------------------------------------------
 # Stage 3 - Cable Chassis Page
@@ -3440,7 +3456,23 @@ elif st.session_state.current_page == "stage3_cable":
         st.progress(progress / 100)
         st.write("")
 
-        st.info("This specialization path is currently under development. Additional Cable Chassis technical data, wiring details, drawings, and engineering references are requested from the Türkiye team and Installation Cairo team to finalize this module.")
+        st.markdown("""
+        <div style="
+            background-color:#FECACA;
+            border-left:6px solid #DC2626;
+            color:#7F1D1D;
+            padding:16px 18px;
+            border-radius:12px;
+            font-size:17px;
+            font-weight:700;
+            line-height:1.7;
+            margin-top:8px;
+            margin-bottom:10px;
+        ">
+            ⚠️ This specialization path is currently under development.<br>
+            Installation wiring data, connection details, drawings, and engineering references are requested from the Türkiye team and Installation Cairo team to activate and complete this module.
+        </div>
+        """, unsafe_allow_html=True)
 
 # ---------------------------------------------------
 # Alstom Tools Page
