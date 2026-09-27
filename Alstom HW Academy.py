@@ -7,6 +7,7 @@ from supabase import create_client, Client
 import streamlit as st
 from PIL import Image
 import streamlit.components.v1 as components
+import math
 
 # ---------------------------------------------------
 # Page Config
@@ -35,13 +36,13 @@ defaults = {
     "mandatory_7_completed": False,
     "stage1_video1_completed": False,
     "stage1_video2_completed": False,
-    "stage1_doc_completed": False,
     "stage1_quiz_submitted": False,
     "stage1_submitted_answers": [],
     "stage1_quiz_score": 0,
     "stage1_quiz_completed": False,
     "stage1_current_item": 0,
     "stage1_completed": False,
+    "railway_system_doc_completed": False,
     "stage2_video1_completed": False,
     "stage2_video2_completed": False,
     "stage2_video3_completed": False,
@@ -96,13 +97,13 @@ def logout():
     st.session_state.mandatory_7_completed = False
     st.session_state.stage1_video1_completed = False
     st.session_state.stage1_video2_completed = False
-    st.session_state.stage1_doc_completed = False
     st.session_state.stage1_quiz_submitted = False
     st.session_state.stage1_quiz_score = 0
     st.session_state.stage1_quiz_completed = False
     st.session_state.stage1_submitted_answers = []
     st.session_state.stage1_current_item = 0
     st.session_state.stage1_completed = False
+    st.session_state.railway_system_doc_completed = False
     st.session_state.stage2_video1_completed = False
     st.session_state.stage2_video2_completed = False
     st.session_state.stage2_video3_completed = False
@@ -176,9 +177,9 @@ def save_progress():
             "mandatory_7_completed": st.session_state.mandatory_7_completed,
             "stage1_video1_completed": st.session_state.stage1_video1_completed,
             "stage1_video2_completed": st.session_state.stage1_video2_completed,
-            "stage1_doc_completed": st.session_state.stage1_doc_completed,
             "stage1_quiz_completed": st.session_state.stage1_quiz_completed,
             "stage1_completed": st.session_state.stage1_completed,
+            "railway_system_doc_completed": st.session_state.railway_system_doc_completed,
             "stage2_video1_completed": st.session_state.stage2_video1_completed,
             "stage2_video2_completed": st.session_state.stage2_video2_completed,
             "stage2_video3_completed": st.session_state.stage2_video3_completed,
@@ -604,104 +605,74 @@ STAGE1_ITEMS = [
 
 STAGE1_QUIZ_QUESTIONS = [
     {
-        "question": "What is the most important rule regarding railway safety?",
+        "question": "What is one of the main objectives of the Rolling Stock Technologies course?",
         "options": [
-            "Trains must follow the timetable exactly",
-            "Trains must not exceed speed limits",
-            "Two trains must not occupy the same position on the track at the same time",
-            "Drivers must always operate manually"
+            "To explain financial reporting systems",
+            "To give general information about rolling stock technology and components",
+            "To teach only signalling maintenance",
+            "To focus only on track construction methods"
         ],
-        "answer": "Two trains must not occupy the same position on the track at the same time"
+        "answer": "To give general information about rolling stock technology and components"
     },
     {
-        "question": "Which of the following is NOT one of the five reasons for railway signalling mentioned in the training?",
+        "question": "After completing the Rolling Stock Technologies course, learners should be able to:",
         "options": [
-            "Traffic management",
-            "Rear-end collision prevention",
-            "Head-on collision prevention",
-            "Fuel consumption reduction"
+            "Understand rolling stock fundamentals and components",
+            "Design railway stations from scratch",
+            "Operate metro systems manually",
+            "Prepare tender contracts"
         ],
-        "answer": "Fuel consumption reduction"
+        "answer": "Understand rolling stock fundamentals and components"
     },
     {
-        "question": "Before a route can be released for train movement, which condition must be ensured?",
+        "question": "The Rolling Stock Technologies course helps learners become familiar with:",
         "options": [
-            "The train schedule is approved",
-            "The route is free and points are set, locked, and detected",
-            "The station manager authorizes it manually",
-            "The train speed is below 40 km/h"
+            "Rolling stock vocabulary",
+            "Passenger ticket pricing",
+            "Payroll systems",
+            "Station retail strategy"
         ],
-        "answer": "The route is free and points are set, locked, and detected"
+        "answer": "Rolling stock vocabulary"
     },
     {
-        "question": "What is the main limitation of axle counters highlighted in the presentation?",
+        "question": "What is the main purpose of the D&IS Onboarding – Infrastructure awareness course?",
         "options": [
-            "They require insulated rail joints",
-            "They consume high power",
-            "They do not detect broken rails",
-            "They cannot be used on bridges"
+            "To give an overview of Infrastructure within Alstom",
+            "To explain only train interior design",
+            "To focus only on project budgeting",
+            "To teach office administration procedures"
         ],
-        "answer": "They do not detect broken rails"
+        "answer": "To give an overview of Infrastructure within Alstom"
     },
     {
-        "question": "Which type of level crossing is described as the most widespread?",
+        "question": "Which two segments of the Electrification activity are highlighted in the Infrastructure awareness course?",
         "options": [
-            "SAL0",
-            "SAL2",
-            "SAL2B",
-            "SAL4"
+            "Wayside and Onboard",
+            "Feeding Systems and Power Supply Systems",
+            "Urban and Mainline",
+            "Rolling Stock and Services"
         ],
-        "answer": "SAL2"
+        "answer": "Feeding Systems and Power Supply Systems"
     },
     {
-        "question": "The point equipment includes which three functions?",
+        "question": "Which of the following solutions/products is mentioned in the Infrastructure awareness course?",
         "options": [
-            "Detection, communication, supervision",
-            "Actuation, locking, detection",
-            "Power supply, actuation, signalling",
-            "Switching, routing, braking"
+            "Appitrack™",
+            "CBTC only",
+            "Axle Counter only",
+            "Balise Transmission Module"
         ],
-        "answer": "Actuation, locking, detection"
+        "answer": "Appitrack™"
     },
     {
-        "question": "What is the definition of headway?",
+        "question": "What is one of the objectives of the Infrastructure awareness course?",
         "options": [
-            "The distance between two stations",
-            "The braking distance of a train",
-            "The time interval between two following trains",
-            "The distance between two signals"
+            "Understand what market needs our solutions and products address",
+            "Learn how to manufacture train wheels",
+            "Study customer payroll processes",
+            "Manage office procurement requests"
         ],
-        "answer": "The time interval between two following trains"
-    },
-    {
-        "question": "Within Automatic Train Control (ATC), what is the primary role of ATP?",
-        "options": [
-            "Drives the train automatically",
-            "Supervises train speed and applies protection",
-            "Plans timetables",
-            "Controls interlocking routes"
-        ],
-        "answer": "Supervises train speed and applies protection"
-    },
-    {
-        "question": "What does ATS stand for?",
-        "options": [
-            "Automatic Train Safety",
-            "Automatic Track Supervision",
-            "Automatic Train Supervision",
-            "Automatic Transit Signalling"
-        ],
-        "answer": "Automatic Train Supervision"
-    },
-    {
-        "question": "According to the fail-safe principle, when a predictable signalling equipment failure occurs, the system should move to:",
-        "options": [
-            "A less restrictive condition",
-            "A manual operating mode only",
-            "A more restrictive safe condition",
-            "A higher-performance mode"
-        ],
-        "answer": "A more restrictive safe condition"
+        "answer": "Understand what market needs our solutions and products address"
     }
 ]
 
@@ -711,7 +682,7 @@ STAGE2_ITEMS = [
         "type": "PDF",
         "duration": "Self-paced",
         "description": "Download and study the railway system document before continuing with the Stage 2 learning materials.",
-        "key": "stage1_doc_completed",
+        "key": "railway_system_doc_completed",
         "file_link": "https://alstomgroup-my.sharepoint.com/:b:/p/eslam_gamal/IQDb7WYfKAsgQLKymXxP4YWEAZRGG0gQzWBL9d29wHrTZRc?e=H6F0li"
     },
     {
@@ -769,100 +740,100 @@ STAGE2_QUIZ_QUESTIONS = [
         "options": [
             "To improve train seat comfort",
             "To ensure the safe and efficient movement of trains",
-            "To reduce ticket prices",
-            "To manage station cleaning schedules"
+            "To reduce station electricity costs",
+            "To manage passenger catering services"
         ],
         "answer": "To ensure the safe and efficient movement of trains"
     },
     {
-        "question": "According to the Mainline Signalling course, one important topic is:",
+        "question": "According to the Railway Signalling Overview course, one key topic is:",
         "options": [
-            "Mainline signalling market evolution",
-            "Train catering services",
-            "Station interior decoration",
-            "Passenger entertainment systems"
+            "Railway signalling challenges",
+            "Train food preparation",
+            "Passenger seat design",
+            "Office IT asset tracking"
         ],
-        "answer": "Mainline signalling market evolution"
+        "answer": "Railway signalling challenges"
     },
     {
-        "question": "Which of the following is part of Alstom Mainline Solutions Portfolio?",
+        "question": "What is one of the learning objectives of the Mainline Signalling course?",
+        "options": [
+            "Understand where Alstom is present and with which solutions",
+            "Learn to operate freight locomotives manually",
+            "Study ticket office staffing plans",
+            "Understand only urban depot maintenance"
+        ],
+        "answer": "Understand where Alstom is present and with which solutions"
+    },
+    {
+        "question": "Which of the following is part of the Alstom Mainline Solutions Portfolio?",
         "options": [
             "Wayside, Onboard, Control Center, and Track Products",
-            "Ticket offices, restaurants, and elevators",
-            "Passenger seats and luggage racks only",
-            "Train painting and branding tools"
+            "Passenger ticket machines and restaurant systems",
+            "Station cleaning systems and elevators",
+            "Train catering and Wi-Fi platforms"
         ],
         "answer": "Wayside, Onboard, Control Center, and Track Products"
     },
     {
-        "question": "In the Urban Signalling Awareness course, CBTC is mainly related to:",
+        "question": "The Urban Signalling Awareness course helps learners understand:",
+        "options": [
+            "The urban market dynamic and Alstom portfolio",
+            "Only rolling stock painting standards",
+            "Track welding calculations only",
+            "Payroll approval workflows"
+        ],
+        "answer": "The urban market dynamic and Alstom portfolio"
+    },
+    {
+        "question": "In the Urban Signalling Awareness course, CBTC is related to:",
         "options": [
             "Urban signalling technology",
-            "Fuel supply systems",
-            "Train interior lighting",
-            "Mechanical wheel design"
+            "Passenger catering services",
+            "Mechanical braking pads only",
+            "Office desktop management"
         ],
         "answer": "Urban signalling technology"
     },
     {
-        "question": "The Urban Signalling course helps learners understand:",
+        "question": "What is the objective of the Hardware discipline awareness training?",
         "options": [
-            "Urban market dynamics and portfolio",
-            "Payroll calculations",
-            "Office network printers",
-            "Manual welding operations"
+            "To provide an overview of the Hardware Discipline process in D&IS",
+            "To explain passenger flow in stations",
+            "To teach budget planning for projects",
+            "To focus only on train door mechanics"
         ],
-        "answer": "Urban market dynamics and portfolio"
+        "answer": "To provide an overview of the Hardware Discipline process in D&IS"
     },
     {
-        "question": "What is the objective of the Hardware Discipline Awareness training?",
+        "question": "Which topic is included in the Hardware discipline awareness agenda?",
         "options": [
-            "To give an overview of the Hardware Discipline process in D&IS",
-            "To explain only train maintenance planning",
-            "To teach financial auditing steps",
-            "To focus on customer complaint handling"
+            "Objective and Scope of the HW Discipline",
+            "Train catering procedures",
+            "Manual train driving steps",
+            "Station retail management"
         ],
-        "answer": "To give an overview of the Hardware Discipline process in D&IS"
-    },
-    {
-        "question": "Which of the following is included in the Hardware Discipline Awareness agenda?",
-        "options": [
-            "Objective and scope of the HW Discipline",
-            "Passenger ticket validation process",
-            "Train door painting standards",
-            "Restaurant stock management"
-        ],
-        "answer": "Objective and scope of the HW Discipline"
+        "answer": "Objective and Scope of the HW Discipline"
     },
     {
         "question": "One of the objectives of the Core Technology Introduction course is to:",
         "options": [
             "Understand the role of Core Technology within Alstom",
-            "Drive trains manually",
-            "Inspect rail welding only",
-            "Manage station security guards"
+            "Design train interiors",
+            "Perform only track inspections",
+            "Handle customer travel bookings"
         ],
         "answer": "Understand the role of Core Technology within Alstom"
     },
     {
-        "question": "Which topic is covered in the Core Technology Introduction course?",
+        "question": "According to the Core Technology Introduction course, learners should know:",
         "options": [
-            "Technology systems, governance, and platforms/products",
-            "Passenger luggage handling",
-            "Track painting techniques",
-            "Train cabin food service"
+            "The major platforms/products in use and being developed",
+            "How to prepare train driver schedules",
+            "How to manage station food supply contracts",
+            "How to operate level crossing barriers manually"
         ],
-        "answer": "Technology systems, governance, and platforms/products"
-    },
-    {
-        "question": "The Infrastructure Awareness course helps learners understand:",
-        "options": [
-            "Infrastructure solutions, products, and market needs in Alstom",
-            "Only rolling stock seating design",
-            "Only station retail planning",
-            "Only employee payroll systems"
-        ],
-        "answer": "Infrastructure solutions, products, and market needs in Alstom"
+        "answer": "The major platforms/products in use and being developed"
     }
 ]
 
@@ -1827,9 +1798,9 @@ elif st.session_state.current_page == "auth":
                                 st.session_state.mandatory_7_completed = progress_data.get("mandatory_7_completed", False)
                                 st.session_state.stage1_video1_completed = progress_data.get("stage1_video1_completed", False)
                                 st.session_state.stage1_video2_completed = progress_data.get("stage1_video2_completed", False)
-                                st.session_state.stage1_doc_completed = progress_data.get("stage1_doc_completed", False)
                                 st.session_state.stage1_quiz_completed = progress_data.get("stage1_quiz_completed", False)
                                 st.session_state.stage1_completed = progress_data.get("stage1_completed", False)
+                                st.session_state.railway_system_doc_completed = progress_data.get("railway_system_doc_completed", False)
                                 st.session_state.stage2_video1_completed = progress_data.get("stage2_video1_completed", False)
                                 st.session_state.stage2_video2_completed = progress_data.get("stage2_video2_completed", False)
                                 st.session_state.stage2_video3_completed = progress_data.get("stage2_video3_completed", False)
@@ -1917,9 +1888,9 @@ elif st.session_state.current_page == "auth":
                                 "mandatory_7_completed": False,
                                 "stage1_video1_completed": False,
                                 "stage1_video2_completed": False,
-                                "stage1_doc_completed": False,
                                 "stage1_quiz_completed": False,
                                 "stage1_completed": False,
+                                "railway_system_doc_completed": False,
                                 "stage2_video1_completed": False,
                                 "stage2_video2_completed": False,
                                 "stage2_video3_completed": False,
@@ -2485,7 +2456,7 @@ elif st.session_state.current_page == "stage1":
                                     correct_count += 1
 
                             total_questions = len(STAGE1_QUIZ_QUESTIONS)
-                            required_score = int(total_questions * 0.8)
+                            required_score = math.ceil(total_questions * 0.8)
 
                             st.session_state.stage1_quiz_score = correct_count
 
@@ -2502,7 +2473,7 @@ elif st.session_state.current_page == "stage1":
 
                         if st.session_state.stage1_quiz_submitted:
                             total_questions = len(STAGE1_QUIZ_QUESTIONS)
-                            required_score = int(total_questions * 0.8)
+                            required_score = math.ceil(total_questions * 0.8)
 
                             st.write(f"Your score: **{st.session_state.stage1_quiz_score}/{total_questions}**")
 
@@ -2658,9 +2629,9 @@ elif st.session_state.current_page == "stage2":
 
                     st.write("")
 
-                    if not st.session_state.stage1_doc_completed:
+                    if not st.session_state.railway_system_doc_completed:
                         if st.button("Mark Document as Completed ✅", use_container_width=True, key="stage2_doc_complete"):
-                            st.session_state.stage1_doc_completed = True
+                            st.session_state.railway_system_doc_completed = True
                             save_progress()
                             st.success("Document marked as completed.")
                             st.rerun()
@@ -2679,7 +2650,7 @@ elif st.session_state.current_page == "stage2":
                 # Item 2: Video 1
                 # -------------------------
                 elif current_index == 1:
-                    if not st.session_state.stage1_doc_completed:
+                    if not st.session_state.railway_system_doc_completed:
                         st.info("Please complete the document first.")
                     else:
                         st.markdown(
@@ -2945,7 +2916,7 @@ elif st.session_state.current_page == "stage2":
                 # -------------------------
                 elif current_index == 6:
                     all_items_done = all([
-                        st.session_state.stage1_doc_completed,
+                        st.session_state.railway_system_doc_completed,
                         st.session_state.stage2_video1_completed,
                         st.session_state.stage2_video2_completed,
                         st.session_state.stage2_video3_completed,
@@ -2987,7 +2958,7 @@ elif st.session_state.current_page == "stage2":
                                     correct_count += 1
 
                             total_questions = len(STAGE2_QUIZ_QUESTIONS)
-                            required_score = int(total_questions * 0.8)
+                            required_score = math.ceil(total_questions * 0.8)
 
                             st.session_state.stage2_quiz_score = correct_count
 
@@ -3004,7 +2975,7 @@ elif st.session_state.current_page == "stage2":
 
                         if st.session_state.stage2_quiz_submitted:
                             total_questions = len(STAGE2_QUIZ_QUESTIONS)
-                            required_score = int(total_questions * 0.8)
+                            required_score = math.ceil(total_questions * 0.8)
 
                             st.write(f"Your score: **{st.session_state.stage2_quiz_score}/{total_questions}**")
 
