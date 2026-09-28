@@ -3047,7 +3047,7 @@ elif st.session_state.current_page == "stage3":
             with select_col1:
                 selected = st.selectbox(
                     "Select your specialization path",
-                    ["", "Pedal", "HVITC", "OBC", "Cable Chassis"],
+                    ["", "Pedal", "HVITC", "OBC", "Cable Chassis", "Wiring and Installation"],
                     index=0,
                     key="stage3_path_select"
                 )
@@ -3074,6 +3074,8 @@ elif st.session_state.current_page == "stage3":
                             go_to("stage3_obc")
                         elif selected == "Cable Chassis":
                             go_to("stage3_cable")
+                        elif selected == "Wiring and Installation":
+                            go_to("stage3_wiring")
 
                         st.rerun()
 
@@ -3811,6 +3813,60 @@ elif st.session_state.current_page == "alstom_tools":
                     st.write("")
 
 # ---------------------------------------------------
+# Stage 3 - Wiring and Installation Page
+# ---------------------------------------------------
+elif st.session_state.current_page == "stage3_wiring":
+    if not st.session_state.logged_in:
+        st.warning("Please login first.")
+        if st.button("Go to Login", key="wiring_go_to_login"):
+            go_to("auth")
+            st.rerun()
+    else:
+        top1, top2, top3 = st.columns([2, 4, 2])
+
+        with top1:
+            if st.button("← Stage 3", use_container_width=True, key="wiring_back_stage3"):
+                go_to("stage3")
+                st.rerun()
+
+        with top3:
+            if st.button("Profile", use_container_width=True, key="wiring_profile"):
+                go_to("profile")
+                st.rerun()
+
+        st.markdown("""
+        <div class="stage-page-hero">
+            <div class="stage-page-hero-title">Wiring and Installation Specialization</div>
+            <div class="stage-page-hero-text">
+                This specialization path will provide focused learning content related to wiring and installation activities, practices, and technical references.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        progress = calculate_progress()
+        st.markdown(f"### Progress: {progress}%")
+        st.progress(progress / 100)
+        st.write("")
+
+        st.markdown("""
+        <div style="
+            background-color:#FECACA;
+            border-left:6px solid #DC2626;
+            color:#7F1D1D;
+            padding:16px 18px;
+            border-radius:12px;
+            font-size:17px;
+            font-weight:700;
+            line-height:1.7;
+            margin-top:8px;
+            margin-bottom:10px;
+        ">
+            ⚠️ This specialization path is currently under development.<br>
+            Installation wiring data, connection details, drawings, and engineering references are requested from the Türkiye team and Installation Cairo team to activate and complete this module.
+        </div>
+        """, unsafe_allow_html=True)
+
+# ---------------------------------------------------
 # Profile Page
 # ---------------------------------------------------
 elif st.session_state.current_page == "profile":
@@ -3877,3 +3933,5 @@ elif st.session_state.current_page == "profile":
             st.write(f"**Course {i}: {course['title']}** — {status}")
 
         st.markdown("</div>", unsafe_allow_html=True)
+
+
