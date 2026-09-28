@@ -3041,6 +3041,22 @@ elif st.session_state.current_page == "stage3":
         else:
             st.markdown("## Select Your Specialization Path")
             st.write("Choose the path that matches your team or technical learning direction.")
+            st.markdown("""
+            <div style="
+                background-color:#FECACA;
+                border-left:6px solid #DC2626;
+                color:#7F1D1D;
+                padding:16px 18px;
+                border-radius:12px;
+                font-size:16px;
+                font-weight:700;
+                line-height:1.7;
+                margin-top:10px;
+                margin-bottom:18px;
+            ">
+                ⚠️ Note: The specialization paths currently available in this section are based on the cabinets of the PDD project identified so far. Additional data, cabinet references, and technical inputs from other projects would be highly appreciated to expand the coverage and make this section more inclusive.
+            </div>
+            """, unsafe_allow_html=True)
 
             select_col1, select_col2 = st.columns([1.3, 1.7])
 
