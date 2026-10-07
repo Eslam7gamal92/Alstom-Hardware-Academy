@@ -132,7 +132,7 @@ def logout():
     st.session_state.current_page = "landing"
 
 def render_user_badge(unique_key="default"):
-    with st.popover(f"👤 {st.session_state.user_name} ⌄"):
+    with st.popover(f"👤 {st.session_state.user_name}"):
         st.markdown(f"**Name:** {st.session_state.user_name}")
         st.markdown(f"**Email:** {st.session_state.user_email}")
         st.markdown(f"**Progress:** {calculate_progress()}%")
