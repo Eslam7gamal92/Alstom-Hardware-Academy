@@ -1938,7 +1938,7 @@ elif st.session_state.current_page == "home":
             go_to("auth")
             st.rerun()
     else:
-        top1, top2, top3 = st.columns([2, 4, 2])
+        top1, top2, top3 = st.columns([2, 5, 1.2])
 
         with top1:
             try:
