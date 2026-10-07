@@ -589,10 +589,6 @@ MANAGERS = [
         "name": "Ahmet KILICARSLAN",
         "email": "ahmet.kilicarslan@alstomgroup.com"
     },
-    {
-        "name": "Eslam Gamal",
-        "email": "eslam.gamal@alstomgroup.com"
-    },
 ]
 
 STAGE1_ITEMS = [
