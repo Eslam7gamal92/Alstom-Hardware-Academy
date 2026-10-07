@@ -132,7 +132,7 @@ def logout():
     st.session_state.current_page = "landing"
 
 def render_user_badge(unique_key="default"):
-    with st.popover(f"👤 {st.session_state.user_name}"):
+    with st.popover(f"👤 {st.session_state.user_name} ⌄"):
         st.markdown(f"**Name:** {st.session_state.user_name}")
         st.markdown(f"**Email:** {st.session_state.user_email}")
         st.markdown(f"**Progress:** {calculate_progress()}%")
@@ -2125,7 +2125,7 @@ elif st.session_state.current_page == "mandatory_trainings":
             go_to("auth")
             st.rerun()
     else:
-        top1, top2, top3 = st.columns([2, 4, 2])
+        top1, top2, top3 = st.columns([2, 6, 1])
 
         with top1:
             if st.button("← Home", use_container_width=True, key="mandatory_home"):
@@ -2242,7 +2242,7 @@ elif st.session_state.current_page == "stage1":
             go_to("auth")
             st.rerun()
     else:
-        top1, top2, top3 = st.columns([2, 4, 2])
+        top1, top2, top3 = st.columns([2, 6, 1])
 
         with top1:
             if st.button("← Home", use_container_width=True, key="stage1_home"):
@@ -2522,7 +2522,7 @@ elif st.session_state.current_page == "stage2":
             go_to("auth")
             st.rerun()
     else:
-        top1, top2, top3 = st.columns([2, 4, 2])
+        top1, top2, top3 = st.columns([2, 6, 1])
 
         with top1:
             if st.button("← Home", use_container_width=True, key="stage2_home"):
@@ -3023,7 +3023,7 @@ elif st.session_state.current_page == "stage3":
             go_to("auth")
             st.rerun()
     else:
-        top1, top2, top3 = st.columns([2, 4, 2])
+        top1, top2, top3 = st.columns([2, 6, 1])
 
         with top1:
             if st.button("← Home", use_container_width=True, key="stage3_home"):
@@ -3118,7 +3118,7 @@ elif st.session_state.current_page == "stage3_pedal":
             go_to("auth")
             st.rerun()
     else:
-        top1, top2, top3 = st.columns([2, 4, 2])
+        top1, top2, top3 = st.columns([2, 6, 1])
 
         with top1:
             if st.button("← Stage 3", use_container_width=True, key="pedal_back_stage3"):
@@ -3345,7 +3345,7 @@ elif st.session_state.current_page == "stage3_hvitc":
             go_to("auth")
             st.rerun()
     else:
-        top1, top2, top3 = st.columns([2, 4, 2])
+        top1, top2, top3 = st.columns([2, 6, 1])
 
         with top1:
             if st.button("← Stage 3", use_container_width=True, key="hvitc_back_stage3"):
@@ -3572,7 +3572,7 @@ elif st.session_state.current_page == "stage3_obc":
             go_to("auth")
             st.rerun()
     else:
-        top1, top2, top3 = st.columns([2, 4, 2])
+        top1, top2, top3 = st.columns([2, 6, 1])
 
         with top1:
             if st.button("← Stage 3", use_container_width=True, key="obc_back_stage3"):
@@ -3625,7 +3625,7 @@ elif st.session_state.current_page == "stage3_cable":
             go_to("auth")
             st.rerun()
     else:
-        top1, top2, top3 = st.columns([2, 4, 2])
+        top1, top2, top3 = st.columns([2, 6, 1])
 
         with top1:
             if st.button("← Stage 3", use_container_width=True, key="cable_back_stage3"):
@@ -3678,7 +3678,7 @@ elif st.session_state.current_page == "alstom_tools":
             go_to("auth")
             st.rerun()
     else:
-        top1, top2, top3 = st.columns([2, 4, 2])
+        top1, top2, top3 = st.columns([2, 6, 1])
 
         with top1:
             if st.button("← Home", use_container_width=True, key="tools_back_home"):
@@ -3846,7 +3846,7 @@ elif st.session_state.current_page == "stage3_wiring":
             go_to("auth")
             st.rerun()
     else:
-        top1, top2, top3 = st.columns([2, 4, 2])
+        top1, top2, top3 = st.columns([2, 6, 1])
 
         with top1:
             if st.button("← Stage 3", use_container_width=True, key="wiring_back_stage3"):
