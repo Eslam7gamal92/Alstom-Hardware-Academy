@@ -131,7 +131,7 @@ def logout():
     st.session_state.stage3_completed = False
     st.session_state.current_page = "landing"
 
-def render_user_menu(unique_key="default"):
+def render_user_badge(unique_key="default"):
     with st.popover(f"👤 {st.session_state.user_name}"):
         st.markdown(f"**Name:** {st.session_state.user_name}")
         st.markdown(f"**Email:** {st.session_state.user_email}")
@@ -142,11 +142,11 @@ def render_user_menu(unique_key="default"):
 
         st.write("")
 
-        if st.button("Open Profile", use_container_width=True, key=f"profile_open_{unique_key}"):
+        if st.button("Profile", use_container_width=True, key=f"user_badge_profile_{unique_key}"):
             go_to("profile")
             st.rerun()
 
-        if st.button("Logout", use_container_width=True, key=f"profile_logout_{unique_key}"):
+        if st.button("Logout", use_container_width=True, key=f"user_badge_logout_{unique_key}"):
             logout()
             st.rerun()
 
@@ -1948,9 +1948,7 @@ elif st.session_state.current_page == "home":
             st.caption("Alstom Hardware & Installation Academy")
 
         with top3:
-            if st.button("Logout", use_container_width=True, key="home_logout"):
-                logout()
-                st.rerun()
+            render_user_badge("home")
 
         progress = calculate_progress()
 
@@ -2136,7 +2134,7 @@ elif st.session_state.current_page == "mandatory_trainings":
 
         with top3:
             if st.button("Profile", use_container_width=True, key="mandatory_profile"):
-                render_user_menu("mandatory")
+                render_user_badge("mandatory")
 
         st.markdown("""
         <div class="mandatory-hero">
@@ -2253,7 +2251,7 @@ elif st.session_state.current_page == "stage1":
 
         with top3:
             if st.button("Profile", use_container_width=True, key="stage1_profile"):
-                render_user_menu("stage1")
+                render_user_badge("stage1")
 
         st.markdown("""
         <div class="stage-page-hero">
@@ -2533,7 +2531,7 @@ elif st.session_state.current_page == "stage2":
 
         with top3:
             if st.button("Profile", use_container_width=True, key="stage2_profile"):
-                render_user_menu("stage2")
+                render_user_badge("stage2")
 
         st.markdown("""
         <div class="stage-page-hero">
@@ -3034,7 +3032,7 @@ elif st.session_state.current_page == "stage3":
 
         with top3:
             if st.button("Profile", use_container_width=True, key="stage3_profile"):
-                render_user_menu("stage3")
+                render_user_badge("stage3")
 
         st.markdown("""
         <div class="stage-page-hero">
@@ -3129,7 +3127,7 @@ elif st.session_state.current_page == "stage3_pedal":
 
         with top3:
             if st.button("Profile", use_container_width=True, key="pedal_profile"):
-                render_user_menu("pedal")
+                render_user_badge("pedal")
 
         st.markdown("""
         <div class="stage-page-hero">
@@ -3356,7 +3354,7 @@ elif st.session_state.current_page == "stage3_hvitc":
 
         with top3:
             if st.button("Profile", use_container_width=True, key="hvitc_profile"):
-                render_user_menu("hvitc")
+                render_user_badge("hvitc")
 
         st.markdown("""
         <div class="stage-page-hero">
@@ -3583,7 +3581,7 @@ elif st.session_state.current_page == "stage3_obc":
 
         with top3:
             if st.button("Profile", use_container_width=True, key="obc_profile"):
-                render_user_menu("obc")
+                render_user_badge("obc")
 
         st.markdown("""
         <div class="stage-page-hero">
@@ -3636,7 +3634,7 @@ elif st.session_state.current_page == "stage3_cable":
 
         with top3:
             if st.button("Profile", use_container_width=True, key="cable_profile"):
-                render_user_menu("cable")
+                render_user_badge("cable")
 
         st.markdown("""
         <div class="stage-page-hero">
@@ -3689,7 +3687,7 @@ elif st.session_state.current_page == "alstom_tools":
 
         with top3:
             if st.button("Profile", use_container_width=True, key="tools_profile"):
-                render_user_menu("tools")
+                render_user_badge("tools")
 
         st.markdown("""
         <div class="mandatory-hero">
@@ -3857,7 +3855,7 @@ elif st.session_state.current_page == "stage3_wiring":
 
         with top3:
             if st.button("Profile", use_container_width=True, key="wiring_profile"):
-                render_user_menu("wiring")
+                render_user_badge("wiring")
 
         st.markdown("""
         <div class="stage-page-hero">
