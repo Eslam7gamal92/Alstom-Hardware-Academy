@@ -61,12 +61,35 @@ defaults = {
     "pedal_quiz_score": 0,
     "pedal_quiz_completed": False,
     "pedal_current_item": 0,
+    
     "hvitc_doc_completed": False,
     "hvitc_quiz_submitted": False,
     "hvitc_submitted_answers": [],
     "hvitc_quiz_score": 0,
     "hvitc_quiz_completed": False,
     "hvitc_current_item": 0,
+    
+    "obc_doc_completed": False,
+    "obc_quiz_submitted": False,
+    "obc_submitted_answers": [],
+    "obc_quiz_score": 0,
+    "obc_quiz_completed": False,
+    "obc_current_item": 0,
+    
+    "cable_doc_completed": False,
+    "cable_quiz_submitted": False,
+    "cable_submitted_answers": [],
+    "cable_quiz_score": 0,
+    "cable_quiz_completed": False,
+    "cable_current_item": 0,
+    
+    "wiring_doc_completed": False,
+    "wiring_quiz_submitted": False,
+    "wiring_submitted_answers": [],
+    "wiring_quiz_score": 0,
+    "wiring_quiz_completed": False,
+    "wiring_current_item": 0,
+    
     "stage3_completed": False,
     "current_page": "landing",
 
