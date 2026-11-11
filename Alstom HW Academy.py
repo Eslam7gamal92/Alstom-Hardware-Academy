@@ -1888,6 +1888,15 @@ elif st.session_state.current_page == "auth":
                                 st.session_state.hvitc_doc_completed = progress_data.get("hvitc_doc_completed", False)
                                 st.session_state.hvitc_quiz_completed = progress_data.get("hvitc_quiz_completed", False)
                                 st.session_state.hvitc_current_item = 0
+                                st.session_state.obc_doc_completed = progress_data.get("obc_doc_completed", False)
+                                st.session_state.obc_quiz_completed = progress_data.get("obc_quiz_completed", False)
+                                st.session_state.obc_current_item = 0
+                                st.session_state.cable_doc_completed = progress_data.get("cable_doc_completed", False)
+                                st.session_state.cable_quiz_completed = progress_data.get("cable_quiz_completed", False)
+                                st.session_state.cable_current_item = 0
+                                st.session_state.wiring_doc_completed = progress_data.get("wiring_doc_completed", False)
+                                st.session_state.wiring_quiz_completed = progress_data.get("wiring_quiz_completed", False)
+                                st.session_state.wiring_current_item = 0
                                 st.session_state.stage3_completed = progress_data.get("stage3_completed", False)
 
                             go_to("home")
