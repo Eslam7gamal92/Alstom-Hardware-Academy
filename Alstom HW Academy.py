@@ -1979,13 +1979,14 @@ elif st.session_state.current_page == "auth":
                                 "stage2_video5_completed": False,
                                 "stage2_quiz_completed": False,
                                 "stage2_completed": False,
+                                "selected_path": "",
                                 "obc_doc_completed": False,
                                 "obc_quiz_completed": False,
                                 "cable_doc_completed": False,
                                 "cable_quiz_completed": False,
                                 "wiring_doc_completed": False,
                                 "wiring_quiz_completed": False,
-                                "selected_path": "",
+
                                 "progress_percent": 0
                             }).execute()
 
