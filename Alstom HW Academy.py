@@ -262,6 +262,12 @@ def save_progress():
             "pedal_quiz_completed": st.session_state.pedal_quiz_completed,
             "hvitc_doc_completed": st.session_state.hvitc_doc_completed,
             "hvitc_quiz_completed": st.session_state.hvitc_quiz_completed,
+            "obc_doc_completed": st.session_state.obc_doc_completed,
+            "obc_quiz_completed": st.session_state.obc_quiz_completed,
+            "cable_doc_completed": st.session_state.cable_doc_completed,
+            "cable_quiz_completed": st.session_state.cable_quiz_completed,
+            "wiring_doc_completed": st.session_state.wiring_doc_completed,
+            "wiring_quiz_completed": st.session_state.wiring_quiz_completed,
             "stage3_completed": st.session_state.stage3_completed,
             "progress_percent": progress
         },
