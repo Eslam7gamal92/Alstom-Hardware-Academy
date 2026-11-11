@@ -1053,6 +1053,222 @@ HVITC_QUIZ_QUESTIONS = [
     }
 ]
 
+OBC_ITEMS = [
+    {
+        "key": "obc_doc_completed",
+        "title": "OBC Presentation",
+        "type": "PowerPoint",
+        "duration": "Self-paced",
+        "description": "Study the OBC presentation before proceeding to the quiz.",
+        "file_link": "#"  # ضع اللينك لاحقًا
+    },
+    {
+        "key": "obc_quiz_completed",
+        "title": "OBC Quiz",
+        "type": "Quiz",
+        "duration": "Short assessment",
+        "description": "Complete the quiz based on the OBC presentation.",
+        "file": ""
+    }
+]
+
+OBC_QUIZ_QUESTIONS = [
+    {
+        "question": "OBC content in D&IS typically relates to:",
+        "options": [
+            "On-board control and computing functions",
+            "Passenger information kiosks only",
+            "Station HVAC control",
+            "Catering services"
+        ],
+        "answer": "On-board control and computing functions"
+    },
+    {
+        "question": "One key aspect of OBC engineering is to ensure:",
+        "options": [
+            "Mechanical bogie balancing",
+            "Interfaces and data exchange with wayside/Control Center",
+            "Track welding plans",
+            "Ticketing machine design"
+        ],
+        "answer": "Interfaces and data exchange with wayside/Control Center"
+    },
+    {
+        "question": "OBC documents and references commonly include:",
+        "options": [
+            "Electrical/communication diagrams and software baselines",
+            "Only civil drawings",
+            "Only interior design plans",
+            "Only ticket price lists"
+        ],
+        "answer": "Electrical/communication diagrams and software baselines"
+    },
+    {
+        "question": "OBC diagnostics and logging are used to:",
+        "options": [
+            "Improve passenger comfort",
+            "Support troubleshooting and operational safety",
+            "Decorate station halls",
+            "Manage train catering menus"
+        ],
+        "answer": "Support troubleshooting and operational safety"
+    },
+    {
+        "question": "A safe OBC integration requires:",
+        "options": [
+            "Documented interfaces and validated configurations",
+            "Painting of train exteriors",
+            "Ticket vending machine installation",
+            "Retail corner layout updates"
+        ],
+        "answer": "Documented interfaces and validated configurations"
+    }
+]
+
+CABLE_ITEMS = [
+    {
+        "key": "cable_doc_completed",
+        "title": "Cable Chassis Presentation",
+        "type": "PowerPoint",
+        "duration": "Self-paced",
+        "description": "Study the Cable Chassis presentation before proceeding to the quiz.",
+        "file_link": "#"  # ضع اللينك لاحقًا
+    },
+    {
+        "key": "cable_quiz_completed",
+        "title": "Cable Chassis Quiz",
+        "type": "Quiz",
+        "duration": "Short assessment",
+        "description": "Complete the quiz based on the Cable Chassis presentation.",
+        "file": ""
+    }
+]
+
+CABLE_QUIZ_QUESTIONS = [
+    {
+        "question": "Cable chassis engineering primarily covers:",
+        "options": [
+            "Wiring harnesses, routing, and terminations",
+            "Only train interior design",
+            "Ticketing system back-office",
+            "Station retail planning"
+        ],
+        "answer": "Wiring harnesses, routing, and terminations"
+    },
+    {
+        "question": "Cable schedules and drawings are used to:",
+        "options": [
+            "Control passenger flows",
+            "Specify wire IDs, connections, and routes",
+            "Plan station decoration",
+            "Manage food logistics"
+        ],
+        "answer": "Specify wire IDs, connections, and routes"
+    },
+    {
+        "question": "A proper cable installation considers:",
+        "options": [
+            "Bend radius, protection, and segregation",
+            "Train exterior branding only",
+            "Ticket price tables",
+            "Retail stock counts"
+        ],
+        "answer": "Bend radius, protection, and segregation"
+    },
+    {
+        "question": "Cabinet connection details typically include:",
+        "options": [
+            "Terminal IDs, connector types, and cable tags",
+            "Only software baselines",
+            "Only bogie drawings",
+            "Only ticket kiosk layouts"
+        ],
+        "answer": "Terminal IDs, connector types, and cable tags"
+    },
+    {
+        "question": "Quality checks in cable chassis often verify:",
+        "options": [
+            "Continuity and correct termination",
+            "Station seating arrangements",
+            "Retail shelf layouts",
+            "HVAC air flow"
+        ],
+        "answer": "Continuity and correct termination"
+    }
+]
+
+WIRING_ITEMS = [
+    {
+        "key": "wiring_doc_completed",
+        "title": "Wiring & Installation Presentation",
+        "type": "PowerPoint",
+        "duration": "Self-paced",
+        "description": "Study the Wiring & Installation presentation before proceeding to the quiz.",
+        "file_link": "#"  # ضع اللينك لاحقًا
+    },
+    {
+        "key": "wiring_quiz_completed",
+        "title": "Wiring & Installation Quiz",
+        "type": "Quiz",
+        "duration": "Short assessment",
+        "description": "Complete the quiz based on the Wiring & Installation presentation.",
+        "file": ""
+    }
+]
+
+WIRING_QUIZ_QUESTIONS = [
+    {
+        "question": "Wiring & Installation scope includes:",
+        "options": [
+            "Field wiring, cabinet terminations, and installation practices",
+            "Only software coding",
+            "Only station design",
+            "Only ticket validation"
+        ],
+        "answer": "Field wiring, cabinet terminations, and installation practices"
+    },
+    {
+        "question": "Installation documents typically reference:",
+        "options": [
+            "Connection details, drawings, and references",
+            "Catering menus",
+            "Retail reports",
+            "Interior paint codes only"
+        ],
+        "answer": "Connection details, drawings, and references"
+    },
+    {
+        "question": "On-site wiring best practices ensure:",
+        "options": [
+            "Safety, traceability, and correct connections",
+            "Faster ticket sales",
+            "Better station music",
+            "Cheaper seats"
+        ],
+        "answer": "Safety, traceability, and correct connections"
+    },
+    {
+        "question": "Before energizing circuits, teams should verify:",
+        "options": [
+            "Continuity and polarity checks",
+            "Poster placements",
+            "Retail discounts",
+            "Train seat colors"
+        ],
+        "answer": "Continuity and polarity checks"
+    },
+    {
+        "question": "Installation quality records help to:",
+        "options": [
+            "Document test results and acceptance",
+            "Print tickets",
+            "Design station halls",
+            "Set food prices"
+        ],
+        "answer": "Document test results and acceptance"
+    }
+]
+
 ALSTOM_TOOLS = [
     {
         "title": "Hydra",
