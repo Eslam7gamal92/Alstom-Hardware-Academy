@@ -118,6 +118,7 @@ def logout():
     st.session_state.mandatory_5_completed = False
     st.session_state.mandatory_6_completed = False
     st.session_state.mandatory_7_completed = False
+    
     st.session_state.stage1_video1_completed = False
     st.session_state.stage1_video2_completed = False
     st.session_state.stage1_quiz_submitted = False
@@ -126,7 +127,9 @@ def logout():
     st.session_state.stage1_submitted_answers = []
     st.session_state.stage1_current_item = 0
     st.session_state.stage1_completed = False
+    
     st.session_state.railway_system_doc_completed = False
+    
     st.session_state.stage2_video1_completed = False
     st.session_state.stage2_video2_completed = False
     st.session_state.stage2_video3_completed = False
@@ -138,19 +141,44 @@ def logout():
     st.session_state.stage2_quiz_completed = False
     st.session_state.stage2_current_item = 0
     st.session_state.stage2_completed = False
+    
     st.session_state.selected_path = ""
+    
     st.session_state.pedal_doc_completed = False
     st.session_state.pedal_quiz_submitted = False
     st.session_state.pedal_submitted_answers = []
     st.session_state.pedal_quiz_score = 0
     st.session_state.pedal_quiz_completed = False
     st.session_state.pedal_current_item = 0
+    
     st.session_state.hvitc_doc_completed = False
     st.session_state.hvitc_quiz_submitted = False
     st.session_state.hvitc_submitted_answers = []
     st.session_state.hvitc_quiz_score = 0
     st.session_state.hvitc_quiz_completed = False
     st.session_state.hvitc_current_item = 0
+    
+    st.session_state.obc_doc_completed = False
+    st.session_state.obc_quiz_submitted = False
+    st.session_state.obc_submitted_answers = []
+    st.session_state.obc_quiz_score = 0
+    st.session_state.obc_quiz_completed = False
+    st.session_state.obc_current_item = 0
+
+    st.session_state.cable_doc_completed = False
+    st.session_state.cable_quiz_submitted = False
+    st.session_state.cable_submitted_answers = []
+    st.session_state.cable_quiz_score = 0
+    st.session_state.cable_quiz_completed = False
+    st.session_state.cable_current_item = 0
+
+    st.session_state.wiring_doc_completed = False
+    st.session_state.wiring_quiz_submitted = False
+    st.session_state.wiring_submitted_answers = []
+    st.session_state.wiring_quiz_score = 0
+    st.session_state.wiring_quiz_completed = False
+    st.session_state.wiring_current_item = 0
+    
     st.session_state.stage3_completed = False
     st.session_state.current_page = "landing"
 
